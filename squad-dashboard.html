@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ELM Squad · Performance Dashboard · FY'26</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#14324F;--navy-mid:#1a4268;--navy-light:#205080;--sky:#7baed6;
+  --text-1:#111111;--text-2:#333333;--text-3:#6a8aa0;
+  --bg:#ffffff;--tbl-hdr-bg:#eaeae1;--tbl-hdr-tx:#818181;
+  --sec-hdr-bg:#143252;--sec-hdr-tx:#ffffff;
+  --row-odd:#f4f4f0;--row-even:#ffffff;--line:#ccccc0;
+  --positive:#0ba956;--flat:#FFCA00;--negative:#E04126;--baking:#205EA3;
+  --broken:#818181;--no-exp:#EAEAE1;--oa:#16A847;
+  --payments:#07c4d9;--payroll:#D72792;--capital:#205EA3;--billpay:#4999E6;--mailchimp:#FFE01B;
+  --font:'Avenir Next','Avenir',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;--mono:'Avenir Next Condensed','Avenir Next','Courier New',monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--text-1);font-size:13px;min-height:100vh}
+
+/* HEADER */
+.dash-header{background:var(--navy);padding:14px 32px 0;border-bottom:3px solid var(--payments);position:sticky;top:0;z-index:100}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:24px}
+.header-left{display:flex;align-items:baseline;gap:14px}
+.eyebrow{font-size:10px;font-weight:500;letter-spacing:.1em;color:var(--sky);text-transform:uppercase}
+.dash-title{font-size:20px;font-weight:600;color:#fff;letter-spacing:-.01em}
+.date-controls{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.date-label{font-size:10px;font-weight:500;color:var(--sky);text-transform:uppercase;letter-spacing:.06em}
+.date-divider{color:var(--sky);font-size:11px}
+.date-select{appearance:none;background:var(--navy-mid);border:1px solid var(--navy-light);color:#fff;font-family:var(--font);font-size:12px;font-weight:500;padding:5px 28px 5px 10px;border-radius:4px;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%237baed6' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 9px center}
+.date-select:focus{outline:none;border-color:var(--payments)}
+.tabs{display:flex;overflow-x:auto}
+.tab{padding:9px 20px 10px;font-size:12px;font-weight:500;color:var(--sky);cursor:pointer;border-bottom:3px solid transparent;transition:color .15s,border-color .15s;white-space:nowrap;margin-bottom:-3px;user-select:none}
+.tab:hover{color:#fff}
+.tab.active{color:#fff;border-bottom-color:var(--payments)}
+
+/* LAYOUT */
+.dash-body{width:100%}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+.split{display:grid;grid-template-columns:56% 1fr;min-height:calc(100vh - 88px)}
+.pane{display:flex;flex-direction:column}
+.pane-left{border-right:2px solid var(--line)}
+
+/* SECTIONS */
+.section{border-bottom:1px solid var(--line)}
+.section:last-child{border-bottom:none}
+.sec-hdr{background:var(--sec-hdr-bg);padding:6px 16px}
+.sec-hdr-text{font-size:9.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--sec-hdr-tx)}
+.sec-body{padding:12px 16px 14px}
+.sec-body-flush{padding:0 16px}.sec-body-flush .tbl{margin:0 16px;width:calc(100% - 32px)}
+
+/* TABLES */
+.tbl{width:100%;border-collapse:collapse;font-family:var(--font)}
+.tbl thead th{background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-weight:600;padding:5px 7px;text-align:right;font-size:11px;white-space:nowrap;letter-spacing:.03em;text-transform:uppercase;border-bottom:1px solid var(--line);font-family:var(--font)}
+.tbl thead th:first-child{text-align:left}
+.tbl tbody tr:nth-child(odd) td{background:var(--row-odd)}
+.tbl tbody tr:nth-child(even) td{background:var(--row-even)}
+.tbl td{padding:4px 7px;text-align:right;border-bottom:1px solid var(--line);color:var(--text-1);font-size:12px;white-space:nowrap;font-family:var(--font)}
+.tbl td:first-child{text-align:left;color:var(--text-2);font-weight:500}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr.tot td{font-weight:700;border-top:2px solid var(--line)}
+.tbl tr.tot td:first-child{color:var(--text-1)}
+.tbl .dv{border-left:1px solid var(--line)}
+.tbl .dvl{border-left:2px solid var(--line)}
+
+/* TAGS */
+.tag{display:inline-flex;align-items:center;font-size:8px;font-weight:700;padding:2px 6px;border-radius:8px;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+.t-pos{background:var(--positive);color:#fff}
+.t-dpos{background:transparent;border:1.5px solid var(--positive);color:#1a7a4a}
+.t-flat{background:var(--flat);color:#14324F}
+.t-neg{background:var(--negative);color:#fff}
+.t-bake{background:var(--baking);color:#fff}
+.t-brok{background:var(--broken);color:#fff}
+.t-nox{background:var(--no-exp);color:#888;border:1px solid #ccc}
+.t-live{background:var(--oa);color:#fff}
+.t-paus{background:var(--flat);color:#14324F}
+.t-ig{background:var(--positive);color:#fff}
+.t-ia{background:var(--flat);color:#14324F}
+.t-ir{background:var(--negative);color:#fff}
+.t-ib{background:var(--baking);color:#fff}
+
+/* LEGEND */
+.legend{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:8px;font-size:9.5px;color:var(--text-3);align-items:center}
+.leg-sq{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:3px;vertical-align:middle}
+.leg-ln{display:inline-block;width:14px;height:2px;border-radius:1px;margin-right:3px;vertical-align:middle}
+.leg-dash{display:inline-block;width:14px;height:0;border-top:2px dashed;margin-right:3px;vertical-align:middle}
+
+/* COMMENTARY */
+.commentary ul{list-style:none}
+.commentary li{display:flex;border-bottom:1px solid var(--line);min-height:36px}
+.commentary li:last-child{border-bottom:none}
+.c-dot-wrap{width:22px;flex-shrink:0;display:flex;align-items:flex-start;justify-content:center;padding-top:9px}
+.c-dot{width:6px;height:6px;border-radius:50%;background:var(--payments)}
+.c-text{flex:1;padding:7px 12px 7px 0;font-size:13px;color:var(--text-2);line-height:1.55;outline:none}
+.c-text strong{color:var(--text-1);font-weight:600}
+[contenteditable]:focus{background:#f8fbfe}
+.add-btn{display:flex;align-items:center;gap:6px;padding:6px 12px;border-top:1px dashed var(--line);cursor:pointer;font-size:10px;color:var(--text-3);background:#fafaf8;transition:color .15s}
+.add-btn:hover{color:var(--text-1)}
+.add-icon{width:14px;height:14px;border-radius:50%;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:12px;line-height:1;flex-shrink:0}
+
+/* OUTCOME ITEMS */
+.outcome-item{display:flex;border-bottom:1px solid var(--line)}
+.outcome-item:nth-child(odd){background:var(--row-odd)}
+.outcome-item:nth-child(even){background:var(--row-even)}
+.outcome-item:last-child{border-bottom:none}
+.o-num{width:22px;flex-shrink:0;font-size:8.5px;font-weight:600;color:var(--text-3);padding:8px 0 8px 8px;font-family:var(--mono)}
+.o-body{flex:1;padding:7px 12px 7px 0}
+.o-row1{display:flex;align-items:center;flex-wrap:wrap;gap:4px;margin-bottom:3px}
+.o-name{font-size:12px;font-weight:600;color:var(--text-1)}
+.o-sot{font-size:10px;font-weight:500;padding:1px 6px;border-radius:3px;border:1px solid var(--line);color:var(--text-3);background:#fff;white-space:nowrap;display:inline-flex;align-items:center;gap:3px}
+.o-arr{font-size:12px;font-weight:700;color:var(--text-1);margin-left:auto;white-space:nowrap;padding-left:8px;font-family:var(--font)}
+.o-desc{font-size:11px;color:var(--text-3);line-height:1.4}
+.prod-dot{display:inline-block;width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+/* KEY / MISC */
+.key-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:6px}
+.key-row:last-child{margin-bottom:0}
+.impact-wrap{overflow-x:auto;padding:10px 16px 14px}
+
+/* CALLOUT GROUPS */
+.callout-groups{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:2px solid var(--line)}
+.callout-group{border-right:2px solid var(--line)}
+.callout-group:last-child{border-right:none}
+.callout-group-hdr{background:var(--sec-hdr-bg);color:var(--sec-hdr-tx);font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;padding:6px 16px;border-bottom:1px solid var(--line);font-family:var(--font)}
+.callout-group-tiles{display:grid;grid-template-columns:1fr 1fr}
+.callout{padding:14px 16px 12px;border-right:1px solid var(--line);background:#fff;position:relative}
+.callout:last-child{border-right:none}
+.callout::before{content:'';display:block;height:3px;background:var(--payments);position:absolute;top:0;left:0;right:0}
+.co-big{font-family:var(--font);font-size:28px;font-weight:600;color:var(--payments);line-height:1;margin-bottom:8px;margin-top:4px}
+.co-label{font-size:11px;font-weight:600;color:var(--text-1);line-height:1.4;margin-bottom:5px}
+.co-sub{font-size:10px;color:var(--payments);font-weight:600;margin-bottom:2px}
+.co-idx{font-size:10px;color:var(--text-3)}
+.co-idx span{font-weight:600}
+.co-note{font-size:8.5px;color:var(--text-3);margin-top:4px;line-height:1.4}
+
+/* PLACEHOLDER */
+.placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;gap:12px}
+.ph-icon{font-size:40px;opacity:.25}
+.ph-title{font-size:16px;font-weight:500;color:var(--text-2)}
+.ph-sub{font-size:12px;color:var(--text-3);text-align:center;max-width:300px;line-height:1.6}
+
+/* WIN RATE TABLE */
+.wr-wrap{padding:12px 16px 14px}
+.wr-title{font-size:11px;font-weight:600;color:var(--text-1);margin-bottom:10px}
+.wr-tbl{width:100%;border-collapse:collapse;font-family:var(--font)}
+.wr-tbl thead th{background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;padding:5px 8px;text-align:right;border-bottom:1px solid var(--line);font-family:var(--font)}
+.wr-tbl thead th:first-child{text-align:left}
+.wr-tbl tbody tr:nth-child(odd) td{background:var(--row-odd)}
+.wr-tbl tbody tr:nth-child(even) td{background:var(--row-even)}
+.wr-tbl td{padding:5px 8px;font-size:12px;text-align:right;border-bottom:1px solid var(--line);color:var(--text-1);font-family:var(--font)}
+.wr-tbl td:first-child{text-align:left;font-weight:500}
+.wr-tbl tr:last-child td{border-bottom:none}
+.wr-tbl tr.wr-total td{font-weight:700;border-top:2px solid var(--line);background:var(--bg)!important}
+.wr-tbl tr.wr-upcoming td{color:var(--text-3)}
+.wr-result{display:inline-flex;align-items:center;font-size:8px;font-weight:700;padding:2px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.04em;color:#fff;white-space:nowrap}
+.wr-pct{font-family:var(--mono);font-weight:700;font-size:11px}
+.wr-pct.green{color:var(--positive)}
+.wr-pct.red{color:var(--negative)}
+.wr-pct.amber{color:#c8970a}
+.wr-na{font-size:10px;color:var(--text-3)}
+
+/* COLORED VALUE TEXT (non-pill, used outside Business Outcomes tab) */
+.val-g{color:var(--positive);font-weight:700;font-family:var(--font);font-size:11px}
+.val-a{color:#c8970a;font-weight:700;font-family:var(--font);font-size:11px}
+.val-r{color:var(--negative);font-weight:700;font-family:var(--font);font-size:11px}
+.val-delta{color:#111111;font-weight:400;font-family:var(--font);font-size:11px}
+
+
+/* STICKY PROJECT TABLE */
+.proj-wrap{overflow:auto;max-height:calc(100vh - 300px);position:relative}
+.proj-wrap .tbl thead{position:sticky;top:0;z-index:20}
+.proj-wrap .tbl{width:100%;table-layout:auto;font-size:10px}
+.proj-wrap .tbl td,.proj-wrap .tbl th{padding:3px 6px;white-space:nowrap}
+.proj-wrap .tbl td.wrap-col{white-space:normal;word-break:break-word;min-width:140px;max-width:200px}
+/* Sticky col 1 - ELM ID */
+.proj-wrap .tbl td.sc1,.proj-wrap .tbl th.sc1{position:sticky;left:0;z-index:5;width:88px;min-width:88px;max-width:88px}
+/* Sticky col 2 - Project Name */
+.proj-wrap .tbl td.sc2,.proj-wrap .tbl th.sc2{position:sticky;left:88px;z-index:5;min-width:150px;box-shadow:3px 0 6px rgba(0,0,0,0.08);text-align:left !important}
+/* Sticky thead × sticky col corners need higher z */
+.proj-wrap .tbl thead th.sc1,.proj-wrap .tbl thead th.sc2{z-index:25;background:var(--tbl-hdr-bg)}.proj-wrap .tbl thead td.sc1,.proj-wrap .tbl thead td.sc2{z-index:25}
+/* Body sticky col backgrounds */
+.proj-wrap .tbl tbody tr:nth-child(odd) td.sc1,.proj-wrap .tbl tbody tr:nth-child(odd) td.sc2{background:var(--row-odd)}
+.proj-wrap .tbl tbody tr:nth-child(even) td.sc1,.proj-wrap .tbl tbody tr:nth-child(even) td.sc2{background:var(--row-even)}
+.proj-wrap .tbl td{white-space:normal;font-size:9.5px;padding:7px 7px}
+.proj-wrap .tbl td.sc2{font-size:11px;font-weight:600;white-space:nowrap !important}
+.proj-wrap .tbl td.wrap-col{font-size:9px;color:#111}
+.proj-wrap .tbl th{white-space:nowrap}
+.proj-wrap .tbl td.sc1{white-space:nowrap}
+/* Section spacing */
+.detail-section{margin-bottom:28px}
+
+/* METRIC FILTER */
+.metric-filter{display:flex;gap:0;border-bottom:2px solid var(--line);padding:12px 20px;background:#fff;align-items:center;gap:12px}
+.metric-filter-label{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3)}
+.metric-btn{font-family:var(--font);font-size:11px;font-weight:600;padding:5px 18px;cursor:pointer;border:1.5px solid var(--line);background:#fff;color:var(--text-2);border-radius:0;transition:all .15s}
+.metric-btn.active{background:var(--sec-hdr-bg);color:#fff;border-color:var(--sec-hdr-bg)}
+.metric-btn:hover:not(.active){background:var(--row-odd)}
+.metric-panel{display:none}
+.metric-panel.active{display:block}
+
+/* TAB CALLOUTS */
+.tab-callouts{display:grid;border-bottom:2px solid var(--line);background:#fff}
+.tab-callout{padding:12px 14px 10px;border-right:1px solid var(--line);position:relative}
+.tab-callout:last-child{border-right:none}
+.tab-callout::before{content:'';display:block;height:3px;position:absolute;top:0;left:0;right:0}
+.tab-callout.co-rev::before{background:var(--payments)}
+.tab-callout.co-pos::before{background:var(--positive)}
+.tab-callout.co-neg::before{background:var(--negative)}
+.tab-callout.co-flat::before{background:var(--flat)}
+.tab-callout.co-bake::before{background:var(--baking)}
+.tab-callout.co-nox::before{background:var(--broken)}
+.tab-co-big{font-family:var(--font);font-size:24px;font-weight:600;color:var(--payments);line-height:1;margin:4px 0 6px}
+.tab-co-big.pos{color:var(--positive)}
+.tab-co-big.neg{color:var(--negative)}
+.tab-co-big.flat{color:#c8970a}
+.tab-co-big.bake{color:var(--baking)}
+.tab-co-big.nox{color:var(--broken)}
+.tab-co-label{font-size:10px;font-weight:600;color:var(--text-1);line-height:1.4;margin-bottom:4px}
+.tab-co-sub{font-size:9px;color:var(--text-3);margin-top:2px}
+.tab-co-pct{font-size:11px;font-weight:700;margin-left:4px}
+
+/* FILTER BAR */
+.filter-bar{display:flex;align-items:center;gap:12px;padding:10px 20px;background:#f9f9f7;flex-wrap:wrap;flex:1}
+.filter-bar-label{font-size:10px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
+.filter-grp{display:flex;align-items:center;gap:6px}
+.filter-grp-label{font-size:10px;font-weight:600;color:var(--text-2);white-space:nowrap}
+.filter-sel{font-family:var(--font);font-size:11px;font-weight:500;padding:4px 24px 4px 9px;border:1.5px solid var(--line);border-radius:0;background:#fff;color:var(--text-1);cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236a8aa0' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;min-width:130px}
+.filter-sel:focus{outline:none;border-color:var(--payments)}
+.filter-sel.active{border-color:var(--payments);background-color:#f0fbfd}
+.filter-clear{font-family:var(--font);font-size:10px;font-weight:600;padding:4px 12px;border:1.5px solid var(--line);background:#fff;color:var(--text-3);cursor:pointer;border-radius:0;margin-left:auto}
+.filter-clear:hover{border-color:var(--negative);color:var(--negative)}
+.filter-active-badge{display:none;font-size:9px;font-weight:700;padding:2px 7px;background:var(--payments);color:#fff;border-radius:8px;margin-left:4px}
+.filter-active-badge.show{display:inline-flex}
+
+/* TIME PERIOD TOGGLE + MULTI-DD */
+.tp-btn{font-family:var(--font);font-size:11px;font-weight:600;padding:4px 12px;cursor:pointer;border:1.5px solid var(--line);background:#fff;color:var(--text-2);transition:all .15s;margin-right:-1px}
+.tp-btn:first-child{border-radius:0}
+.tp-btn:last-child{border-radius:0}
+.tp-btn.active{background:var(--sec-hdr-bg);color:#fff;border-color:var(--sec-hdr-bg);z-index:1;position:relative}
+.multi-dd{position:absolute;top:calc(100% + 4px);left:0;background:#fff;border:1.5px solid var(--line);z-index:200;min-width:160px;box-shadow:0 4px 12px rgba(0,0,0,0.08)}
+.multi-dd label{display:flex;align-items:center;gap:8px;padding:5px 12px;font-size:11px;cursor:pointer;white-space:nowrap;color:var(--text-1)}
+.multi-dd label:hover{background:var(--row-odd)}
+.multi-dd input[type=checkbox]{accent-color:var(--payments);cursor:pointer}
+/* FOOTER */
+.dash-footer{background:var(--navy);color:var(--sky);font-size:10px;padding:10px 32px;display:flex;justify-content:space-between;align-items:center;letter-spacing:.04em}
+</style>
+</head>
+<body>
+
+<header class="dash-header">
+  <div class="header-top">
+    <div class="header-left">
+      <span class="eyebrow">ELM Squad · FY'26</span>
+      <span class="dash-title">Squad Performance Dashboard</span>
+    </div>
+    <div class="date-controls">
+      <span class="date-label">Period</span>
+      <select class="date-select"><option>FY'26</option><option>FY'25</option></select>
+      <span class="date-divider">Q</span>
+      <select class="date-select"><option>Q1</option><option selected>Q2</option><option>Q3</option><option>Q4</option></select>
+      <span class="date-divider">→</span>
+      <select class="date-select"><option>Aug</option><option selected>Sep</option><option>Oct</option></select>
+    </div>
+  </div>
+  <nav class="tabs">
+    <div class="tab active" onclick="switchTab(0)">Business Outcomes Summary</div>
+    <div class="tab" onclick="switchTab(1)">Business Outcomes Detail</div>
+    <div class="tab" onclick="switchTab(2)">Future Outlook</div>
+    <div class="tab" onclick="switchTab(3)">Velocity</div>
+    <div class="tab" onclick="switchTab(4)">Roadmap</div>
+  </nav>
+</header>
+
+<main class="dash-body">
+
+  <!-- TAB 0: Business Outcomes -->
+  <div class="tab-panel active" id="tab-0">
+
+    <div class="callout-groups">
+
+      <div class="callout-group">
+        <div class="callout-group-hdr">ELM Squad · Revenue Outcomes</div>
+        <div class="callout-group-tiles">
+          <div class="callout">
+            <div class="co-big">$4.2M</div>
+            <div class="co-label">Total ARR</div>
+          </div>
+          <div class="callout">
+            <div class="co-big">$1.8M</div>
+            <div class="co-label">In Year Incremental Revenue</div>
+            <div class="co-idx"><span class="val-g">105</span> <span style="font-size:9px;color:var(--text-3);">ITF</span> &nbsp;|&nbsp; <span class="val-r">72</span> <span style="font-size:9px;color:var(--text-3);">ITT</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout-group">
+        <div class="callout-group-hdr">ELM Squad · GNA Outcomes</div>
+        <div class="callout-group-tiles">
+          <div class="callout">
+            <div class="co-big">8.7k</div>
+            <div class="co-label">Total Annualized GNA</div>
+          </div>
+          <div class="callout">
+            <div class="co-big">4.4k</div>
+            <div class="co-label">In Year Incremental GNA</div>
+            <div class="co-idx"><span class="val-g">106</span> <span style="font-size:9px;color:var(--text-3);">ITF</span> &nbsp;|&nbsp; <span class="val-r">75</span> <span style="font-size:9px;color:var(--text-3);">ITT</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout-group">
+        <div class="callout-group-hdr">ELM Squad · Positive Biz Outcome Campaigns</div>
+        <div class="callout-group-tiles">
+          <div class="callout">
+            <div class="co-big">12</div>
+            <div class="co-label">Total Positive Biz Outcome Campaigns <sup>5</sup></div>
+            <div class="co-sub"><span class="val-r">80</span> <span style="font-size:9px;color:var(--text-3);font-weight:500;">ITPM</span></div>
+            <div class="co-note">5 – Absolute #, not normalized for project size.</div>
+          </div>
+          <div class="callout">
+            <div class="co-big">46%</div>
+            <div class="co-label">Win Rate <sup>4</sup></div>
+            <div class="co-sub"><span class="val-a">97</span> <span style="font-size:9px;color:var(--text-3);font-weight:500;">ITC</span></div>
+            <div class="co-note">4 – 30% Win Rate Squad Goal</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="split">
+
+      <!-- LEFT PANE -->
+      <div class="pane pane-left">
+
+        <div class="section">
+          <div class="sec-hdr"><span class="sec-hdr-text">ELM Squad · Revenue Outcomes</span></div>
+          <div class="sec-body">
+            <div class="legend">
+              <span><span class="leg-sq" style="background:#07c4d9;"></span>Achieved</span>
+              <span><span class="leg-sq" style="background:rgba(7,196,217,0.5);"></span>High Confidence Path To</span>
+              <span><span class="leg-sq" style="background:rgba(7,196,217,0.12);border:1px solid #ccccc0;"></span>Low Confidence Path To</span>
+              <span><span class="leg-ln" style="background:#000;"></span>Forecast</span>
+              <span><span class="leg-dash" style="border-color:#aaaaaa;"></span>Target</span>
+            </div>
+            <div style="position:relative;width:100%;height:240px;"><canvas id="revChart"></canvas></div>
+            <table class="tbl" style="margin-top:10px;">
+              <thead><tr><th style="width:12%;">Month</th><th>Actuals</th><th class="dvl">Forecast</th><th>Δ Fcst</th><th>ITF</th><th class="dv">Target</th><th>Δ Target</th><th>ITT</th></tr></thead>
+              <tbody>
+                <tr><td>Aug</td><td>$420K</td><td class="dvl">$400K</td><td><span class="val-delta">+$20K</span></td><td><span class="val-g">105</span></td><td class="dv">$580K</td><td><span class="val-delta">-$160K</span></td><td><span class="val-r">72</span></td></tr>
+                <tr><td>Sep</td><td>$580K</td><td class="dvl">$550K</td><td><span class="val-delta">+$30K</span></td><td><span class="val-g">105</span></td><td class="dv">$760K</td><td><span class="val-delta">-$180K</span></td><td><span class="val-r">76</span></td></tr>
+                <tr><td>Oct</td><td>—</td><td class="dvl">$650K</td><td>—</td><td>—</td><td class="dv">$900K</td><td>—</td><td>—</td></tr>
+                <tr class="tot"><td>QTD</td><td>$1.0M</td><td class="dvl">$950K</td><td><span class="val-delta">+$50K</span></td><td><span class="val-g">105</span></td><td class="dv">$1.34M</td><td><span class="val-delta">-$340K</span></td><td><span class="val-r">75</span></td></tr>
+                <tr class="tot"><td>YTD</td><td>$1.0M</td><td class="dvl">$950K</td><td><span class="val-delta">+$50K</span></td><td><span class="val-g">105</span></td><td class="dv">$1.34M</td><td><span class="val-delta">-$340K</span></td><td><span class="val-r">75</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="sec-hdr"><span class="sec-hdr-text">ELM Squad · GNA Outcomes</span></div>
+          <div class="sec-body">
+            <table class="tbl">
+              <thead><tr><th style="width:12%;">Month</th><th>Actuals</th><th class="dvl">Forecast</th><th>Δ Fcst</th><th>ITF</th><th class="dv">Target</th><th>Δ Target</th><th>ITT</th></tr></thead>
+              <tbody>
+                <tr><td>Aug</td><td>310</td><td class="dvl">290</td><td><span class="val-delta">+20</span></td><td><span class="val-g">107</span></td><td class="dv">420</td><td><span class="val-delta">-110</span></td><td><span class="val-r">74</span></td></tr>
+                <tr><td>Sep</td><td>420</td><td class="dvl">400</td><td><span class="val-delta">+20</span></td><td><span class="val-g">105</span></td><td class="dv">560</td><td><span class="val-delta">-140</span></td><td><span class="val-r">75</span></td></tr>
+                <tr><td>Oct</td><td>—</td><td class="dvl">480</td><td>—</td><td>—</td><td class="dv">660</td><td>—</td><td>—</td></tr>
+                <tr class="tot"><td>QTD</td><td>730</td><td class="dvl">690</td><td><span class="val-delta">+40</span></td><td><span class="val-g">106</span></td><td class="dv">980</td><td><span class="val-delta">-250</span></td><td><span class="val-r">74</span></td></tr>
+                <tr class="tot"><td>YTD</td><td>730</td><td class="dvl">690</td><td><span class="val-delta">+40</span></td><td><span class="val-g">106</span></td><td class="dv">980</td><td><span class="val-delta">-250</span></td><td><span class="val-r">74</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="sec-hdr"><span class="sec-hdr-text">ELM Squad · Compounded &amp; Annualized · YTD</span></div>
+          <div class="sec-body">
+            <table class="tbl">
+              <thead><tr><th style="width:28%;">Metric</th><th>Actuals</th><th class="dvl">Forecast</th><th>Δ Fcst</th><th>ITF</th><th class="dv">Target</th><th>Δ Target</th><th>ITT</th></tr></thead>
+              <tbody>
+                <tr><td>FY'26 GNA</td><td>4,380</td><td class="dvl">4,140</td><td><span class="val-delta">+240</span></td><td><span class="val-g">106</span></td><td class="dv">5,880</td><td><span class="val-delta">-1,500</span></td><td><span class="val-r">75</span></td></tr>
+                <tr><td>FY'26 Revenue</td><td>$4.2M</td><td class="dvl">$3.9M</td><td><span class="val-delta">+$300K</span></td><td><span class="val-g">108</span></td><td class="dv">$5.8M</td><td><span class="val-delta">-$1.6M</span></td><td><span class="val-r">72</span></td></tr>
+                <tr><td>Annualized GNA</td><td>8,760</td><td class="dvl">8,280</td><td><span class="val-delta">+480</span></td><td><span class="val-g">106</span></td><td class="dv">11,760</td><td><span class="val-delta">-3,000</span></td><td><span class="val-r">74</span></td></tr>
+                <tr><td>ARR</td><td>$8.4M</td><td class="dvl">$7.8M</td><td><span class="val-delta">+$600K</span></td><td><span class="val-g">108</span></td><td class="dv">$11.6M</td><td><span class="val-delta">-$3.2M</span></td><td><span class="val-r">72</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div><!-- /pane-left -->
+
+      <!-- RIGHT PANE -->
+      <div class="pane pane-right">
+
+        <div class="section">
+          <div class="sec-hdr"><span class="sec-hdr-text">ELM Squad · Commentary</span></div>
+          <div class="sec-body-flush">
+            <div class="commentary">
+              <ul id="perf-list">
+                <li><div class="c-dot-wrap"><div class="c-dot"></div></div><div class="c-text" contenteditable="true"><strong>Revenue ahead of forecast</strong> but trailing target. Aug +$20 over fcst; Sep +$30. Oct still open.</div></li>
+                <li><div class="c-dot-wrap"><div class="c-dot"></div></div><div class="c-text" contenteditable="true"><strong>GNA ITT at 74% QTD</strong> — gap vs target is significant; squad forecast remains strong at 106% ITF.</div></li>
+                <li><div class="c-dot-wrap"><div class="c-dot"></div></div><div class="c-text" contenteditable="true">Add performance commentary here.</div></li>
+              </ul>
+              <div class="add-btn" onclick="addBullet('perf-list')"><div class="add-icon">+</div><span>Add point</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section" style="margin-top:20px;">
+          <div class="sec-hdr"><span class="sec-hdr-text">ELM Squad · This Quarter's Wins</span></div>
+          <div class="sec-body-flush">
+            <div id="outcomes-list">
+              <div class="outcome-item"><div class="o-num">1</div><div class="o-body"><div class="o-row1"><span class="o-name">Payments Onboarding Nudge</span><span class="tag t-pos">Positive</span><span class="o-sot"><span class="prod-dot" style="background:#07c4d9;"></span>Payments</span><span class="o-arr">+$42K ARR</span></div><div class="o-desc">Incremental signups via in-product nudge during onboarding. Outperformed control by 12%.</div></div></div>
+              <div class="outcome-item"><div class="o-num">2</div><div class="o-body"><div class="o-row1"><span class="o-name">Payments Upgrade Banner</span><span class="tag t-pos">Positive</span><span class="o-sot"><span class="prod-dot" style="background:#07c4d9;"></span>Payments</span><span class="o-arr">+$31K ARR</span></div><div class="o-desc">Contextual upgrade prompt at transaction milestone. 18% lift in upgrade rate vs control.</div></div></div>
+              <div class="outcome-item"><div class="o-num">3</div><div class="o-body"><div class="o-row1"><span class="o-name">Payments Re-engagement Flow</span><span class="tag t-pos">Positive</span><span class="o-sot"><span class="prod-dot" style="background:#07c4d9;"></span>Payments</span><span class="o-arr">+$28K ARR</span></div><div class="o-desc">Dormant user win-back sequence via in-product messaging. Reactivated 9% of lapsed cohort.</div></div></div>
+            </div>
+            <div class="add-btn" onclick="addOutcome()"><div class="add-icon">+</div><span>Add outcome</span></div>
+            <!-- Totals row -->
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:5px 16px 5px 14px;background:var(--tbl-hdr-bg);border-top:1px solid var(--line);">
+              <span style="font-size:11px;font-weight:600;color:var(--tbl-hdr-tx);letter-spacing:.03em;text-transform:uppercase;">This Quarter's Wins</span>
+              <span style="font-family:var(--font);font-size:11px;font-weight:700;color:#111111;">+$101K ARR</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="section" style="margin-top:20px;">
+          <div class="sec-hdr"><span class="sec-hdr-text">ELM Squad · Win Rate</span></div>
+          <div class="wr-wrap">
+            <table class="wr-tbl">
+              <thead>
+                <tr>
+                  <th style="width:45%;">Result</th>
+                  <th>#</th>
+                  <th>%</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="wr-result" style="background:var(--positive);">Positive</span></td>
+                  <td>12</td>
+                  <td><span class="wr-pct green">46%</span></td>
+                </tr>
+                <tr>
+                  <td><span class="wr-result" style="background:var(--negative);">Negative</span></td>
+                  <td>2</td>
+                  <td><span class="wr-pct red">8%</span></td>
+                </tr>
+                <tr>
+                  <td><span class="wr-result" style="background:var(--flat);color:#14324F;">Flat</span></td>
+                  <td>12</td>
+                  <td><span class="wr-pct amber">46%</span></td>
+                </tr>
+                <tr>
+                  <td><span class="wr-result" style="background:var(--baking);">Still Baking</span></td>
+                  <td>11</td>
+                  <td><span class="wr-na">n/a</span></td>
+                </tr>
+                <tr class="wr-upcoming">
+                  <td style="color:var(--text-3);font-weight:500;letter-spacing:.04em;font-size:9px;text-transform:uppercase;">Q3 Upcoming</td>
+                  <td>31</td>
+                  <td><span class="wr-na">n/a</span></td>
+                </tr>
+                <tr class="wr-total">
+                  <td>Total</td>
+                  <td>67</td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div><!-- /pane-right -->
+    </div><!-- /split -->
+  </div><!-- /tab-0 -->
+
+  <!-- TAB 1: Business Outcomes Detail -->
+  <div class="tab-panel" id="tab-1">
+
+    <!-- View by + Filter by combined row -->
+    <div style="display:flex;align-items:center;border-bottom:2px solid var(--line);background:#f9f9f7;flex-wrap:wrap;">
+      <div class="metric-filter" style="border-right:2px solid var(--line);flex-shrink:0;">
+        <span class="metric-filter-label">View by</span>
+        <button class="metric-btn active" id="btn-rev" onclick="switchMetric('revenue')">Revenue</button>
+        <button class="metric-btn" id="btn-gna" onclick="switchMetric('gna')">GNA</button>
+      </div>
+      <div class="filter-bar" id="tab1-filter-bar">
+        <span class="filter-bar-label">Filter by</span>
+        <span class="filter-active-badge" id="filter-badge">Filtered</span>
+
+        <!-- Time Period filter -->
+        <div class="filter-grp" style="position:relative;">
+          <span class="filter-grp-label">Time Period</span>
+          <div style="display:flex;gap:0;">
+            <button class="tp-btn active" id="tp-ytd" onclick="setTimePeriodMode('ytd')">YTD</button>
+            <button class="tp-btn" id="tp-quarter" onclick="setTimePeriodMode('quarter')">Quarter</button>
+            <button class="tp-btn" id="tp-month" onclick="setTimePeriodMode('month')">Month</button>
+          </div>
+          <div class="multi-dd" id="dd-quarter" style="display:none;">
+            <label><input type="checkbox" value="Q1" onchange="updateTimePeriodSel()"> Q1 (May–Jul)</label>
+            <label><input type="checkbox" value="Q2" checked onchange="updateTimePeriodSel()"> Q2 (Aug–Oct)</label>
+            <label><input type="checkbox" value="Q3" onchange="updateTimePeriodSel()"> Q3 (Nov–Jan)</label>
+            <label><input type="checkbox" value="Q4" onchange="updateTimePeriodSel()"> Q4 (Feb–Apr)</label>
+          </div>
+          <div class="multi-dd" id="dd-month" style="display:none;">
+            <label><input type="checkbox" value="Aug" onchange="updateTimePeriodSel()"> Aug</label>
+            <label><input type="checkbox" value="Sep" onchange="updateTimePeriodSel()"> Sep</label>
+            <label><input type="checkbox" value="Oct" onchange="updateTimePeriodSel()"> Oct</label>
+            <label><input type="checkbox" value="Nov" onchange="updateTimePeriodSel()"> Nov</label>
+            <label><input type="checkbox" value="Dec" onchange="updateTimePeriodSel()"> Dec</label>
+            <label><input type="checkbox" value="Jan" onchange="updateTimePeriodSel()"> Jan</label>
+            <label><input type="checkbox" value="Feb" onchange="updateTimePeriodSel()"> Feb</label>
+            <label><input type="checkbox" value="Mar" onchange="updateTimePeriodSel()"> Mar</label>
+            <label><input type="checkbox" value="Apr" onchange="updateTimePeriodSel()"> Apr</label>
+            <label><input type="checkbox" value="May" onchange="updateTimePeriodSel()"> May</label>
+            <label><input type="checkbox" value="Jun" onchange="updateTimePeriodSel()"> Jun</label>
+            <label><input type="checkbox" value="Jul" onchange="updateTimePeriodSel()"> Jul</label>
+          </div>
+        </div>
+
+        <!-- Outcome Type -->
+        <div class="filter-grp">
+          <span class="filter-grp-label">Outcome Type</span>
+          <select class="filter-sel" id="flt-outcome" onchange="setFilter('outcomeType', this.value)">
+            <option value="all">All Outcomes</option>
+            <option value="t-pos">Positive</option>
+            <option value="t-neg">Negative</option>
+            <option value="t-flat">Flat</option>
+            <option value="t-bake">Still Baking</option>
+            <option value="t-nox">No Experiment</option>
+          </select>
+        </div>
+
+        <!-- Requestor Team -->
+        <div class="filter-grp">
+          <span class="filter-grp-label">Requestor Team</span>
+          <select class="filter-sel" id="flt-team" onchange="setFilter('requestorTeam', this.value)">
+            <option value="all">All Teams</option>
+            <option value="ELM Squad">ELM Squad</option>
+            <option value="Segment">Segment</option>
+            <option value="Sales">Sales</option>
+            <option value="CS">CS</option>
+          </select>
+        </div>
+
+        <!-- Audience -->
+        <div class="filter-grp" style="position:relative;">
+          <span class="filter-grp-label">Audience</span>
+          <button class="filter-sel" id="flt-audience-btn" onclick="toggleAudienceDd()" style="text-align:left;padding-right:28px;">All Audiences ▾</button>
+          <div class="multi-dd" id="dd-audience" style="display:none;">
+            <label><input type="checkbox" value="SMB" onchange="updateAudienceSel()"> SMB</label>
+            <label><input type="checkbox" value="Emerging MM" onchange="updateAudienceSel()"> Emerging MM</label>
+            <label><input type="checkbox" value="Mid-Market" onchange="updateAudienceSel()"> Mid-Market</label>
+            <label><input type="checkbox" value="HVB" onchange="updateAudienceSel()"> HVB</label>
+          </div>
+        </div>
+
+        <button class="filter-clear" onclick="resetFilters()">✕ Clear Filters</button>
+      </div>
+    </div>
+
+    <!-- REVENUE VIEW -->
+    <div class="metric-panel active" id="metric-revenue">
+
+    <div class="tab-callouts" style="grid-template-columns:repeat(7,1fr);">
+      <div class="tab-callout co-rev">
+        <div class="tab-co-big">$4.2M</div>
+        <div class="tab-co-label">Total ARR</div>
+      </div>
+      <div class="tab-callout co-rev">
+        <div class="tab-co-big">$1.8M</div>
+        <div class="tab-co-label">In Year Incremental Revenue</div>
+        <div class="tab-co-sub"><span class="val-g" style="font-size:10px;">105</span> <span style="font-size:8px;">ITF</span> &nbsp;|&nbsp; <span class="val-r" style="font-size:10px;">72</span> <span style="font-size:8px;">ITT</span></div>
+      </div>
+      <div class="tab-callout co-pos">
+        <div class="tab-co-big pos co-stat-pos-n">20</div>
+        <div class="tab-co-label">Positive Outcomes</div>
+        <div class="tab-co-sub"><span class="tab-co-pct co-stat-pos-pct" style="color:var(--positive);">83%</span> of experiments</div>
+      </div>
+      <div class="tab-callout co-neg">
+        <div class="tab-co-big neg co-stat-neg-n">2</div>
+        <div class="tab-co-label">Negative Outcomes</div>
+        <div class="tab-co-sub"><span class="tab-co-pct co-stat-neg-pct" style="color:var(--negative);">8%</span> of experiments</div>
+      </div>
+      <div class="tab-callout co-flat">
+        <div class="tab-co-big flat co-stat-flat-n">2</div>
+        <div class="tab-co-label">Flat Outcomes</div>
+        <div class="tab-co-sub"><span class="tab-co-pct co-stat-flat-pct" style="color:#c8970a;">9%</span> of experiments</div>
+      </div>
+      <div class="tab-callout co-bake">
+        <div class="tab-co-big bake co-stat-bake-n">2</div>
+        <div class="tab-co-label">Still Baking</div>
+        <div class="tab-co-sub">Not yet measured</div>
+      </div>
+      <div class="tab-callout co-nox">
+        <div class="tab-co-big nox co-stat-nox-n">6</div>
+        <div class="tab-co-label">Non-Experiments</div>
+        <div class="tab-co-sub">No test design</div>
+      </div>
+    </div>
+
+      <div style="padding:0;margin-bottom:24px;">
+        <div class="sec-hdr"><span class="sec-hdr-text">ELM Squad · Revenue Outcomes</span></div>
+        <div style="padding:14px 20px 16px;">
+          <div class="legend">
+            <span><span class="leg-sq" style="background:#07c4d9;"></span>Achieved</span>
+            <span><span class="leg-sq" style="background:rgba(7,196,217,0.5);"></span>High Confidence Path To</span>
+            <span><span class="leg-sq" style="background:rgba(7,196,217,0.12);border:1px solid #ccccc0;"></span>Low Confidence Path To</span>
+            <span><span class="leg-ln" style="background:#000;"></span>Forecast</span>
+            <span><span class="leg-dash" style="border-color:#aaaaaa;"></span>Target</span>
+          </div>
+          <div style="position:relative;width:100%;height:200px;"><canvas id="revChart2"></canvas></div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:0;border-bottom:2px solid var(--line);overflow-x:auto;">
+      <div style="overflow-x:auto;flex:1;min-width:340px;border-right:2px solid var(--line);padding:0 16px 16px;">
+        <table class="tbl outcomes-tbl" style="width:100%;">
+          <thead>
+            <tr>
+              <th style="text-align:left;min-width:110px;">Metric</th>
+              <th style="text-align:center;width:60px;">YTD</th>
+              <th style="text-align:center;width:60px;">QTD</th>
+              <th class="dvl" style="text-align:center;">Aug</th>
+              <th style="text-align:center;">Sep</th><th style="text-align:center;">Oct</th><th style="text-align:center;">Nov</th><th style="text-align:center;">Dec</th><th style="text-align:center;">Jan</th><th style="text-align:center;">Feb</th><th style="text-align:center;">Mar</th><th style="text-align:center;">Apr</th><th style="text-align:center;">May</th><th style="text-align:center;">Jun</th><th style="text-align:center;">Jul</th>
+            </tr>
+            <tr>
+              <th colspan="14" style="background:var(--sec-hdr-bg);color:#fff;text-align:left;font-size:9.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;padding:6px 12px;border-bottom:1px solid rgba(255,255,255,0.15);">Incremental Outcomes In Year</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="font-weight:600;">Actuals</td><td style="text-align:center;font-weight:700;">$1.0M</td><td style="text-align:center;font-weight:700;">$1.0M</td><td class="dvl" style="text-align:center;">$420K</td><td style="text-align:center;">$580K</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td></tr>
+            <tr><td style="font-weight:600;">Forecast</td><td style="text-align:center;font-weight:700;">$950K</td><td style="text-align:center;font-weight:700;">$1.24M</td><td class="dvl" style="text-align:center;">$400K</td><td style="text-align:center;">$550K</td><td style="text-align:center;">$650K</td><td style="text-align:center;">$780K</td><td style="text-align:center;">$870K</td><td style="text-align:center;">$950K</td><td style="text-align:center;">$1.1M</td><td style="text-align:center;">$1.1M</td><td style="text-align:center;">$1.3M</td><td style="text-align:center;">$1.4M</td><td style="text-align:center;">$1.5M</td><td style="text-align:center;">$1.7M</td></tr>
+            <tr><td style="color:var(--text-3);">Δ to Forecast</td><td style="text-align:center;"><span class="val-delta">+$50K</span></td><td class="dvl" style="text-align:center;"><span class="val-delta">+$20K</span></td><td style="text-align:center;"><span class="val-delta">+$30K</span></td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td></tr>
+            <tr><td style="color:var(--text-3);">ITF</td><td style="text-align:center;"><span class="val-g">105</span></td><td class="dvl" style="text-align:center;"><span class="val-g">105</span></td><td style="text-align:center;"><span class="val-g">105</span></td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td></tr>
+            <tr><td style="font-weight:600;">Target</td><td style="text-align:center;font-weight:700;">$1.34M</td><td style="text-align:center;font-weight:700;">$1.34M</td><td class="dvl" style="text-align:center;">$580K</td><td style="text-align:center;">$760K</td><td style="text-align:center;">$900K</td><td style="text-align:center;">$1.0M</td><td style="text-align:center;">$1.2M</td><td style="text-align:center;">$1.3M</td><td style="text-align:center;">$1.5M</td><td style="text-align:center;">$1.6M</td><td style="text-align:center;">$1.8M</td><td style="text-align:center;">$2.0M</td><td style="text-align:center;">$2.2M</td><td style="text-align:center;">$2.5M</td></tr>
+            <tr><td style="color:var(--text-3);">Δ to Target</td><td style="text-align:center;"><span class="val-delta">-$340K</span></td><td class="dvl" style="text-align:center;"><span class="val-delta">-$160K</span></td><td style="text-align:center;"><span class="val-delta">-$180K</span></td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td></tr>
+            <tr><td style="color:var(--text-3);">ITT</td><td style="text-align:center;"><span class="val-r">75</span></td><td class="dvl" style="text-align:center;"><span class="val-r">72</span></td><td style="text-align:center;"><span class="val-r">76</span></td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="overflow-x:auto;flex:1;min-width:280px;padding:0 16px 16px;">
+        <table class="tbl outcomes-tbl" style="width:100%;">
+          <thead>
+            <tr>
+              <th colspan="14" style="background:var(--sec-hdr-bg);color:#fff;text-align:left;font-size:9.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;padding:6px 12px;border-bottom:1px solid rgba(255,255,255,0.15);">Annualized Impact</th>
+            </tr>
+            <tr>
+              <th style="text-align:left;min-width:90px;">Metric</th>
+              <th style="text-align:center;width:65px;">YTD</th>
+              <th class="dvl" style="text-align:center;">Aug</th>
+              <th style="text-align:center;">Sep</th><th style="text-align:center;">Oct</th><th style="text-align:center;">Nov</th><th style="text-align:center;">Dec</th><th style="text-align:center;">Jan</th><th style="text-align:center;">Feb</th><th style="text-align:center;">Mar</th><th style="text-align:center;">Apr</th><th style="text-align:center;">May</th><th style="text-align:center;">Jun</th><th style="text-align:center;">Jul</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="font-weight:600;">Actuals</td><td style="text-align:center;font-weight:700;">$794K</td><td class="dvl" style="text-align:center;">$117K</td><td style="text-align:center;">$203K</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td></tr>
+          </tbody>
+        </table>
+      </div>
+      </div>
+
+
+
+    </div>
+
+    <!-- GNA VIEW -->
+    <div class="metric-panel" id="metric-gna">
+
+    <div class="tab-callouts" style="grid-template-columns:repeat(7,1fr);">
+      <div class="tab-callout co-rev">
+        <div class="tab-co-big">8.7k</div>
+        <div class="tab-co-label">Total Annualized GNA</div>
+      </div>
+      <div class="tab-callout co-rev">
+        <div class="tab-co-big">4.4k</div>
+        <div class="tab-co-label">In Year Incremental GNA</div>
+        <div class="tab-co-sub"><span class="val-g" style="font-size:10px;">106</span> <span style="font-size:8px;">ITF</span> &nbsp;|&nbsp; <span class="val-r" style="font-size:10px;">75</span> <span style="font-size:8px;">ITT</span></div>
+      </div>
+      <div class="tab-callout co-pos">
+        <div class="tab-co-big pos co-stat-pos-n">20</div>
+        <div class="tab-co-label">Positive Outcomes</div>
+        <div class="tab-co-sub"><span class="tab-co-pct co-stat-pos-pct" style="color:var(--positive);">83%</span> of experiments</div>
+      </div>
+      <div class="tab-callout co-neg">
+        <div class="tab-co-big neg co-stat-neg-n">2</div>
+        <div class="tab-co-label">Negative Outcomes</div>
+        <div class="tab-co-sub"><span class="tab-co-pct co-stat-neg-pct" style="color:var(--negative);">8%</span> of experiments</div>
+      </div>
+      <div class="tab-callout co-flat">
+        <div class="tab-co-big flat co-stat-flat-n">2</div>
+        <div class="tab-co-label">Flat Outcomes</div>
+        <div class="tab-co-sub"><span class="tab-co-pct co-stat-flat-pct" style="color:#c8970a;">9%</span> of experiments</div>
+      </div>
+      <div class="tab-callout co-bake">
+        <div class="tab-co-big bake co-stat-bake-n">2</div>
+        <div class="tab-co-label">Still Baking</div>
+        <div class="tab-co-sub">Not yet measured</div>
+      </div>
+      <div class="tab-callout co-nox">
+        <div class="tab-co-big nox co-stat-nox-n">6</div>
+        <div class="tab-co-label">Non-Experiments</div>
+        <div class="tab-co-sub">No test design</div>
+      </div>
+    </div>
+
+      <div style="padding:0;margin-bottom:24px;">
+        <div class="sec-hdr"><span class="sec-hdr-text">ELM Squad · GNA Outcomes</span></div>
+        <div style="padding:14px 20px 16px;">
+          <div class="legend">
+            <span><span class="leg-sq" style="background:#07c4d9;"></span>Achieved</span>
+            <span><span class="leg-sq" style="background:rgba(7,196,217,0.5);"></span>High Confidence Path To</span>
+            <span><span class="leg-sq" style="background:rgba(7,196,217,0.12);border:1px solid #ccccc0;"></span>Low Confidence Path To</span>
+            <span><span class="leg-ln" style="background:#000;"></span>Forecast</span>
+            <span><span class="leg-dash" style="border-color:#aaaaaa;"></span>Target</span>
+          </div>
+          <div style="position:relative;width:100%;height:200px;"><canvas id="gnaChart"></canvas></div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:0;border-bottom:2px solid var(--line);overflow-x:auto;">
+      <div style="overflow-x:auto;flex:1;min-width:340px;border-right:2px solid var(--line);padding:0 16px 16px;">
+        <table class="tbl outcomes-tbl" style="width:100%;">
+          <thead>
+            <tr>
+              <th style="text-align:left;min-width:110px;">Metric</th>
+              <th style="text-align:center;width:60px;">YTD</th>
+              <th style="text-align:center;width:60px;">QTD</th>
+              <th class="dvl" style="text-align:center;">Aug</th>
+              <th style="text-align:center;">Sep</th><th style="text-align:center;">Oct</th><th style="text-align:center;">Nov</th><th style="text-align:center;">Dec</th><th style="text-align:center;">Jan</th><th style="text-align:center;">Feb</th><th style="text-align:center;">Mar</th><th style="text-align:center;">Apr</th><th style="text-align:center;">May</th><th style="text-align:center;">Jun</th><th style="text-align:center;">Jul</th>
+            </tr>
+            <tr>
+              <th colspan="14" style="background:var(--sec-hdr-bg);color:#fff;text-align:left;font-size:9.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;padding:6px 12px;border-bottom:1px solid rgba(255,255,255,0.15);">Incremental Outcomes In Year (GNA)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="font-weight:600;">Actuals</td><td style="text-align:center;font-weight:700;">730</td><td style="text-align:center;font-weight:700;">730</td><td class="dvl" style="text-align:center;">310</td><td style="text-align:center;">420</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td></tr>
+            <tr><td style="font-weight:600;">Forecast</td><td style="text-align:center;font-weight:700;">690</td><td style="text-align:center;font-weight:700;">690</td><td class="dvl" style="text-align:center;">290</td><td style="text-align:center;">400</td><td style="text-align:center;">480</td><td style="text-align:center;">520</td><td style="text-align:center;">580</td><td style="text-align:center;">640</td><td style="text-align:center;">700</td><td style="text-align:center;">760</td><td style="text-align:center;">830</td><td style="text-align:center;">900</td><td style="text-align:center;">980</td><td style="text-align:center;">1,060</td></tr>
+            <tr><td style="color:var(--text-3);">Δ to Forecast</td><td style="text-align:center;"><span class="val-delta">+40</span></td><td class="dvl" style="text-align:center;"><span class="val-delta">+20</span></td><td style="text-align:center;"><span class="val-delta">+20</span></td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td></tr>
+            <tr><td style="color:var(--text-3);">ITF</td><td style="text-align:center;"><span class="val-g">106</span></td><td class="dvl" style="text-align:center;"><span class="val-g">107</span></td><td style="text-align:center;"><span class="val-g">105</span></td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td></tr>
+            <tr><td style="font-weight:600;">Target</td><td style="text-align:center;font-weight:700;">980</td><td style="text-align:center;font-weight:700;">980</td><td class="dvl" style="text-align:center;">420</td><td style="text-align:center;">560</td><td style="text-align:center;">660</td><td style="text-align:center;">750</td><td style="text-align:center;">860</td><td style="text-align:center;">980</td><td style="text-align:center;">1,080</td><td style="text-align:center;">1,200</td><td style="text-align:center;">1,350</td><td style="text-align:center;">1,500</td><td style="text-align:center;">1,650</td><td style="text-align:center;">1,800</td></tr>
+            <tr><td style="color:var(--text-3);">Δ to Target</td><td style="text-align:center;"><span class="val-delta">-250</span></td><td class="dvl" style="text-align:center;"><span class="val-delta">-110</span></td><td style="text-align:center;"><span class="val-delta">-140</span></td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td></tr>
+            <tr><td style="color:var(--text-3);">ITT</td><td style="text-align:center;"><span class="val-r">74</span></td><td class="dvl" style="text-align:center;"><span class="val-r">74</span></td><td style="text-align:center;"><span class="val-r">75</span></td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="overflow-x:auto;flex:1;min-width:280px;padding:0 16px 16px;">
+        <table class="tbl outcomes-tbl" style="width:100%;">
+          <thead>
+            <tr>
+              <th colspan="14" style="background:var(--sec-hdr-bg);color:#fff;text-align:left;font-size:9.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;padding:6px 12px;border-bottom:1px solid rgba(255,255,255,0.15);">Annualized Impact (GNA)</th>
+            </tr>
+            <tr>
+              <th style="text-align:left;min-width:90px;">Metric</th>
+              <th style="text-align:center;width:65px;">YTD</th>
+              <th class="dvl" style="text-align:center;">Aug</th>
+              <th style="text-align:center;">Sep</th><th style="text-align:center;">Oct</th><th style="text-align:center;">Nov</th><th style="text-align:center;">Dec</th><th style="text-align:center;">Jan</th><th style="text-align:center;">Feb</th><th style="text-align:center;">Mar</th><th style="text-align:center;">Apr</th><th style="text-align:center;">May</th><th style="text-align:center;">Jun</th><th style="text-align:center;">Jul</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="font-weight:600;">Actuals</td><td style="text-align:center;font-weight:700;">313k</td><td class="dvl" style="text-align:center;">50k</td><td style="text-align:center;">85k</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td></tr>
+          </tbody>
+        </table>
+      </div>
+      </div>
+
+
+
+    </div>
+
+  </div>
+
+
+
+
+      <div style="margin-top:24px;">
+        <div class="sec-hdr"><span class="sec-hdr-text">ELM Squad · Project Detail · FY'26 · Payments</span></div>
+        <div class="proj-wrap">
+          <table class="tbl">
+          <thead>
+            <tr>
+              <td class="sc1" style="background:var(--payments);font-weight:700;color:#fff;font-size:10px;border-bottom:1px solid var(--line);">Totals</td>
+              <td class="sc2" style="background:var(--payments);font-weight:700;color:#fff;font-size:10px;border-bottom:1px solid var(--line);">30 Projects</td>
+              <td style="background:var(--payments);border-bottom:1px solid var(--line);"></td>
+              <td style="background:var(--payments);border-bottom:1px solid var(--line);"></td>
+              <td style="background:var(--payments);border-bottom:1px solid var(--line);"></td>
+              <td style="background:var(--payments);border-bottom:1px solid var(--line);"></td>
+              <td style="background:var(--payments);border-bottom:1px solid var(--line);"></td>
+              <td style="background:var(--payments);border-bottom:1px solid var(--line);"></td>
+              <td style="background:var(--payments);border-bottom:1px solid var(--line);"></td>
+              <td style="background:var(--payments);border-bottom:1px solid var(--line);"></td>
+              <td style="background:var(--payments);border-bottom:1px solid var(--line);"></td>
+              <td class="dvl" style="background:var(--payments);font-weight:700;color:#fff;text-align:center;border-bottom:1px solid var(--line);">$794K</td>
+              <td style="background:var(--payments);font-weight:700;color:#fff;text-align:center;border-bottom:1px solid var(--line);">$561K</td>
+              <td class="dvl" style="background:var(--payments);font-weight:700;color:#fff;text-align:center;border-bottom:1px solid var(--line);">$117K</td>
+              <td style="background:var(--payments);font-weight:700;color:#fff;text-align:center;border-bottom:1px solid var(--line);">$203K</td><td style="background:var(--payments);font-weight:700;color:#fff;text-align:center;border-bottom:1px solid var(--line);">$171K</td><td style="background:var(--payments);font-weight:700;color:#fff;text-align:center;border-bottom:1px solid var(--line);">$61K</td><td style="background:var(--payments);font-weight:700;color:#fff;text-align:center;border-bottom:1px solid var(--line);">$5K</td><td style="background:var(--payments);font-weight:700;color:#fff;text-align:center;border-bottom:1px solid var(--line);">—</td><td style="background:var(--payments);font-weight:700;color:#fff;text-align:center;border-bottom:1px solid var(--line);">—</td><td style="background:var(--payments);font-weight:700;color:#fff;text-align:center;border-bottom:1px solid var(--line);">—</td><td style="background:var(--payments);font-weight:700;color:#fff;text-align:center;border-bottom:1px solid var(--line);">—</td><td style="background:var(--payments);font-weight:700;color:#fff;text-align:center;border-bottom:1px solid var(--line);">—</td><td style="background:var(--payments);font-weight:700;color:#fff;text-align:center;border-bottom:1px solid var(--line);">—</td><td style="background:var(--payments);font-weight:700;color:#fff;text-align:center;border-bottom:1px solid var(--line);">—</td>
+            </tr>
+            <tr>
+              <th class="sc1" style="text-align:left;">ELM ID</th>
+              <th class="sc2">Project Name</th>
+              <th style="text-align:left;min-width:140px;">Description</th>
+              <th style="text-align:center;">Outcome</th>
+              <th style="text-align:center;">SWAG</th>
+              <th style="text-align:center;">Launch Date</th>
+              <th style="text-align:center;">Scale Date</th>
+              <th style="text-align:center;">Test Design</th>
+              <th style="text-align:center;">Requestor</th>
+              <th style="text-align:center;">LMM Driver</th>
+              <th style="text-align:center;">Analytics</th>
+              <th style="text-align:left;min-width:120px;">Squad Lever</th>
+              <th id="proj-arr-hdr" style="text-align:center;" class="dvl">Annualized Impact</th>
+              <th id="proj-inyr-hdr" style="text-align:center;">In-Yr Rev</th>
+              <th style="text-align:center;" class="dvl">Aug</th><th style="text-align:center;">Sep</th><th style="text-align:center;">Oct</th><th style="text-align:center;">Nov</th><th style="text-align:center;">Dec</th>
+              <th style="text-align:center;">Jan</th><th style="text-align:center;">Feb</th><th style="text-align:center;">Mar</th><th style="text-align:center;">Apr</th><th style="text-align:center;">May</th><th style="text-align:center;">Jun</th><th style="text-align:center;">Jul</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-elm="ELM-1001" data-audience="SMB"><td class="sc1"><a href="#" style="color:var(--payments);text-decoration:none;border-bottom:1px solid rgba(7,196,217,0.4);">ELM-1001</a></td><td class="sc2" style="text-align:left;">Payments Onboarding Nudge</td><td class="wrap-col" style="text-align:left;color:#111;">In-product nudge during onboarding to drive signups</td><td style="text-align:center;"><span class="tag t-pos">Positive</span></td><td style="text-align:center;">Medium</td><td style="text-align:center;">Aug-01</td><td style="text-align:center;">Sep-15</td><td style="text-align:center;">90/10</td><td style="text-align:center;">ELM Squad</td><td style="text-align:center;">Jenna Martinez</td><td style="text-align:center;">Amy Chen</td><td style="text-align:left;font-size:9.5px;">Lever 2: Personalization, Segmentation &amp; Targeting</td><td class="dvl" style="text-align:center;" data-rev="$42K" data-gna="18k">$42K</td><td style="text-align:center;" data-rev="$31K" data-gna="13k">$31K</td><td class="dvl" style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="$12K" data-gna="5">$12K</td><td style="text-align:center;" data-rev="$14K" data-gna="6">$14K</td><td style="text-align:center;" data-rev="$5K" data-gna="2">$5K</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td></tr>
+            <tr data-elm="ELM-1002" data-audience="SMB"><td class="sc1"><a href="#" style="color:var(--payments);text-decoration:none;border-bottom:1px solid rgba(7,196,217,0.4);">ELM-1002</a></td><td class="sc2" style="text-align:left;">Payments Upgrade Banner</td><td class="wrap-col" style="text-align:left;color:#111;">Contextual upgrade prompt at transaction milestone</td><td style="text-align:center;"><span class="tag t-pos">Positive</span></td><td style="text-align:center;">Small</td><td style="text-align:center;">Aug-05</td><td style="text-align:center;">Oct-01</td><td style="text-align:center;">50/50</td><td style="text-align:center;">Segment</td><td style="text-align:center;">Ravi Patel</td><td style="text-align:center;">Amy Chen</td><td style="text-align:left;font-size:9.5px;">Lever 3: Commercial Levers</td><td class="dvl" style="text-align:center;" data-rev="$31K" data-gna="12k">$31K</td><td style="text-align:center;" data-rev="$22K" data-gna="9k">$22K</td><td class="dvl" style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="$8K" data-gna="4">$8K</td><td style="text-align:center;" data-rev="$9K" data-gna="4">$9K</td><td style="text-align:center;" data-rev="$5K" data-gna="2">$5K</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td></tr>
+            <tr data-elm="ELM-1003" data-audience="SMB"><td class="sc1"><a href="#" style="color:var(--payments);text-decoration:none;border-bottom:1px solid rgba(7,196,217,0.4);">ELM-1003</a></td><td class="sc2" style="text-align:left;">Payments Re-engagement Flow</td><td class="wrap-col" style="text-align:left;color:#111;">Dormant user win-back via in-product messaging</td><td style="text-align:center;"><span class="tag t-pos">Positive</span></td><td style="text-align:center;">Medium</td><td style="text-align:center;">Sep-12</td><td style="text-align:center;">—</td><td style="text-align:center;">80/20</td><td style="text-align:center;">ELM Squad</td><td style="text-align:center;">Sara Kim</td><td style="text-align:center;">Tran Nguyen</td><td style="text-align:left;font-size:9.5px;">Lever 5: Driving Active Use</td><td class="dvl" style="text-align:center;" data-rev="$28K" data-gna="11k">$28K</td><td style="text-align:center;" data-rev="$19K" data-gna="8k">$19K</td><td class="dvl" style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="$10K" data-gna="4">$10K</td><td style="text-align:center;" data-rev="$9K" data-gna="3">$9K</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td></tr>
+            <tr data-elm="ELM-1004" data-audience="SMB"><td class="sc1"><a href="#" style="color:var(--payments);text-decoration:none;border-bottom:1px solid rgba(7,196,217,0.4);">ELM-1004</a></td><td class="sc2" style="text-align:left;">Payments Fee Transparency</td><td class="wrap-col" style="text-align:left;color:#111;">Clear fee breakdown messaging at key decision points</td><td style="text-align:center;"><span class="tag t-pos">Positive</span></td><td style="text-align:center;">Small</td><td style="text-align:center;">Aug-18</td><td style="text-align:center;">Sep-20</td><td style="text-align:center;">50/50</td><td style="text-align:center;">Sales</td><td style="text-align:center;">Jenna Martinez</td><td style="text-align:center;">Amy Chen</td><td style="text-align:left;font-size:9.5px;">Lever 3: Commercial Levers</td><td class="dvl" style="text-align:center;" data-rev="$38K" data-gna="15k">$38K</td><td style="text-align:center;" data-rev="$27K" data-gna="11k">$27K</td><td class="dvl" style="text-align:center;" data-rev="$15K" data-gna="6">$15K</td><td style="text-align:center;" data-rev="$12K" data-gna="5">$12K</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td></tr>
+            <tr data-elm="ELM-1005" data-audience="SMB"><td class="sc1"><a href="#" style="color:var(--payments);text-decoration:none;border-bottom:1px solid rgba(7,196,217,0.4);">ELM-1005</a></td><td class="sc2" style="text-align:left;">Payments Dashboard Highlight</td><td class="wrap-col" style="text-align:left;color:#111;">Feature spotlight on key dashboard payment metrics</td><td style="text-align:center;"><span class="tag t-nox">No Experiment</span></td><td style="text-align:center;">Mini</td><td style="text-align:center;">Aug-22</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">ELM Squad</td><td style="text-align:center;">Ravi Patel</td><td style="text-align:center;">Tran Nguyen</td><td style="text-align:left;font-size:9.5px;">Lever 2: Personalization, Segmentation &amp; Targeting</td><td class="dvl" style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td class="dvl" style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td></tr>
+            <tr data-elm="ELM-1006" data-audience="SMB"><td class="sc1"><a href="#" style="color:var(--payments);text-decoration:none;border-bottom:1px solid rgba(7,196,217,0.4);">ELM-1006</a></td><td class="sc2" style="text-align:left;">Payments Mobile CTA Test</td><td class="wrap-col" style="text-align:left;color:#111;">Optimized call-to-action on mobile checkout</td><td style="text-align:center;"><span class="tag t-pos">Positive</span></td><td style="text-align:center;">Small</td><td style="text-align:center;">Sep-03</td><td style="text-align:center;">Oct-10</td><td style="text-align:center;">80/20</td><td style="text-align:center;">Segment</td><td style="text-align:center;">Sara Kim</td><td style="text-align:center;">Amy Chen</td><td style="text-align:left;font-size:9.5px;">Lever 2: Personalization, Segmentation &amp; Targeting</td><td class="dvl" style="text-align:center;" data-rev="$33K" data-gna="13k">$33K</td><td style="text-align:center;" data-rev="$24K" data-gna="10k">$24K</td><td class="dvl" style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="$16K" data-gna="7">$16K</td><td style="text-align:center;" data-rev="$8K" data-gna="3">$8K</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td></tr>
+            <tr data-elm="ELM-1007" data-audience="SMB"><td class="sc1"><a href="#" style="color:var(--payments);text-decoration:none;border-bottom:1px solid rgba(7,196,217,0.4);">ELM-1007</a></td><td class="sc2" style="text-align:left;">Payments Checkout Upsell</td><td class="wrap-col" style="text-align:left;color:#111;">Post-transaction upsell to premium payment tier</td><td style="text-align:center;"><span class="tag t-pos">Positive</span></td><td style="text-align:center;">Large</td><td style="text-align:center;">Sep-08</td><td style="text-align:center;">—</td><td style="text-align:center;">90/10</td><td style="text-align:center;">ELM Squad</td><td style="text-align:center;">Jenna Martinez</td><td style="text-align:center;">Tran Nguyen</td><td style="text-align:left;font-size:9.5px;">Lever 4: Driving Consumption</td><td class="dvl" style="text-align:center;" data-rev="$51K" data-gna="20k">$51K</td><td style="text-align:center;" data-rev="$36K" data-gna="14k">$36K</td><td class="dvl" style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="$26K" data-gna="11">$26K</td><td style="text-align:center;" data-rev="$10K" data-gna="4">$10K</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td></tr>
+            <tr data-elm="ELM-1008" data-audience="SMB"><td class="sc1"><a href="#" style="color:var(--payments);text-decoration:none;border-bottom:1px solid rgba(7,196,217,0.4);">ELM-1008</a></td><td class="sc2" style="text-align:left;">Payments Card Reader Promo</td><td class="wrap-col" style="text-align:left;color:#111;">Hardware bundle offer triggered by volume threshold</td><td style="text-align:center;"><span class="tag t-pos">Positive</span></td><td style="text-align:center;">Medium</td><td style="text-align:center;">Sep-15</td><td style="text-align:center;">Oct-20</td><td style="text-align:center;">50/50</td><td style="text-align:center;">Sales</td><td style="text-align:center;">Ravi Patel</td><td style="text-align:center;">Amy Chen</td><td style="text-align:left;font-size:9.5px;">Lever 3: Commercial Levers</td><td class="dvl" style="text-align:center;" data-rev="$44K" data-gna="18k">$44K</td><td style="text-align:center;" data-rev="$31K" data-gna="13k">$31K</td><td class="dvl" style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="$20K" data-gna="8">$20K</td><td style="text-align:center;" data-rev="$11K" data-gna="4">$11K</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td></tr>
+            <tr data-elm="ELM-1009" data-audience="Emerging MM"><td class="sc1"><a href="#" style="color:var(--payments);text-decoration:none;border-bottom:1px solid rgba(7,196,217,0.4);">ELM-1009</a></td><td class="sc2" style="text-align:left;">Payments Dispute Win-back</td><td class="wrap-col" style="text-align:left;color:#111;">Re-engage customers after dispute resolution</td><td style="text-align:center;"><span class="tag t-pos">Positive</span></td><td style="text-align:center;">Small</td><td style="text-align:center;">Sep-20</td><td style="text-align:center;">—</td><td style="text-align:center;">80/20</td><td style="text-align:center;">CS</td><td style="text-align:center;">Sara Kim</td><td style="text-align:center;">Tran Nguyen</td><td style="text-align:left;font-size:9.5px;">Lever 5: Driving Active Use</td><td class="dvl" style="text-align:center;" data-rev="$26K" data-gna="10k">$26K</td><td style="text-align:center;" data-rev="$18K" data-gna="7k">$18K</td><td class="dvl" style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="$13K" data-gna="5">$13K</td><td style="text-align:center;" data-rev="$5K" data-gna="2">$5K</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td></tr>
+            <tr data-elm="ELM-1010" data-audience="Emerging MM"><td class="sc1"><a href="#" style="color:var(--payments);text-decoration:none;border-bottom:1px solid rgba(7,196,217,0.4);">ELM-1010</a></td><td class="sc2" style="text-align:left;">Payments Instant Deposit Promo</td><td class="wrap-col" style="text-align:left;color:#111;">Promote instant deposit at payout screen</td><td style="text-align:center;"><span class="tag t-pos">Positive</span></td><td style="text-align:center;">Large</td><td style="text-align:center;">Oct-01</td><td style="text-align:center;">—</td><td style="text-align:center;">90/10</td><td style="text-align:center;">ELM Squad</td><td style="text-align:center;">Jenna Martinez</td><td style="text-align:center;">Amy Chen</td><td style="text-align:left;font-size:9.5px;">Lever 4: Driving Consumption</td><td class="dvl" style="text-align:center;" data-rev="$59K" data-gna="24k">$59K</td><td style="text-align:center;" data-rev="$42K" data-gna="17k">$42K</td><td class="dvl" style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="$28K" data-gna="11">$28K</td><td style="text-align:center;" data-rev="$14K" data-gna="6">$14K</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td></tr>
+            <tr data-elm="ELM-1011" data-audience="Emerging MM"><td class="sc1"><a href="#" style="color:var(--payments);text-decoration:none;border-bottom:1px solid rgba(7,196,217,0.4);">ELM-1011</a></td><td class="sc2" style="text-align:left;">Payments ACH Adoption Push</td><td class="wrap-col" style="text-align:left;color:#111;">Encourage ACH over card to reduce processing costs</td><td style="text-align:center;"><span class="tag t-pos">Positive</span></td><td style="text-align:center;">Medium</td><td style="text-align:center;">Aug-10</td><td style="text-align:center;">Sep-25</td><td style="text-align:center;">50/50</td><td style="text-align:center;">Segment</td><td style="text-align:center;">Ravi Patel</td><td style="text-align:center;">Tran Nguyen</td><td style="text-align:left;font-size:9.5px;">Lever 4: Driving Consumption</td><td class="dvl" style="text-align:center;" data-rev="$36K" data-gna="14k">$36K</td><td style="text-align:center;" data-rev="$25K" data-gna="10k">$25K</td><td class="dvl" style="text-align:center;" data-rev="$18K" data-gna="7">$18K</td><td style="text-align:center;" data-rev="$7K" data-gna="3">$7K</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td></tr>
+            <tr data-elm="ELM-1012" data-audience="Emerging MM"><td class="sc1"><a href="#" style="color:var(--payments);text-decoration:none;border-bottom:1px solid rgba(7,196,217,0.4);">ELM-1012</a></td><td class="sc2" style="text-align:left;">Payments Risk Alert Banner</td><td class="wrap-col" style="text-align:left;color:#111;">Risk flagging prompt to reduce chargeback exposure</td><td style="text-align:center;"><span class="tag t-nox">No Experiment</span></td><td style="text-align:center;">Mini</td><td style="text-align:center;">Sep-25</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">ELM Squad</td><td style="text-align:center;">Sara Kim</td><td style="text-align:center;">Amy Chen</td><td style="text-align:left;font-size:9.5px;">Lever 2: Personalization, Segmentation &amp; Targeting</td><td class="dvl" style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td class="dvl" style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td></tr>
+            <tr data-elm="ELM-1013" data-audience="Emerging MM"><td class="sc1"><a href="#" style="color:var(--payments);text-decoration:none;border-bottom:1px solid rgba(7,196,217,0.4);">ELM-1013</a></td><td class="sc2" style="text-align:left;">Payments Recurring Billing Nudge</td><td class="wrap-col" style="text-align:left;color:#111;">Prompt one-time payers to switch to subscriptions</td><td style="text-align:center;"><span class="tag t-pos">Positive</span></td><td style="text-align:center;">Large</td><td style="text-align:center;">Sep-06</td><td style="text-align:center;">Oct-15</td><td style="text-align:center;">80/20</td><td style="text-align:center;">Sales</td><td style="text-align:center;">Jenna Martinez</td><td style="text-align:center;">Tran Nguyen</td><td style="text-align:left;font-size:9.5px;">Lever 3: Commercial Levers</td><td class="dvl" style="text-align:center;" data-rev="$47K" data-gna="19k">$47K</td><td style="text-align:center;" data-rev="$33K" data-gna="13k">$33K</td><td class="dvl" style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="$24K" data-gna="10">$24K</td><td style="text-align:center;" data-rev="$13K" data-gna="5">$13K</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td></tr>
+            <tr data-elm="ELM-1014" data-audience="Emerging MM"><td class="sc1"><a href="#" style="color:var(--payments);text-decoration:none;border-bottom:1px solid rgba(7,196,217,0.4);">ELM-1014</a></td><td class="sc2" style="text-align:left;">Payments QR Code Upsell</td><td class="wrap-col" style="text-align:left;color:#111;">QR code feature adoption prompt at POS flow</td><td style="text-align:center;"><span class="tag t-bake">Still Baking</span></td><td style="text-align:center;">Medium</td><td style="text-align:center;">Oct-10</td><td style="text-align:center;">—</td><td style="text-align:center;">90/10</td><td style="text-align:center;">ELM Squad</td><td style="text-align:center;">Ravi Patel</td><td style="text-align:center;">Amy Chen</td><td style="text-align:left;font-size:9.5px;">Lever 4: Driving Consumption</td><td class="dvl" style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td class="dvl" style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td></tr>
+            <tr data-elm="ELM-1015" data-audience="Emerging MM"><td class="sc1"><a href="#" style="color:var(--payments);text-decoration:none;border-bottom:1px solid rgba(7,196,217,0.4);">ELM-1015</a></td><td class="sc2" style="text-align:left;">Payments Tap-to-Pay Feature</td><td class="wrap-col" style="text-align:left;color:#111;">Drive tap-to-pay activation on eligible devices</td><td style="text-align:center;"><span class="tag t-pos">Positive</span></td><td style="text-align:center;">Mega</td><td style="text-align:center;">Aug-28</td><td style="text-align:center;">Oct-05</td><td style="text-align:center;">90/10</td><td style="text-align:center;">Segment</td><td style="text-align:center;">Sara Kim</td><td style="text-align:center;">Tran Nguyen</td><td style="text-align:left;font-size:9.5px;">Lever 1: Amplifying Segment Innovation</td><td class="dvl" style="text-align:center;" data-rev="$53K" data-gna="21k">$53K</td><td style="text-align:center;" data-rev="$37K" data-gna="15k">$37K</td><td class="dvl" style="text-align:center;" data-rev="$25K" data-gna="10">$25K</td><td style="text-align:center;" data-rev="$12K" data-gna="5">$12K</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td></tr>
+            <tr data-elm="ELM-1016" data-audience="Mid-Market"><td class="sc1"><a href="#" style="color:var(--payments);text-decoration:none;border-bottom:1px solid rgba(7,196,217,0.4);">ELM-1016</a></td><td class="sc2" style="text-align:left;">Payments Refund Flow Simplify</td><td class="wrap-col" style="text-align:left;color:#111;">Streamlined refund process to reduce cancellations</td><td style="text-align:center;"><span class="tag t-neg">Negative</span></td><td style="text-align:center;">Small</td><td style="text-align:center;">Sep-14</td><td style="text-align:center;">—</td><td style="text-align:center;">50/50</td><td style="text-align:center;">CS</td><td style="text-align:center;">Jenna Martinez</td><td style="text-align:center;">Amy Chen</td><td style="text-align:left;font-size:9.5px;">Lever 5: Driving Active Use</td><td class="dvl" style="text-align:center;" data-rev="-$9K" data-gna="-4k">-$9K</td><td style="text-align:center;" data-rev="-$6K" data-gna="-3k">-$6K</td><td class="dvl" style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="-$9K" data-gna="-4">-$9K</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td></tr>
+            <tr data-elm="ELM-1017" data-audience="Mid-Market"><td class="sc1"><a href="#" style="color:var(--payments);text-decoration:none;border-bottom:1px solid rgba(7,196,217,0.4);">ELM-1017</a></td><td class="sc2" style="text-align:left;">Payments Invoice Reminder</td><td class="wrap-col" style="text-align:left;color:#111;">Automated invoice follow-up to reduce overdue payments</td><td style="text-align:center;"><span class="tag t-pos">Positive</span></td><td style="text-align:center;">Medium</td><td style="text-align:center;">Sep-18</td><td style="text-align:center;">Oct-25</td><td style="text-align:center;">80/20</td><td style="text-align:center;">ELM Squad</td><td style="text-align:center;">Ravi Patel</td><td style="text-align:center;">Tran Nguyen</td><td style="text-align:left;font-size:9.5px;">Lever 5: Driving Active Use</td><td class="dvl" style="text-align:center;" data-rev="$39K" data-gna="16k">$39K</td><td style="text-align:center;" data-rev="$28K" data-gna="11k">$28K</td><td class="dvl" style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="$20K" data-gna="8">$20K</td><td style="text-align:center;" data-rev="$9K" data-gna="4">$9K</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td></tr>
+            <tr data-elm="ELM-1018" data-audience="Mid-Market"><td class="sc1"><a href="#" style="color:var(--payments);text-decoration:none;border-bottom:1px solid rgba(7,196,217,0.4);">ELM-1018</a></td><td class="sc2" style="text-align:left;">Payments Chargeback Alert</td><td class="wrap-col" style="text-align:left;color:#111;">Early chargeback risk notification and resolution path</td><td style="text-align:center;"><span class="tag t-nox">No Experiment</span></td><td style="text-align:center;">Mini</td><td style="text-align:center;">Aug-14</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">Sales</td><td style="text-align:center;">Sara Kim</td><td style="text-align:center;">Amy Chen</td><td style="text-align:left;font-size:9.5px;">Lever 2: Personalization, Segmentation &amp; Targeting</td><td class="dvl" style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td class="dvl" style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td></tr>
+            <tr data-elm="ELM-1019" data-audience="Mid-Market"><td class="sc1"><a href="#" style="color:var(--payments);text-decoration:none;border-bottom:1px solid rgba(7,196,217,0.4);">ELM-1019</a></td><td class="sc2" style="text-align:left;">Payments Multi-currency Prompt</td><td class="wrap-col" style="text-align:left;color:#111;">International expansion nudge for eligible merchants</td><td style="text-align:center;"><span class="tag t-bake">Still Baking</span></td><td style="text-align:center;">Large</td><td style="text-align:center;">Oct-05</td><td style="text-align:center;">—</td><td style="text-align:center;">90/10</td><td style="text-align:center;">Segment</td><td style="text-align:center;">Jenna Martinez</td><td style="text-align:center;">Tran Nguyen</td><td style="text-align:left;font-size:9.5px;">Lever 1: Amplifying Segment Innovation</td><td class="dvl" style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td class="dvl" style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td></tr>
+            <tr data-elm="ELM-1020" data-audience="Mid-Market"><td class="sc1"><a href="#" style="color:var(--payments);text-decoration:none;border-bottom:1px solid rgba(7,196,217,0.4);">ELM-1020</a></td><td class="sc2" style="text-align:left;">Payments Savings Deposit Nudge</td><td class="wrap-col" style="text-align:left;color:#111;">Prompt high-balance accounts to enable savings features</td><td style="text-align:center;"><span class="tag t-pos">Positive</span></td><td style="text-align:center;">Medium</td><td style="text-align:center;">Sep-22</td><td style="text-align:center;">—</td><td style="text-align:center;">80/20</td><td style="text-align:center;">ELM Squad</td><td style="text-align:center;">Ravi Patel</td><td style="text-align:center;">Amy Chen</td><td style="text-align:left;font-size:9.5px;">Lever 4: Driving Consumption</td><td class="dvl" style="text-align:center;" data-rev="$34K" data-gna="14k">$34K</td><td style="text-align:center;" data-rev="$24K" data-gna="10k">$24K</td><td class="dvl" style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="$17K" data-gna="7">$17K</td><td style="text-align:center;" data-rev="$7K" data-gna="3">$7K</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td></tr>
+            <tr data-elm="ELM-1021" data-audience="Mid-Market"><td class="sc1"><a href="#" style="color:var(--payments);text-decoration:none;border-bottom:1px solid rgba(7,196,217,0.4);">ELM-1021</a></td><td class="sc2" style="text-align:left;">Payments Link by Stripe Compare</td><td class="wrap-col" style="text-align:left;color:#111;">Competitive comparison card against Stripe Link</td><td style="text-align:center;"><span class="tag t-pos">Positive</span></td><td style="text-align:center;">Large</td><td style="text-align:center;">Aug-08</td><td style="text-align:center;">Sep-18</td><td style="text-align:center;">90/10</td><td style="text-align:center;">Sales</td><td style="text-align:center;">Sara Kim</td><td style="text-align:center;">Tran Nguyen</td><td style="text-align:left;font-size:9.5px;">Lever 3: Commercial Levers</td><td class="dvl" style="text-align:center;" data-rev="$62K" data-gna="25k">$62K</td><td style="text-align:center;" data-rev="$44K" data-gna="18k">$44K</td><td class="dvl" style="text-align:center;" data-rev="$31K" data-gna="13">$31K</td><td style="text-align:center;" data-rev="$13K" data-gna="5">$13K</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td></tr>
+            <tr data-elm="ELM-1022" data-audience="Mid-Market"><td class="sc1"><a href="#" style="color:var(--payments);text-decoration:none;border-bottom:1px solid rgba(7,196,217,0.4);">ELM-1022</a></td><td class="sc2" style="text-align:left;">Payments Deposit Speed Prompt</td><td class="wrap-col" style="text-align:left;color:#111;">Highlight faster deposit options at withdrawal step</td><td style="text-align:center;"><span class="tag t-pos">Positive</span></td><td style="text-align:center;">Small</td><td style="text-align:center;">Sep-10</td><td style="text-align:center;">—</td><td style="text-align:center;">50/50</td><td style="text-align:center;">CS</td><td style="text-align:center;">Jenna Martinez</td><td style="text-align:center;">Amy Chen</td><td style="text-align:left;font-size:9.5px;">Lever 4: Driving Consumption</td><td class="dvl" style="text-align:center;" data-rev="$29K" data-gna="12k">$29K</td><td style="text-align:center;" data-rev="$20K" data-gna="8k">$20K</td><td class="dvl" style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="$15K" data-gna="6">$15K</td><td style="text-align:center;" data-rev="$5K" data-gna="2">$5K</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td></tr>
+            <tr data-elm="ELM-1023" data-audience="HVB"><td class="sc1"><a href="#" style="color:var(--payments);text-decoration:none;border-bottom:1px solid rgba(7,196,217,0.4);">ELM-1023</a></td><td class="sc2" style="text-align:left;">Payments Checkout Abandonment</td><td class="wrap-col" style="text-align:left;color:#111;">Re-engagement sequence for incomplete checkout sessions</td><td style="text-align:center;"><span class="tag t-nox">No Experiment</span></td><td style="text-align:center;">Small</td><td style="text-align:center;">Aug-25</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">ELM Squad</td><td style="text-align:center;">Ravi Patel</td><td style="text-align:center;">Tran Nguyen</td><td style="text-align:left;font-size:9.5px;">Lever 5: Driving Active Use</td><td class="dvl" style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td class="dvl" style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td></tr>
+            <tr data-elm="ELM-1024" data-audience="HVB"><td class="sc1"><a href="#" style="color:var(--payments);text-decoration:none;border-bottom:1px solid rgba(7,196,217,0.4);">ELM-1024</a></td><td class="sc2" style="text-align:left;">Payments Webhook Setup Guide</td><td class="wrap-col" style="text-align:left;color:#111;">Developer onboarding flow to increase API integrations</td><td style="text-align:center;"><span class="tag t-pos">Positive</span></td><td style="text-align:center;">Small</td><td style="text-align:center;">Sep-28</td><td style="text-align:center;">—</td><td style="text-align:center;">50/50</td><td style="text-align:center;">Segment</td><td style="text-align:center;">Sara Kim</td><td style="text-align:center;">Amy Chen</td><td style="text-align:left;font-size:9.5px;">Lever 1: Amplifying Segment Innovation</td><td class="dvl" style="text-align:center;" data-rev="$22K" data-gna="9k">$22K</td><td style="text-align:center;" data-rev="$15K" data-gna="6k">$15K</td><td class="dvl" style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="$11K" data-gna="4">$11K</td><td style="text-align:center;" data-rev="$4K" data-gna="2">$4K</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td></tr>
+            <tr data-elm="ELM-1025" data-audience="HVB"><td class="sc1"><a href="#" style="color:var(--payments);text-decoration:none;border-bottom:1px solid rgba(7,196,217,0.4);">ELM-1025</a></td><td class="sc2" style="text-align:left;">Payments Transaction Summary</td><td class="wrap-col" style="text-align:left;color:#111;">Weekly digest of payment activity to drive engagement</td><td style="text-align:center;"><span class="tag t-nox">No Experiment</span></td><td style="text-align:center;">Mini</td><td style="text-align:center;">Oct-08</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">ELM Squad</td><td style="text-align:center;">Jenna Martinez</td><td style="text-align:center;">Tran Nguyen</td><td style="text-align:left;font-size:9.5px;">Lever 2: Personalization, Segmentation &amp; Targeting</td><td class="dvl" style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td class="dvl" style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td></tr>
+            <tr data-elm="ELM-1026" data-audience="HVB"><td class="sc1"><a href="#" style="color:var(--payments);text-decoration:none;border-bottom:1px solid rgba(7,196,217,0.4);">ELM-1026</a></td><td class="sc2" style="text-align:left;">Payments Gross Profit Insight</td><td class="wrap-col" style="text-align:left;color:#111;">Gross profit visibility nudge to drive upsell intent</td><td style="text-align:center;"><span class="tag t-pos">Positive</span></td><td style="text-align:center;">Medium</td><td style="text-align:center;">Oct-02</td><td style="text-align:center;">—</td><td style="text-align:center;">90/10</td><td style="text-align:center;">Sales</td><td style="text-align:center;">Ravi Patel</td><td style="text-align:center;">Amy Chen</td><td style="text-align:left;font-size:9.5px;">Lever 3: Commercial Levers</td><td class="dvl" style="text-align:center;" data-rev="$41K" data-gna="16k">$41K</td><td style="text-align:center;" data-rev="$29K" data-gna="11k">$29K</td><td class="dvl" style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="$21K" data-gna="8">$21K</td><td style="text-align:center;" data-rev="$8K" data-gna="3">$8K</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td></tr>
+            <tr data-elm="ELM-1027" data-audience="HVB"><td class="sc1"><a href="#" style="color:var(--payments);text-decoration:none;border-bottom:1px solid rgba(7,196,217,0.4);">ELM-1027</a></td><td class="sc2" style="text-align:left;">Payments First Transaction Win</td><td class="wrap-col" style="text-align:left;color:#111;">Celebrate first successful payment to build habit loop</td><td style="text-align:center;"><span class="tag t-pos">Positive</span></td><td style="text-align:center;">Large</td><td style="text-align:center;">Aug-04</td><td style="text-align:center;">Sep-10</td><td style="text-align:center;">50/50</td><td style="text-align:center;">CS</td><td style="text-align:center;">Sara Kim</td><td style="text-align:center;">Tran Nguyen</td><td style="text-align:left;font-size:9.5px;">Lever 5: Driving Active Use</td><td class="dvl" style="text-align:center;" data-rev="$57K" data-gna="23k">$57K</td><td style="text-align:center;" data-rev="$40K" data-gna="16k">$40K</td><td class="dvl" style="text-align:center;" data-rev="$28K" data-gna="11">$28K</td><td style="text-align:center;" data-rev="$12K" data-gna="5">$12K</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td></tr>
+            <tr data-elm="ELM-1028" data-audience="HVB"><td class="sc1"><a href="#" style="color:var(--payments);text-decoration:none;border-bottom:1px solid rgba(7,196,217,0.4);">ELM-1028</a></td><td class="sc2" style="text-align:left;">Payments Dispute Education</td><td class="wrap-col" style="text-align:left;color:#111;">Proactive dispute prevention education flow</td><td style="text-align:center;"><span class="tag t-nox">No Experiment</span></td><td style="text-align:center;">Mini</td><td style="text-align:center;">Sep-17</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">ELM Squad</td><td style="text-align:center;">Jenna Martinez</td><td style="text-align:center;">Amy Chen</td><td style="text-align:left;font-size:9.5px;">Lever 2: Personalization, Segmentation &amp; Targeting</td><td class="dvl" style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td class="dvl" style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td></tr>
+            <tr data-elm="ELM-1029" data-audience="HVB"><td class="sc1"><a href="#" style="color:var(--payments);text-decoration:none;border-bottom:1px solid rgba(7,196,217,0.4);">ELM-1029</a></td><td class="sc2" style="text-align:left;">Payments Bank Transfer Feature</td><td class="wrap-col" style="text-align:left;color:#111;">Bank-to-bank transfer adoption for high-volume merchants</td><td style="text-align:center;"><span class="tag t-pos">Positive</span></td><td style="text-align:center;">Large</td><td style="text-align:center;">Sep-30</td><td style="text-align:center;">—</td><td style="text-align:center;">90/10</td><td style="text-align:center;">Segment</td><td style="text-align:center;">Ravi Patel</td><td style="text-align:center;">Tran Nguyen</td><td style="text-align:left;font-size:9.5px;">Lever 4: Driving Consumption</td><td class="dvl" style="text-align:center;" data-rev="$48K" data-gna="19k">$48K</td><td style="text-align:center;" data-rev="$34K" data-gna="14k">$34K</td><td class="dvl" style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="$24K" data-gna="10">$24K</td><td style="text-align:center;" data-rev="$10K" data-gna="4">$10K</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td></tr>
+            <tr data-elm="ELM-1030" data-audience="HVB"><td class="sc1"><a href="#" style="color:var(--payments);text-decoration:none;border-bottom:1px solid rgba(7,196,217,0.4);">ELM-1030</a></td><td class="sc2" style="text-align:left;">Payments Seasonal Promo Push</td><td class="wrap-col" style="text-align:left;color:#111;">Holiday season payment volume incentive campaign</td><td style="text-align:center;"><span class="tag t-neg">Negative</span></td><td style="text-align:center;">Medium</td><td style="text-align:center;">Aug-30</td><td style="text-align:center;">—</td><td style="text-align:center;">50/50</td><td style="text-align:center;">Sales</td><td style="text-align:center;">Sara Kim</td><td style="text-align:center;">Amy Chen</td><td style="text-align:left;font-size:9.5px;">Lever 3: Commercial Levers</td><td class="dvl" style="text-align:center;" data-rev="-$7K" data-gna="-3k">-$7K</td><td style="text-align:center;" data-rev="-$5K" data-gna="-2k">-$5K</td><td class="dvl" style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="-$7K" data-gna="-3">-$7K</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td><td style="text-align:center;" data-rev="—" data-gna="—">—</td></tr>
+          </tbody>
+        </table>
+        </div>
+      </div>
+
+  <!-- TAB 2: Future Outlook -->
+  <div class="tab-panel" id="tab-2">
+    <div class="split">
+      <div class="pane pane-left">
+        <div class="section">
+          <div class="sec-hdr"><span class="sec-hdr-text">ELM Squad · Impact to Date</span></div>
+          <div class="impact-wrap">
+            <table class="tbl" style="min-width:520px;">
+              <thead>
+                <tr><th>Actuals</th><th>ITT</th><th>ITF</th><th class="dvl">Actuals</th><th>ITT</th><th>ITF</th><th class="dvl">Actuals</th><th>ITT</th><th>ITF</th><th class="dvl">Actuals</th><th>ITT</th><th>ITF</th></tr>
+                <tr><th rowspan="2" style="min-width:150px;vertical-align:bottom;">Metric</th><th colspan="3">Aug</th><th colspan="3" class="dvl">Sep</th><th colspan="3" class="dvl">Oct</th><th colspan="3" class="dvl">YTD</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Total Revenue</td><td>$420K</td><td><span class="val-r">-$160K</span></td><td><span class="val-g">+$20K</span></td><td class="dvl">$580K</td><td><span class="val-r">-$180K</span></td><td><span class="val-g">+$30K</span></td><td class="dvl">—</td><td>—</td><td>—</td><td class="dvl">$1.0M</td><td><span class="val-r">-$340K</span></td><td><span class="val-g">+$50K</span></td></tr>
+                <tr><td>Total GNA</td><td>310</td><td><span class="val-r">-110</span></td><td><span class="val-g">+20</span></td><td class="dvl">420</td><td><span class="val-r">-140</span></td><td><span class="val-g">+20</span></td><td class="dvl">—</td><td>—</td><td>—</td><td class="dvl">730</td><td><span class="val-r">-250</span></td><td><span class="val-g">+40</span></td></tr>
+                <tr><td>Squad Big Rocks</td><td>$820K</td><td><span class="val-a">-$80K</span></td><td><span class="val-g">+$45K</span></td><td class="dvl">$960K</td><td><span class="val-a">-$120K</span></td><td><span class="val-g">+$60K</span></td><td class="dvl">—</td><td>—</td><td>—</td><td class="dvl">$1.78M</td><td><span class="val-a">-$200K</span></td><td><span class="val-g">+$105K</span></td></tr>
+                <tr><td>Seg. Innovation Support</td><td>$310K</td><td><span class="val-g">+$10K</span></td><td><span class="val-g">+$35K</span></td><td class="dvl">$290K</td><td><span class="val-g">+$30K</span></td><td><span class="val-g">+$15K</span></td><td class="dvl">—</td><td>—</td><td>—</td><td class="dvl">$600K</td><td><span class="val-g">+$40K</span></td><td><span class="val-g">+$50K</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="section">
+          <div class="sec-hdr"><span class="sec-hdr-text">ELM Squad · Recent Outcomes</span></div>
+          <div class="sec-body-flush">
+            <div class="outcome-item"><div class="o-num">1</div><div class="o-body"><div class="o-row1"><span class="o-name">Project Alpha</span><span class="tag t-pos">Positive</span><span class="o-sot"><span class="prod-dot" style="background:#07c4d9;"></span>Payments</span><span class="o-arr">+$42K ARR</span></div><div class="o-desc">Incremental signups via in-product nudge. Outperformed control by 12%.</div></div></div>
+            <div class="outcome-item"><div class="o-num">2</div><div class="o-body"><div class="o-row1"><span class="o-name">Project Beta</span><span class="tag t-neg">Negative</span><span class="o-sot"><span class="prod-dot" style="background:#D72792;"></span>Payroll</span><span class="o-arr">-$18K ARR</span></div><div class="o-desc">Messaging variant underperformed. High bounce on landing step.</div></div></div>
+            <div class="outcome-item"><div class="o-num">3</div><div class="o-body"><div class="o-row1"><span class="o-name">Project Gamma</span><span class="tag t-flat">Flat</span><span class="o-sot"><span class="prod-dot" style="background:#FFCA00;"></span>QB Live</span><span class="o-arr">$0 ARR</span></div><div class="o-desc">No significant lift detected after 6-week run.</div></div></div>
+            <div class="add-btn"><div class="add-icon">+</div><span>Add outcome</span></div>
+          </div>
+        </div>
+        <div class="section">
+          <div class="sec-hdr"><span class="sec-hdr-text">ELM Squad · Live Experiments</span></div>
+          <div class="sec-body-flush">
+            <div class="outcome-item"><div class="o-num">1</div><div class="o-body"><div class="o-row1"><span class="o-name">ELM-1042</span><span class="tag t-live">Live</span><span class="o-sot"><span class="prod-dot" style="background:#205EA3;"></span>Capital</span><span style="font-size:9px;color:var(--text-3);">Launched 09-15</span><span class="o-arr">Est. +$65K ARR</span></div><div class="o-desc">Urgency-framed offer in Capital upsell flow. 90/10 split.</div></div></div>
+            <div class="outcome-item"><div class="o-num">2</div><div class="o-body"><div class="o-row1"><span class="o-name">ELM-1058</span><span class="tag t-paus">Paused</span><span class="o-sot"><span class="prod-dot" style="background:#FFE01B;"></span>MailChimp</span><span style="font-size:9px;color:var(--text-3);">Launched 08-28</span><span class="o-arr">Est. +$30K ARR</span></div><div class="o-desc">Paused — data quality issue in impression attribution.</div></div></div>
+            <div class="outcome-item"><div class="o-num">3</div><div class="o-body"><div class="o-row1"><span class="o-name">ELM-1071</span><span class="tag t-live">Live</span><span class="o-sot"><span class="prod-dot" style="background:#4999E6;"></span>Bill Pay</span><span style="font-size:9px;color:var(--text-3);">Launched 10-01</span><span class="o-arr">Est. +$22K ARR</span></div><div class="o-desc">First Bill Pay IPD test. Early signals positive at day 7.</div></div></div>
+            <div class="add-btn"><div class="add-icon">+</div><span>Add experiment</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="pane pane-right">
+        <div class="section">
+          <div class="sec-hdr"><span class="sec-hdr-text">ELM Squad · Impact Commentary</span></div>
+          <div class="sec-body-flush">
+            <div class="commentary"><ul id="impact-list">
+              <li><div class="c-dot-wrap"><div class="c-dot"></div></div><div class="c-text" contenteditable="true"><strong>Revenue and GNA</strong> tracking ahead of forecast QTD across squad-owned big rocks.</div></li>
+              <li><div class="c-dot-wrap"><div class="c-dot"></div></div><div class="c-text" contenteditable="true">Segment innovation support contributing $###K incremental ARR YTD.</div></li>
+              <li><div class="c-dot-wrap"><div class="c-dot"></div></div><div class="c-text" contenteditable="true">Add commentary here.</div></li>
+            </ul><div class="add-btn" onclick="addBullet('impact-list')"><div class="add-icon">+</div><span>Add point</span></div></div>
+          </div>
+        </div>
+        <div class="section">
+          <div class="sec-hdr"><span class="sec-hdr-text">ELM Squad · Outlook Commentary</span></div>
+          <div class="sec-body-flush">
+            <div class="commentary"><ul id="outlook-list">
+              <li><div class="c-dot-wrap"><div class="c-dot"></div></div><div class="c-text" contenteditable="true"><strong>3 live experiments</strong> with combined est. impact of +$117K ARR if positive.</div></li>
+              <li><div class="c-dot-wrap"><div class="c-dot"></div></div><div class="c-text" contenteditable="true">ELM-1058 pause expected to resolve by [date] — low risk to Oct close.</div></li>
+              <li><div class="c-dot-wrap"><div class="c-dot"></div></div><div class="c-text" contenteditable="true">Add outlook commentary here.</div></li>
+            </ul><div class="add-btn" onclick="addBullet('outlook-list')"><div class="add-icon">+</div><span>Add point</span></div></div>
+          </div>
+        </div>
+        <div class="section">
+          <div class="sec-hdr"><span class="sec-hdr-text">ELM Squad · Result Key</span></div>
+          <div class="sec-body">
+            <div class="key-row"><span class="tag t-pos">Positive Biz Impact</span><span class="tag t-dpos">Directionally Positive</span><span class="tag t-flat">Flat Biz Impact</span><span class="tag t-neg">Negative Biz Impact</span><span class="tag t-bake">Still Baking</span><span class="tag t-brok">Broken &amp; Unmeasurable</span><span class="tag t-nox">No Experiment</span></div>
+            <div class="key-row"><span style="font-size:8.5px;color:var(--text-3);text-transform:uppercase;letter-spacing:.05em;font-weight:600;">Index:</span><span class="tag t-ig">≥100%</span><span class="tag t-ia">95–99%</span><span class="tag t-ir">≤94%</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3 -->
+  <div class="tab-panel" id="tab-3">
+    <div class="placeholder"><div class="ph-icon">⚡</div><div class="ph-title">Velocity</div><div class="ph-sub">Experiment throughput, win rates, ship cadence, and team health metrics will live here.</div></div>
+  </div>
+
+  <!-- TAB 4 -->
+  <div class="tab-panel" id="tab-4">
+    <div class="placeholder"><div class="ph-icon">🗺</div><div class="ph-title">Roadmap</div><div class="ph-sub">Upcoming initiatives, project pipeline, and milestone tracking will live here.</div></div>
+  </div>
+
+</main>
+
+<footer class="dash-footer">
+  <span>ELM Squad · Global Business Solutions Group</span>
+  <span>FY'26 Q2 · Last updated Sep 2026</span>
+</footer>
+
+<script>
+function switchTab(n){
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',i===n));
+  document.querySelectorAll('.tab-panel').forEach((p,i)=>p.classList.toggle('active',i===n));
+}
+function addBullet(id){
+  const ul=document.getElementById(id);
+  const li=document.createElement('li');
+  li.innerHTML=`<div class="c-dot-wrap"><div class="c-dot"></div></div><div class="c-text" contenteditable="true">New point — click to edit.</div>`;
+  ul.appendChild(li);li.querySelector('[contenteditable]').focus();
+}
+function addOutcome(){
+  const list=document.getElementById('outcomes-list');
+  const n=list.querySelectorAll('.outcome-item').length+1;
+  const div=document.createElement('div');
+  div.className='outcome-item';
+  div.innerHTML=`<div class="o-num">${n}</div><div class="o-body"><div class="o-row1"><span class="o-name" contenteditable="true" style="border-bottom:1px dashed var(--line);outline:none;">Project Name</span><span class="tag t-bake">TBD</span><span class="o-sot" contenteditable="true" style="outline:none;">SOT</span><span class="o-arr" contenteditable="true" style="outline:none;">$— ARR</span></div><div class="o-desc" contenteditable="true" style="outline:none;">Add description.</div></div>`;
+  list.appendChild(div);div.querySelector('[contenteditable]').focus();
+}
+
+const months=['Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul'];
+const forecastVals=[500,620,700,780,870,950,1050,1130,1250,1380,1520,1700];
+const targetVals=[580,760,900,1020,1150,1300,1450,1600,1800,2000,2200,2450];
+const highConf=[0,0,100,350,450,560,680,780,920,1060,1210,1380];
+const lowConf=[0,0,50,130,170,200,230,260,300,340,390,440];
+
+new Chart(document.getElementById('revChart'),{
+  type:'bar',
+  data:{
+    labels:months,
+    datasets:[
+      {label:'Achieved',data:[420,580,680,680,680,680,680,680,680,680,680,680],backgroundColor:'#07c4d9',borderWidth:0,stack:'bars'},
+      {label:'High Confidence Path To',data:highConf,backgroundColor:'rgba(7,196,217,0.5)',borderWidth:0,stack:'bars'},
+      {label:'Low Confidence Path To',data:lowConf,backgroundColor:'rgba(7,196,217,0.12)',borderWidth:0,stack:'bars'},
+      {label:'Forecast',data:forecastVals,type:'line',borderColor:'#000000',borderWidth:2,pointRadius:3,pointBackgroundColor:'#000000',fill:false,stack:undefined,order:1},
+      {label:'Target',data:targetVals,type:'line',borderColor:'#aaaaaa',borderWidth:1.5,borderDash:[5,4],pointRadius:0,fill:false,stack:undefined,order:2}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false}},
+    scales:{
+      x:{stacked:true,ticks:{font:{size:10},color:'#6a8aa0',autoSkip:false},grid:{display:false}},
+      y:{stacked:true,ticks:{font:{size:10},color:'#6a8aa0',callback:v=>'$'+v.toLocaleString()},grid:{color:'rgba(0,0,0,0.04)'}}
+    }
+  }
+});
+
+window._revChart2 = new Chart(document.getElementById('revChart2'),{
+  type:'bar',
+  data:{
+    labels:months,
+    datasets:[
+      {label:'Achieved',data:[420,580,680,680,680,680,680,680,680,680,680,680],backgroundColor:'#07c4d9',borderWidth:0,stack:'bars'},
+      {label:'High Confidence Path To',data:highConf,backgroundColor:'rgba(7,196,217,0.5)',borderWidth:0,stack:'bars'},
+      {label:'Low Confidence Path To',data:lowConf,backgroundColor:'rgba(7,196,217,0.12)',borderWidth:0,stack:'bars'},
+      {label:'Forecast',data:forecastVals,type:'line',borderColor:'#000000',borderWidth:2,pointRadius:3,pointBackgroundColor:'#000000',fill:false,stack:undefined,order:1},
+      {label:'Target',data:targetVals,type:'line',borderColor:'#aaaaaa',borderWidth:1.5,borderDash:[5,4],pointRadius:0,fill:false,stack:undefined,order:2}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false}},
+    scales:{
+      x:{stacked:true,ticks:{font:{size:10},color:'#6a8aa0',autoSkip:false},grid:{display:false}},
+      y:{stacked:true,ticks:{font:{size:10},color:'#6a8aa0',callback:v=>'$'+v.toLocaleString()},grid:{color:'rgba(0,0,0,0.04)'}}
+    }
+  }
+});
+
+function switchMetric(m) {
+  document.querySelectorAll('.metric-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.metric-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('metric-' + m).classList.add('active');
+  document.getElementById('btn-' + m.substring(0,3)).classList.add('active');
+  updateProjectTable(m);
+  applyFilters();
+}
+
+// GNA chart data
+const gnaForecast = [290,400,480,520,580,640,700,760,830,900,980,1060];
+const gnaTarget   = [420,560,660,750,860,980,1080,1200,1350,1500,1650,1800];
+const gnaHigh = [0,0,70,240,310,380,460,530,620,710,810,920];
+const gnaLow  = [0,0,30,90,120,140,160,180,210,240,270,310];
+
+window._gnaChart = new Chart(document.getElementById('gnaChart'),{
+  type:'bar',
+  data:{
+    labels:months,
+    datasets:[
+      {label:'Achieved',data:[310,420,490,490,490,490,490,490,490,490,490,490],backgroundColor:'#07c4d9',borderWidth:0,stack:'bars'},
+      {label:'High Confidence Path To',data:gnaHigh,backgroundColor:'rgba(7,196,217,0.5)',borderWidth:0,stack:'bars'},
+      {label:'Low Confidence Path To',data:gnaLow,backgroundColor:'rgba(7,196,217,0.12)',borderWidth:0,stack:'bars'},
+      {label:'Forecast',data:gnaForecast,type:'line',borderColor:'#000000',borderWidth:2,pointRadius:3,pointBackgroundColor:'#000000',fill:false,stack:undefined,order:1},
+      {label:'Target',data:gnaTarget,type:'line',borderColor:'#aaaaaa',borderWidth:1.5,borderDash:[5,4],pointRadius:0,fill:false,stack:undefined,order:2}
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false}},
+    scales:{
+      x:{stacked:true,ticks:{font:{size:10},color:'#6a8aa0',autoSkip:false},grid:{display:false}},
+      y:{stacked:true,ticks:{font:{size:10},color:'#6a8aa0',callback:v=>v.toLocaleString()},grid:{color:'rgba(0,0,0,0.04)'}}
+    }
+  }
+});
+
+
+function sortTable(th) {
+  const table = th.closest('table');
+  const tbody = table.querySelector('tbody');
+  const rows = Array.from(tbody.querySelectorAll('tr'));
+  const colIdx = Array.from(th.parentElement.children).indexOf(th);
+  const asc = th.dataset.sort !== 'asc';
+
+  // Reset all indicators in this thead
+  table.querySelectorAll('thead th .sort-ind').forEach(s => s.textContent = ' ↕');
+  table.querySelectorAll('thead th').forEach(h => h.dataset.sort = '');
+
+  th.dataset.sort = asc ? 'asc' : 'desc';
+  const ind = th.querySelector('.sort-ind');
+  if (ind) ind.textContent = asc ? ' ↑' : ' ↓';
+
+  rows.sort((a, b) => {
+    const aRaw = a.cells[colIdx]?.textContent.trim() || '';
+    const bRaw = b.cells[colIdx]?.textContent.trim() || '';
+    // Numeric sort for values like $42K, -$9K, 18k, 105, —
+    const parse = v => {
+      if (v === '—' || v === '') return asc ? Infinity : -Infinity;
+      const neg = v.startsWith('-');
+      const n = parseFloat(v.replace(/[^0-9.]/g, '')) * (v.toUpperCase().includes('K') ? 1000 : 1) * (neg ? -1 : 1);
+      return isNaN(n) ? null : n;
+    };
+    const aN = parse(aRaw), bN = parse(bRaw);
+    if (aN !== null && bN !== null) return asc ? aN - bN : bN - aN;
+    return asc ? aRaw.localeCompare(bRaw, undefined, {numeric:true}) : bRaw.localeCompare(aRaw, undefined, {numeric:true});
+  });
+
+  rows.forEach(r => tbody.appendChild(r));
+}
+
+// Auto-wire all proj-wrap table column headers as sortable
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.proj-wrap .tbl thead tr:first-child th').forEach(th => {
+    th.style.cursor = 'pointer';
+    th.style.userSelect = 'none';
+    const ind = document.createElement('span');
+    ind.className = 'sort-ind';
+    ind.textContent = ' ⇅';
+    ind.style.cssText = 'font-size:10px;opacity:0.55;font-weight:400;margin-left:2px;vertical-align:middle;';
+    th.appendChild(ind);
+    th.addEventListener('click', () => sortTable(th));
+  });
+});
+
+
+// ── FILTER STATE ──────────────────────────────────────────────────────────
+const activeFilters = { timePeriod: 'year', outcomeType: 'all', requestorTeam: 'all', audience: [], timePeriodMonths: [] };
+const quarterMonths = ['Aug','Sep','Oct'];
+const currentMonth  = ['Sep'];
+
+function isFiltered() {
+  return activeFilters.timePeriod !== 'year'
+      || activeFilters.outcomeType !== 'all'
+      || activeFilters.requestorTeam !== 'all';
+}
+
+function setFilter(key, val) {
+  activeFilters[key] = val;
+  // Highlight active selects
+  ['flt-period','flt-outcome','flt-team'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.toggle('active', el.value !== el.options[0].value);
+  });
+  applyFilters();
+}
+
+function resetFilters() {
+  activeFilters.timePeriod = 'year';
+  activeFilters.outcomeType = 'all';
+  activeFilters.requestorTeam = 'all';
+  activeFilters.audience = [];
+  activeFilters.timePeriodMonths = [];
+  ['flt-outcome','flt-team'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.value = el.options[0].value; el.classList.remove('active'); }
+  });
+  // Reset time period toggle
+  setTimePeriodMode('ytd');
+  // Reset audience
+  document.querySelectorAll('#dd-audience input').forEach(i => i.checked = false);
+  document.getElementById('flt-audience-btn').textContent = 'All Audiences ▾';
+  document.getElementById('flt-audience-btn').classList.remove('active');
+  applyFilters();
+}
+
+// ── ROW MATCHING ──────────────────────────────────────────────────────────
+function rowMatches(row) {
+  // Outcome (col index 3)
+  if (activeFilters.outcomeType !== 'all') {
+    const tag = row.cells[3]?.querySelector('.tag');
+    const cls = tag ? [...tag.classList].find(c => c.startsWith('t-')) : null;
+    if (cls !== activeFilters.outcomeType) return false;
+  }
+  // Requestor (col index 8)
+  if (activeFilters.requestorTeam !== 'all') {
+    const req = row.cells[8]?.textContent.trim();
+    if (!req || req !== activeFilters.requestorTeam) return false;
+  }
+  // Time period (launch date, col index 5)
+  if (activeFilters.timePeriod !== 'year') {
+    const launch = row.cells[5]?.textContent.trim() || '';
+    const month = launch.split('-')[0];
+    const allowed = activeFilters.timePeriodMonths || (activeFilters.timePeriod === 'quarter' ? quarterMonths : currentMonth);
+    if (!allowed.includes(month)) return false;
+  }
+  // Audience
+  if (activeFilters.audience && activeFilters.audience.length > 0) {
+    const aud = row.dataset.audience || '';
+    if (!activeFilters.audience.includes(aud)) return false;
+  }
+  return true;
+}
+
+// ── MAIN APPLY ────────────────────────────────────────────────────────────
+function applyFilters() {
+  const filtered = isFiltered();
+
+  // Badge
+  const badge = document.getElementById('filter-badge');
+  if (badge) badge.classList.toggle('show', filtered);
+
+  // 1. Filter project table rows in active panel
+  document.querySelectorAll('.metric-panel.active .proj-wrap .tbl tbody tr').forEach(row => {
+    row.style.display = rowMatches(row) ? '' : 'none';
+  });
+
+  // 2. Update outcomes table (hide/show forecast + target rows)
+  document.querySelectorAll('.metric-panel.active .outcomes-tbl tbody tr').forEach(row => {
+    const label = row.cells[0]?.textContent.trim();
+    const isFcstOrTgt = ['Forecast','Δ to Forecast','ITF','Target','Δ to Target','ITT'].includes(label);
+    if (isFcstOrTgt) {
+      for (let i = 1; i < row.cells.length; i++) {
+        const td = row.cells[i];
+        if (!td.dataset.orig) td.dataset.orig = td.innerHTML;
+        td.innerHTML = filtered ? '<span style="color:var(--text-3);">—</span>' : td.dataset.orig;
+      }
+    }
+  });
+
+  // 3. Update chart — hide forecast+target when filtered
+  updateChartsFilter(filtered);
+
+  // 4. Update callout stats from visible rows
+  updateCalloutsFromRows();
+}
+
+// ── CHART FILTER ──────────────────────────────────────────────────────────
+function updateChartsFilter(filtered) {
+  [window._revChart2, window._gnaChart].forEach(chart => {
+    if (!chart) return;
+    // dataset 3 = Forecast line, dataset 4 = Target line
+    [3, 4].forEach(i => {
+      if (chart.data.datasets[i]) {
+        chart.data.datasets[i].hidden = filtered;
+      }
+    });
+    chart.update();
+  });
+}
+
+// ── CALLOUT UPDATE ────────────────────────────────────────────────────────
+function updateCalloutsFromRows() {
+  const panel = document.querySelector('.metric-panel.active');
+  if (!panel) return;
+  const rows = [...panel.querySelectorAll('.proj-wrap .tbl tbody tr')].filter(r => r.style.display !== 'none');
+
+  let pos=0, neg=0, flat=0, bake=0, nox=0;
+  rows.forEach(row => {
+    const tag = row.cells[3]?.querySelector('.tag');
+    const cls = tag ? [...tag.classList].find(c => c.startsWith('t-')) : null;
+    if (cls === 't-pos') pos++;
+    else if (cls === 't-neg') neg++;
+    else if (cls === 't-flat') flat++;
+    else if (cls === 't-bake') bake++;
+    else if (cls === 't-nox') nox++;
+  });
+  const expTotal = pos + neg + flat;
+  const pct = n => expTotal > 0 ? Math.round(n/expTotal*100)+'%' : '—';
+
+  const set = (sel, val) => { const el = panel.querySelector(sel); if (el) el.textContent = val; };
+  set('.co-stat-pos-n',  pos);
+  set('.co-stat-pos-pct', pct(pos));
+  set('.co-stat-neg-n',  neg);
+  set('.co-stat-neg-pct', pct(neg));
+  set('.co-stat-flat-n', flat);
+  set('.co-stat-flat-pct', pct(flat));
+  set('.co-stat-bake-n', bake);
+  set('.co-stat-nox-n',  nox);
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  // Wire all proj-wrap headers as sortable
+  document.querySelectorAll('.proj-wrap .tbl thead tr:first-child th').forEach(th => {
+    th.style.cursor = 'pointer';
+    th.style.userSelect = 'none';
+    const ind = document.createElement('span');
+    ind.className = 'sort-ind';
+    ind.textContent = ' ⇅';
+    ind.style.cssText = 'font-size:10px;opacity:0.55;font-weight:400;margin-left:2px;vertical-align:middle;';
+    th.appendChild(ind);
+    th.addEventListener('click', () => sortTable(th));
+  });
+});
+
+
+function updateProjectTable(metric) {
+  // Update column headers
+  const arrHdr  = document.getElementById('proj-arr-hdr');
+  const inyrHdr = document.getElementById('proj-inyr-hdr');
+  if (arrHdr)  arrHdr.textContent  = metric === 'gna' ? 'Ann. GNA' : 'ARR';
+  if (inyrHdr) inyrHdr.textContent = metric === 'gna' ? 'In-Yr GNA' : 'In-Yr Rev';
+
+  // Update totals cells
+  const totArr  = document.getElementById('proj-tot-arr');
+  const totInyr = document.getElementById('proj-tot-inyr');
+  if (metric === 'gna') {
+    if (totArr)  totArr.textContent  = '313k';
+    if (totInyr) totInyr.textContent = '224k';
+  } else {
+    if (totArr)  totArr.textContent  = '$794K';
+    if (totInyr) totInyr.textContent = '$561K';
+  }
+
+  // Update all data rows
+  document.querySelectorAll('.proj-wrap .tbl tbody tr[data-elm]').forEach(row => {
+    row.querySelectorAll('td[data-rev]').forEach(td => {
+      td.textContent = metric === 'gna' ? td.dataset.gna : td.dataset.rev;
+    });
+  });
+
+  // Update section header
+  const hdr = document.querySelector('.proj-wrap')?.previousElementSibling?.querySelector('.sec-hdr-text');
+  if (hdr) hdr.textContent = `ELM Squad · Project Detail · FY'26 · Payments · ${metric === 'gna' ? 'GNA' : 'Revenue'}`;
+}
+
+
+// ── TIME PERIOD TOGGLE ────────────────────────────────────────────────────
+let timePeriodMode = 'ytd';
+const quarterMonthMap = {Q1:['May','Jun','Jul'],Q2:['Aug','Sep','Oct'],Q3:['Nov','Dec','Jan'],Q4:['Feb','Mar','Apr']};
+
+function setTimePeriodMode(mode) {
+  timePeriodMode = mode;
+  ['ytd','quarter','month'].forEach(m => {
+    document.getElementById('tp-'+m).classList.toggle('active', m === mode);
+  });
+  document.getElementById('dd-quarter').style.display = mode === 'quarter' ? 'block' : 'none';
+  document.getElementById('dd-month').style.display = mode === 'month' ? 'block' : 'none';
+  activeFilters.timePeriod = mode === 'ytd' ? 'year' : mode;
+  applyFilters();
+}
+
+function updateTimePeriodSel() {
+  if (timePeriodMode === 'quarter') {
+    const checked = [...document.querySelectorAll('#dd-quarter input:checked')].map(i=>i.value);
+    activeFilters.timePeriodMonths = checked.flatMap(q => quarterMonthMap[q] || []);
+  } else if (timePeriodMode === 'month') {
+    activeFilters.timePeriodMonths = [...document.querySelectorAll('#dd-month input:checked')].map(i=>i.value);
+  }
+  applyFilters();
+}
+
+// ── AUDIENCE FILTER ───────────────────────────────────────────────────────
+let audienceDdOpen = false;
+function toggleAudienceDd() {
+  audienceDdOpen = !audienceDdOpen;
+  document.getElementById('dd-audience').style.display = audienceDdOpen ? 'block' : 'none';
+}
+function updateAudienceSel() {
+  const checked = [...document.querySelectorAll('#dd-audience input:checked')].map(i=>i.value);
+  activeFilters.audience = checked;
+  const btn = document.getElementById('flt-audience-btn');
+  btn.textContent = checked.length === 0 ? 'All Audiences ▾' : checked.length + ' selected ▾';
+  btn.classList.toggle('active', checked.length > 0);
+  applyFilters();
+}
+
+// Close dropdowns when clicking outside
+document.addEventListener('click', e => {
+  if (!e.target.closest('#dd-audience') && !e.target.closest('#flt-audience-btn')) {
+    document.getElementById('dd-audience').style.display = 'none';
+    audienceDdOpen = false;
+  }
+  if (!e.target.closest('#dd-quarter') && !e.target.closest('#tp-quarter')) {
+    document.getElementById('dd-quarter').style.display = 'none';
+  }
+  if (!e.target.closest('#dd-month') && !e.target.closest('#tp-month')) {
+    document.getElementById('dd-month').style.display = 'none';
+  }
+});
+
+</script>
+</body>
+</html>
