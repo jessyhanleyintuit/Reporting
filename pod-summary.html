@@ -174,20 +174,20 @@ body{font-family:var(--font);background:#f4f4f0 !important;color:var(--text-1);f
 .proj-wrap{overflow:auto;max-height:calc(100vh - 300px);position:relative}
 .proj-wrap .tbl thead{position:sticky;top:0;z-index:20}
 .proj-wrap .tbl{width:100%;table-layout:auto;font-size:10px}
-.proj-wrap .tbl td,.proj-wrap .tbl th{padding:3px 6px;white-space:nowrap}
+.proj-wrap .tbl td,.proj-wrap .tbl th{padding:4px 7px;white-space:nowrap}
 .proj-wrap .tbl td.wrap-col{white-space:normal;word-break:break-word;min-width:140px;max-width:200px}
 /* Sticky col 1 - ELM ID */
 .proj-wrap .tbl td.sc1,.proj-wrap .tbl th.sc1{position:sticky;left:0;z-index:5;width:88px;min-width:88px;max-width:88px}
 /* Sticky col 2 - Project Name */
 .proj-wrap .tbl td.sc2,.proj-wrap .tbl th.sc2{position:sticky;left:88px;z-index:5;min-width:150px;box-shadow:3px 0 6px rgba(0,0,0,0.08);text-align:left !important}
 /* Sticky thead × sticky col corners need higher z */
-.proj-wrap .tbl thead th.sc1,.proj-wrap .tbl thead th.sc2{z-index:25;background:var(--tbl-hdr-bg)}.proj-wrap .tbl thead td.sc1,.proj-wrap .tbl thead td.sc2{z-index:25}
+.proj-wrap .tbl thead th.sc1,.proj-wrap .tbl thead th.sc2{z-index:25;background:var(--tbl-hdr-bg)}.proj-wrap .tbl thead td.sc1,.proj-wrap .tbl thead td.sc2{z-index:25;background:var(--payments)}
 /* Body sticky col backgrounds */
 .proj-wrap .tbl tbody tr:nth-child(odd) td.sc1,.proj-wrap .tbl tbody tr:nth-child(odd) td.sc2{background:var(--row-odd)}
 .proj-wrap .tbl tbody tr:nth-child(even) td.sc1,.proj-wrap .tbl tbody tr:nth-child(even) td.sc2{background:var(--row-even)}
-.proj-wrap .tbl td{white-space:normal;font-size:9.5px;padding:7px 7px}
-.proj-wrap .tbl td.sc2{font-size:11px;font-weight:600;white-space:nowrap !important}
-.proj-wrap .tbl td.wrap-col{font-size:9px;color:#111}
+.proj-wrap .tbl td{white-space:normal;font-size:12px;padding:5px 7px}
+.proj-wrap .tbl td.sc2{font-size:12px;font-weight:600;white-space:nowrap !important}
+.proj-wrap .tbl td.wrap-col{font-size:11px;color:#111}
 .proj-wrap .tbl th{white-space:nowrap}
 .proj-wrap .tbl td.sc1{white-space:nowrap}
 /* Section spacing */
@@ -558,11 +558,8 @@ body{font-family:var(--font);background:#f4f4f0 !important;color:var(--text-1);f
 </footer>
 <script>
 
-
 function switchTab(n){
   // Explicitly hide project detail unless on tab-2
-  var pds=document.getElementById("project-detail-section");
-  if(pds) pds.style.display=(n===2)?"":"none";
 
   document.querySelectorAll('.tab').forEach((t,i)=>{
     t.classList.toggle('active',i===n);
@@ -777,27 +774,27 @@ function resetFilters() {
 
 // ── ROW MATCHING ──────────────────────────────────────────────────────────
 function rowMatches(row) {
-  // Outcome (col index 3)
+  // New col order: 0=#, 1=ELM-ID, 2=Project, 3=Desc, 4=Product, 5=Sub-Product, 6=Lever, 7=Request, 8=LMM, 9=SWAG, 10=Launch, 11=Analyst, 12=Outcome, 13=ITC, 14=Scale, 15=Ann, 16=InYr, 17+=months
   if (activeFilters.outcomeType !== 'all') {
-    const tag = row.cells[3]?.querySelector('.tag');
+    const tag = row.cells[12]?.querySelector('.tag');
     const cls = tag ? [...tag.classList].find(c => c.startsWith('t-')) : null;
     if (cls !== activeFilters.outcomeType) return false;
   }
-  // Requestor (col index 8)
   if (activeFilters.requestorTeam !== 'all') {
-    const req = row.cells[8]?.textContent.trim();
+    const req = row.cells[7]?.textContent.trim();
     if (!req || req !== activeFilters.requestorTeam) return false;
   }
-  // Time period (launch date, col index 5)
   if (activeFilters.timePeriod !== 'year') {
-    const launch = row.cells[5]?.textContent.trim() || '';
+    const launch = row.cells[10]?.textContent.trim() || '';
     const month = launch.split('-')[0];
     const allowed = activeFilters.timePeriodMonths || (activeFilters.timePeriod === 'quarter' ? quarterMonths : currentMonth);
     if (!allowed.includes(month)) return false;
   }
-  if(activeFilters.lever&&activeFilters.lever.length){const lc=row.querySelector("td:nth-child(5)")?.textContent||"";if(!activeFilters.lever.some(function(l){return lc.startsWith(l);}))return false;}
-  if(activeFilters.subprod&&activeFilters.subprod.length){const sp=(row.querySelector("td:nth-child(4)")?.textContent||"").trim();if(!activeFilters.subprod.includes(sp))return false;}
-  // Audience
+  if(activeFilters.lever&&activeFilters.lever.length){
+    const lc=row.cells[6]?.textContent||'';
+    if(!activeFilters.lever.some(function(l){return('Lever '+lc.replace('L','')).startsWith(l)||(l.startsWith('Lever ')&&lc===l.replace('Lever ','L').split(':')[0]);}))return false;
+  }
+  if(activeFilters.subprod&&activeFilters.subprod.length){const sp=(row.cells[5]?.textContent||'').trim();if(!activeFilters.subprod.includes(sp))return false;}
   if (activeFilters.audience && activeFilters.audience.length > 0) {
     const aud = row.dataset.audience || '';
     if (!activeFilters.audience.includes(aud)) return false;
@@ -883,27 +880,12 @@ function updateCalloutsFromRows() {
 }
 
 // ── INIT ──────────────────────────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', () => {
-  // Wire all proj-wrap headers as sortable
-  document.querySelectorAll('.proj-wrap .tbl thead tr:first-child th').forEach(th => {
-    th.style.cursor = 'pointer';
-    th.style.userSelect = 'none';
-    const ind = document.createElement('span');
-    ind.className = 'sort-ind';
-    ind.textContent = ' ⇅';
-    ind.style.cssText = 'font-size:10px;opacity:0.55;font-weight:400;margin-left:2px;vertical-align:middle;';
-    th.appendChild(ind);
-    th.addEventListener('click', () => sortTable(th));
-  });
-});
-
-
 function updateProjectTable(metric) {
   // Update column headers
   const arrHdr  = document.getElementById('proj-arr-hdr');
   const inyrHdr = document.getElementById('proj-inyr-hdr');
-  if (arrHdr)  arrHdr.textContent  = metric === 'gna' ? 'Ann. GNA' : 'ARR';
-  if (inyrHdr) inyrHdr.textContent = metric === 'gna' ? 'In-Yr GNA' : 'In-Yr Rev';
+  if (arrHdr)  arrHdr.textContent  = metric === 'gna' ? 'Ann. GNA' : 'Annualized';
+  if (inyrHdr) inyrHdr.textContent = metric === 'gna' ? 'In-Yr GNA' : 'In-Year';
 
   // Update totals cells
   const totArr  = document.getElementById('proj-tot-arr');
@@ -959,12 +941,9 @@ function setGlobalMonth(v){}
 function saveMBR(){alert('Saved for MBR');}
 function loadMBR(v){if(v)alert('Loading: '+v);}
 function updateLeverBox(m){const h1=document.getElementById('lev-hdr1');if(!h1)return;h1.textContent=m==='gna'?'Ann. GNA':'Total ARR';const h2=document.getElementById('lev-hdr2');if(h2)h2.textContent=m==='gna'?'In Yr GNA':'In Yr Rev';const mh=document.getElementById('monthly-outcomes-hdr');if(mh)mh.textContent=m==='gna'?'ELM LCM Pod · Monthly GNA Outcomes To Date':'ELM LCM Pod · Monthly Revenue Outcomes To Date';}
-  document.querySelectorAll('.proj-wrap .tbl thead tr th').forEach(function(th){th.style.cursor='pointer';const s=document.createElement('span');s.style.cssText='font-size:10px;opacity:.55;margin-left:2px;';s.textContent=' ⇅';th.appendChild(s);th.addEventListener('click',function(){sortTable(th);});});
-
-
 var _pageSubtitleTpl='ELM {p} LCM Pod Incremental Outcomes Detail';
-function setGlobalProduct(val){var lmap={'All':'ELM','Ecosystem':'ELM Ecosystem','OnlineAcct':'ELM Online Accounting','Advanced':'ELM Advanced','AIHI':'ELM AI / HI','BizTax':'ELM Biz Tax','Workforce':'ELM Workforce','Payments':'ELM Payments','Capital':'ELM Capital','IBCC':'ELM IBCC','BillPay':'ELM Bill Pay','MailChimp':'ELM MailChimp','IES':'ELM IES'};var lbl=lmap[val]||'ELM '+val;var s=document.getElementById('sticky-title');if(s)s.textContent=_pageSubtitleTpl.replace('{p}',lbl.replace('ELM ',''));}
-document.addEventListener('DOMContentLoaded',function(){var pds=document.getElementById('project-detail-section');if(pds)pds.style.display='none';
+
+document.addEventListener('DOMContentLoaded',function(){// project-detail-section is always visible on tab-2
   
   // Init sub-product filter for default product (Payments)
   (function(){
@@ -1026,6 +1005,13 @@ document.addEventListener('DOMContentLoaded',function(){var pds=document.getElem
   document.addEventListener('click',function(e){if(!e.target.closest('#product-dd-wrap')){var d=document.getElementById('product-pill-dd');if(d){d.style.display='none';productDdOpen=false;}}[['dd-lever','flt-lever-btn'],['dd-subprod','flt-subprod-btn'],['dd-audience','flt-audience-btn'],['dd-category','flt-category-btn']].forEach(function(p){if(!e.target.closest('#'+p[0])&&!e.target.closest('#'+p[1])){var dd=document.getElementById(p[0]);if(dd)dd.style.display='none';}});});});
 
 document.addEventListener('DOMContentLoaded', function() {
+  // Init sub-product filter on load (default: Payments)
+  (function(){
+    var defaultProd = document.getElementById('product-pill-label')?.textContent.trim() || 'Payments';
+    document.querySelectorAll('[data-subprod-product]').forEach(function(tr){
+      tr.style.display = (tr.getAttribute('data-subprod-product') === defaultProd) ? '' : 'none';
+    });
+  })();
   // POD Details revenue chart (active on load)
   (function initRevPODDetail(){
     var c=document.getElementById('revChartPODDetail');
@@ -1095,6 +1081,91 @@ function updateGNAMetric(val) {
   }
 }
 
+function switchProjView(view) {
+  // Update button styles
+  var btns = {
+    date:  document.getElementById('proj-view-date'),
+    month: document.getElementById('proj-view-month'),
+    lever: document.getElementById('proj-view-lever')
+  };
+  Object.keys(btns).forEach(function(k) {
+    var b = btns[k];
+    if (!b) return;
+    var active = k === view;
+    b.style.background = active ? 'var(--navy)' : 'rgba(255,255,255,0.25)';
+    b.style.color      = active ? '#fff' : 'var(--navy)';
+    b.style.fontWeight = active ? '700' : '600';
+    b.style.border     = active ? 'none' : '1px solid rgba(20,50,79,0.25)';
+    b.style.borderLeft = (k === 'month' || k === 'lever') ? 'none' : b.style.border;
+  });
+
+  var rows = Array.from(document.querySelectorAll('.proj-wrap .tbl tbody tr[data-elm]'));
+  var dividers = document.querySelectorAll('.proj-group-divider');
+  dividers.forEach(function(d) { d.remove(); });
+
+  if (view === 'date' || view === 'month') {
+    // Sort all rows by launch date (col 10)
+    var tbody = rows[0]?.parentElement;
+    if (!tbody) return;
+    rows.sort(function(a, b) {
+      var ad = a.cells[10]?.textContent.trim() || '';
+      var bd = b.cells[10]?.textContent.trim() || '';
+      var months = ['Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul'];
+      var ai = months.indexOf(ad.split('-')[0]), bi = months.indexOf(bd.split('-')[0]);
+      if (ai !== bi) return ai - bi;
+      return parseInt(ad.split('-')[1]||0) - parseInt(bd.split('-')[1]||0);
+    });
+    rows.forEach(function(r) { tbody.appendChild(r); });
+
+    if (view === 'month') {
+      // Re-read rows in new order and insert month group headers
+      var orderedRows = Array.from(tbody.querySelectorAll('tr[data-elm]'));
+      var lastMonth = null;
+      orderedRows.forEach(function(row) {
+        var launch = row.cells[10]?.textContent.trim() || '';
+        var mo = launch.split('-')[0] || '—';
+        if (mo !== lastMonth) {
+          var div = document.createElement('tr');
+          div.className = 'proj-group-divider';
+          var colCount = row.cells.length;
+          div.innerHTML = '<td colspan="' + colCount + '" style="background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:5px 10px;border-bottom:1px solid var(--line);">' + (mo === '—' ? 'No Launch Date' : mo) + '</td>';
+          tbody.insertBefore(div, row);
+          lastMonth = mo;
+        }
+      });
+    }
+  } else if (view === 'lever') {
+    var leverOrder = ['L1','L2','L3','L4','L5','L6'];
+    var tbody = rows[0]?.parentElement;
+    if (!tbody) return;
+    rows.sort(function(a, b) {
+      var al = (a.cells[6]?.textContent.trim()||'').substring(0,2);
+      var bl = (b.cells[6]?.textContent.trim()||'').substring(0,2);
+      return leverOrder.indexOf(al) - leverOrder.indexOf(bl);
+    });
+    rows.forEach(function(r) { tbody.appendChild(r); });
+
+    // Insert lever group headers
+    var orderedRows = Array.from(tbody.querySelectorAll('tr[data-elm]'));
+    var leverNames = {
+      L1:'L1 · Bring Innovation to Life', L2:'L2 · Personalize Every Experience',
+      L3:'L3 · Drive Purchase with the Right Offers', L4:'L4 · Accelerate Revenue-Driving Consumption',
+      L5:'L5 · Drive Active Use and Re-Engagement', L6:'L6 · Turn Demand into Pipeline'
+    };
+    var lastLever = null;
+    orderedRows.forEach(function(row) {
+      var lev = (row.cells[6]?.textContent.trim()||'').substring(0,2);
+      if (lev !== lastLever) {
+        var div = document.createElement('tr');
+        div.className = 'proj-group-divider';
+        var colCount = row.cells.length;
+        div.innerHTML = '<td colspan="' + colCount + '" style="background:var(--tbl-hdr-bg);color:var(--navy);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:5px 10px;border-bottom:1px solid var(--line);">' + (leverNames[lev]||lev) + '</td>';
+        tbody.insertBefore(div, row);
+        lastLever = lev;
+      }
+    });
+  }
+}
 </script>
 </body>
 </html>
