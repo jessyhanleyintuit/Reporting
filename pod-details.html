@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>ELM Dashboard – POD Details</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js" crossorigin="anonymous"></script>
   <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -252,8 +252,7 @@ body{font-family:var(--font);background:#f4f4f0 !important;color:var(--text-1);f
 
 .outcomes-tbl tr{background:#fff !important;}
 .outcomes-tbl tr:hover{background:#f0f7ff !important;}
-
-.tab-panel{display:block;}</style>
+</style>
 </head>
 <body>
 <header class="dash-header">
@@ -310,7 +309,7 @@ body{font-family:var(--font);background:#f4f4f0 !important;color:var(--text-1);f
     </div>
   </div>
 </header>
-<main class="dash-body"><div class="tab-panel active"><div id="pod-filter-bar" style="background:#ffffff;border-bottom:1px solid var(--line);width:100%;box-sizing:border-box;position:sticky;top:0;z-index:550;">
+<main class="dash-body"><div class="tab-panel active" id="tab-2"><div id="pod-filter-bar" style="background:#ffffff;border-bottom:1px solid var(--line);width:100%;box-sizing:border-box;position:sticky;top:0;z-index:550;">
     <div style="display:flex;align-items:center;flex-wrap:nowrap;gap:8px;padding:8px 24px;overflow:visible;">
       <span style="font-size:10px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.07em;font-family:var(--font);white-space:nowrap;">View by</span>
       <div style="display:flex;gap:0;border-radius:5px;overflow:hidden;">
@@ -499,7 +498,7 @@ body{font-family:var(--font);background:#f4f4f0 !important;color:var(--text-1);f
 
       <div style="display:flex;gap:16px;align-items:flex-start;margin-bottom:24px;">
         <div class="section" style="flex:2;min-width:0;margin-bottom:0;">
-          <div class="sec-hdr"><span class="sec-hdr-text" id="hdr-rev-outcomes">ELM LCM Pod · Incremental Revenue Outcomes · September</span></div>
+          <div class="sec-hdr"><span class="sec-hdr-text" id="hdr-rev-outcomes-2">ELM LCM Pod · Incremental Revenue Outcomes · September</span></div>
           <div class="sec-body" style="padding:12px 16px 16px;">
             <div class="legend">
               <span><span class="leg-sq" style="background:var(--payments);"></span>Achieved</span>
@@ -802,92 +801,7 @@ body{font-family:var(--font);background:#f4f4f0 !important;color:var(--text-1);f
       </div>
         </div>
         </div>
-
-      
-      </div>
-
-
-
-    </div>
-
-    <!-- GNA VIEW -->
-    <div class="metric-panel" id="metric-gna">
-
-    
-
-      <div style="padding:0;margin-bottom:24px;">
-        <div class="sec-hdr"><span class="sec-hdr-text">ELM · Incremental <span class="gna-metric">GNA</span> Outcomes YTD</span></div>
-        <div style="padding:14px 20px 16px;">
-          <div class="legend">
-            <span><span class="leg-sq" style="background:var(--payments);"></span>Achieved</span>
-            <span><span class="leg-sq" style="background:var(--payments-mid);"></span>High Confidence Path To</span>
-            <span><span class="leg-sq" style="background:var(--payments-light);border:1px solid #ccccc0;"></span>Low Confidence Path To</span>
-            <span><span class="leg-ln" style="background:#000;"></span>Forecast</span>
-            <span><span class="leg-dash" style="border-color:#aaaaaa;"></span>Target</span>
-          </div>
-          <div style="position:relative;width:100%;height:200px;"><canvas id="gnaChart"></canvas></div>
-        </div>
-      </div>
-
-      <div style="overflow-x:auto;padding:0 0 24px 0;border-bottom:2px solid var(--line);">
-        <table class="tbl outcomes-tbl" style="width:100%;">
-          <thead>
-            <tr>
-              <th style="text-align:left;min-width:110px;">Metric</th>
-              <th style="text-align:center;width:70px;">YTD</th>
-              <th class="dvl" style="text-align:center;">Aug</th>
-              <th style="text-align:center;">Sep</th><th style="text-align:center;">Oct</th><th style="text-align:center;">Nov</th><th style="text-align:center;">Dec</th><th style="text-align:center;">Jan</th><th style="text-align:center;">Feb</th><th style="text-align:center;">Mar</th><th style="text-align:center;">Apr</th><th style="text-align:center;">May</th><th style="text-align:center;">Jun</th><th style="text-align:center;">Jul</th>
-            </tr>
-            <tr>
-              <th colspan="14" style="background:var(--sec-hdr-bg);color:#fff;text-align:left;font-size:9.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;padding:6px 12px;border-bottom:1px solid rgba(255,255,255,0.15);">Incremental Outcomes In Year (GNA)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td style="font-weight:600;">Actuals</td><td style="text-align:center;font-weight:700;">730</td><td style="text-align:center;font-weight:700;">730</td><td class="dvl" style="text-align:center;">310</td><td style="text-align:center;">420</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td></tr>
-            <tr><td style="font-weight:600;">Forecast</td><td style="text-align:center;font-weight:700;">690</td><td style="text-align:center;font-weight:700;">690</td><td class="dvl" style="text-align:center;">290</td><td style="text-align:center;">400</td><td style="text-align:center;">480</td><td style="text-align:center;">520</td><td style="text-align:center;">580</td><td style="text-align:center;">640</td><td style="text-align:center;">700</td><td style="text-align:center;">760</td><td style="text-align:center;">830</td><td style="text-align:center;">900</td><td style="text-align:center;">980</td><td style="text-align:center;">1,060</td></tr>
-            <tr><td style="color:var(--text-3);">Δ to Forecast</td><td style="text-align:center;"><span class="val-delta">+40</span></td><td class="dvl" style="text-align:center;"><span class="val-delta">+20</span></td><td style="text-align:center;"><span class="val-delta">+20</span></td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td></tr>
-            <tr><td style="color:var(--text-3);">ITF</td><td style="text-align:center;"><span class="val-g">106</span></td><td class="dvl" style="text-align:center;"><span class="val-g">107</span></td><td style="text-align:center;"><span class="val-g">105</span></td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td></tr>
-            <tr><td style="font-weight:600;">Target</td><td style="text-align:center;font-weight:700;">980</td><td style="text-align:center;font-weight:700;">980</td><td class="dvl" style="text-align:center;">420</td><td style="text-align:center;">560</td><td style="text-align:center;">660</td><td style="text-align:center;">750</td><td style="text-align:center;">860</td><td style="text-align:center;">980</td><td style="text-align:center;">1,080</td><td style="text-align:center;">1,200</td><td style="text-align:center;">1,350</td><td style="text-align:center;">1,500</td><td style="text-align:center;">1,650</td><td style="text-align:center;">1,800</td></tr>
-            <tr><td style="color:var(--text-3);">Δ to Target</td><td style="text-align:center;"><span class="val-delta">-250</span></td><td class="dvl" style="text-align:center;"><span class="val-delta">-110</span></td><td style="text-align:center;"><span class="val-delta">-140</span></td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td></tr>
-            <tr><td style="color:var(--text-3);">ITT</td><td style="text-align:center;"><span class="val-r">74</span></td><td class="dvl" style="text-align:center;"><span class="val-r">74</span></td><td style="text-align:center;"><span class="val-r">75</span></td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td></tr>
-          </tbody>
-        </table>
-        </div>
-        <div style="overflow-x:auto;flex:0 0 420px;min-width:280px;">
-        <table class="tbl outcomes-tbl" style="width:100%;">
-          <thead>
-            <tr>
-              <th colspan="14" style="background:var(--sec-hdr-bg);color:#fff;text-align:left;font-size:9.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;padding:6px 12px;border-bottom:1px solid rgba(255,255,255,0.15);">Annualized Impact (GNA)</th>
-            </tr>
-            <tr>
-              <th style="text-align:left;min-width:90px;">Metric</th>
-              <th style="text-align:center;width:65px;">YTD</th>
-              <th class="dvl" style="text-align:center;">Aug</th>
-              <th style="text-align:center;">Sep</th><th style="text-align:center;">Oct</th><th style="text-align:center;">Nov</th><th style="text-align:center;">Dec</th><th style="text-align:center;">Jan</th><th style="text-align:center;">Feb</th><th style="text-align:center;">Mar</th><th style="text-align:center;">Apr</th><th style="text-align:center;">May</th><th style="text-align:center;">Jun</th><th style="text-align:center;">Jul</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td style="font-weight:600;">Actuals</td><td style="text-align:center;font-weight:700;">313k</td><td class="dvl" style="text-align:center;">50k</td><td style="text-align:center;">85k</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td></tr>
-            <tr><td style="font-weight:600;">Forecast</td><td style="text-align:center;font-weight:700;">295k</td><td class="dvl" style="text-align:center;">45k</td><td style="text-align:center;">78k</td><td style="text-align:center;">180k</td><td style="text-align:center;">210k</td><td style="text-align:center;">235k</td><td style="text-align:center;">260k</td><td style="text-align:center;">290k</td><td style="text-align:center;">320k</td><td style="text-align:center;">355k</td><td style="text-align:center;">390k</td><td style="text-align:center;">430k</td><td style="text-align:center;">470k</td></tr>
-            <tr><td style="color:var(--text-3);">Δ to Forecast</td><td style="text-align:center;"><span class="val-delta">+18k</span></td><td class="dvl" style="text-align:center;"><span class="val-delta">+5k</span></td><td style="text-align:center;"><span class="val-delta">+7k</span></td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td></tr>
-            <tr><td style="color:var(--text-3);">ITF</td><td style="text-align:center;"><span class="val-g">106</span></td><td class="dvl" style="text-align:center;"><span class="val-g">111</span></td><td style="text-align:center;"><span class="val-g">109</span></td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td></tr>
-            <tr><td style="font-weight:600;">Target</td><td style="text-align:center;font-weight:700;">360k</td><td class="dvl" style="text-align:center;">55k</td><td style="text-align:center;">93k</td><td style="text-align:center;">215k</td><td style="text-align:center;">250k</td><td style="text-align:center;">280k</td><td style="text-align:center;">315k</td><td style="text-align:center;">345k</td><td style="text-align:center;">385k</td><td style="text-align:center;">425k</td><td style="text-align:center;">465k</td><td style="text-align:center;">515k</td><td style="text-align:center;">560k</td></tr>
-            <tr><td style="color:var(--text-3);">Δ to Target</td><td style="text-align:center;"><span class="val-delta">-47k</span></td><td class="dvl" style="text-align:center;"><span class="val-delta">-5k</span></td><td style="text-align:center;"><span class="val-delta">-8k</span></td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td></tr>
-            <tr><td style="color:var(--text-3);">ITT</td><td style="text-align:center;"><span class="val-r">87</span></td><td class="dvl" style="text-align:center;"><span class="val-r">91</span></td><td style="text-align:center;"><span class="val-r">91</span></td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td></tr>
-          </tbody>
-        </table>
-      </div>
-      </div>
-
-
-
-    
-
-
-      
-
-</div>
-  <!-- Project Detail Table -->
+<!-- Project Detail Table -->
   <div id="project-detail-section" style="padding:0 16px 16px;">
     <div id="proj-view-bar" style="display:flex;align-items:center;gap:10px;padding:6px 0 6px;">
       <span style="font-size:10px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.07em;white-space:nowrap;font-family:var(--font);">View Projects By</span>
@@ -983,9 +897,6 @@ body{font-family:var(--font);background:#f4f4f0 !important;color:var(--text-1);f
         </div>
       </div></div>
     </div>
-  </div>
-
-  <!-- TAB 3: POD Incremental Outlook -->
 <!-- Project Detail Table -->
   <div id="project-detail-section" style="padding:0 16px 16px;">
     <div id="proj-view-bar" style="display:flex;align-items:center;gap:10px;padding:6px 0 6px;">
@@ -1084,9 +995,8 @@ body{font-family:var(--font);background:#f4f4f0 !important;color:var(--text-1);f
     </div>
   </div>
 
-  <!-- TAB 3: POD Incremental Outlook -->
-<div class="tab-panel" style="display:none;" id="tab-3">
-    <div class="split">
+  
+  <div class="tab-panel " style="display:none;" id="tab-3"><div class="split">
       <div class="pane pane-left">
         <div class="section">
           <div class="sec-hdr"><span class="sec-hdr-text">ELM · Impact to Date</span></div>
@@ -1155,13 +1065,7 @@ body{font-family:var(--font);background:#f4f4f0 !important;color:var(--text-1);f
       </div>
     </div>
   </div>
-
-  <!-- TAB 1: POD Incremental Summary -->
-<div class="tab-panel" style="display:none;" id="tab-4">
-
-    
-
-    <div class="callout-groups">
+  <div class="tab-panel " style="display:none;" id="tab-4"><div class="callout-groups">
 
       <div class="callout-group">
         <div class="callout-group-hdr">AURA & ELM Growth · Incremental Revenue Outcomes YTD</div>
@@ -1398,31 +1302,248 @@ body{font-family:var(--font);background:#f4f4f0 !important;color:var(--text-1);f
       </div><!-- /pane-right -->    </div><!-- /split -->
   
     <div style="padding:8px 24px 12px;font-size:10px;color:var(--text-3);font-family:var(--font);"><sup>4</sup> 30% Win Rate Squad Goal &nbsp;&nbsp;<sup>5</sup> Absolute #, not normalized for project size</div>
-</div>
-
-  <!-- TAB 5: AURA Incremental Details -->
-<div class="tab-panel" style="display:none;" id="tab-5">
-    <div style="padding:40px 32px;color:var(--text-3);font-family:var(--font);font-size:14px;">AURA Incremental Details — coming soon.</div>
+  </div>
+  <div class="tab-panel " style="display:none;" id="tab-5"><div style="padding:40px 32px;color:var(--text-3);font-family:var(--font);font-size:14px;">AURA Incremental Details — coming soon.</div>
+  </div>
+  <div class="tab-panel " style="display:none;" id="tab-6"><div style="padding:40px 32px;color:var(--text-3);font-family:var(--font);font-size:14px;">AURA Incremental Outlook — coming soon.</div>
+  </div>
+  <div class="tab-panel active " style="display:block;" id="tab-7">  <!-- IPD Sub-nav -->
+  <div id="ipd-subnav" style="background:var(--navy);padding:0 24px;display:flex;align-items:center;gap:2px;border-bottom:3px solid var(--payments);">
+    <button class="ipd-nav-btn active" onclick="switchIPDPage('perf-sub')" style="font-size:12px;font-weight:600;padding:10px 18px;background:var(--payments);color:#fff;border:none;cursor:pointer;font-family:var(--font);border-radius:0;letter-spacing:.01em;transition:all .15s;">Performance by IPD Subcategory</button>
+    <button class="ipd-nav-btn" onclick="switchIPDPage('cms-impressions')" style="font-size:12px;font-weight:600;padding:10px 18px;background:transparent;color:rgba(255,255,255,0.7);border:none;cursor:pointer;font-family:var(--font);border-radius:0;letter-spacing:.01em;transition:all .15s;">CMS Impressions</button>
+    <button class="ipd-nav-btn" onclick="switchIPDPage('cms-campaign')" style="font-size:12px;font-weight:600;padding:10px 18px;background:transparent;color:rgba(255,255,255,0.7);border:none;cursor:pointer;font-family:var(--font);border-radius:0;letter-spacing:.01em;transition:all .15s;">CMS Campaign View</button>
+    <button class="ipd-nav-btn" onclick="switchIPDPage('cms-funnel')" style="font-size:12px;font-weight:600;padding:10px 18px;background:transparent;color:rgba(255,255,255,0.7);border:none;cursor:pointer;font-family:var(--font);border-radius:0;letter-spacing:.01em;transition:all .15s;">CMS Funnel Performance</button>
   </div>
 
-  <!-- TAB 6: AURA Incremental Outlook -->
-<div class="tab-panel" style="display:none;" id="tab-6">
-    <div style="padding:40px 32px;color:var(--text-3);font-family:var(--font);font-size:14px;">AURA Incremental Outlook — coming soon.</div>
+  <!-- perf-sub page -->
+  <div id="ipd-perf-sub" class="ipd-page" style="display:block;">
+  <!-- Page Title -->
+  <div style="padding:10px 24px 4px;">
+    <div style="font-size:9px;font-weight:700;color:var(--payments);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;">IPD Performance</div>
+    <div style="font-size:24px;font-weight:300;color:var(--navy);line-height:1.2;">Full Payments IPD April Performance <span style="font-size:17px;font-weight:400;color:var(--text-3);">(Baseline &amp; Incremental)</span></div>
+  </div>
+    <div class="split" style="grid-template-columns:1fr 1fr;align-items:start;">
+<!-- LEFT PANE -->
+    <div class="pane pane-left" style="gap:12px;">
+      <div class="section">
+        <div class="sec-hdr"><span class="sec-hdr-text">IPD Totals</span></div>
+        <div class="sec-body-flush"><table class="tbl" style="width:100%;font-size:11px;">
+          <thead><tr><th style="text-align:left;"></th><th style="text-align:center;">Actuals</th><th style="text-align:center;">Forecast</th><th style="text-align:center;">Δ</th><th style="text-align:center;">ITF</th><th style="text-align:center;">ITT</th><th style="text-align:center;">ITPY</th><th style="text-align:center;">% GNA</th></tr></thead>
+          <tbody>
+            <tr><td style="font-weight:700;">ALL GNA</td><td style="text-align:center;">36.5K</td><td style="text-align:center;">39.2K</td><td style="text-align:center;"><span class="val-r">-2.6k</span></td><td style="text-align:center;"><span class="val-a">93</span></td><td style="text-align:center;"><span class="val-g">104</span></td><td style="text-align:center;"><span class="val-g">119</span></td><td style="text-align:center;font-weight:700;">100%</td></tr>
+            <tr><td style="font-weight:700;">IPD APR</td><td style="text-align:center;">28.4k</td><td style="text-align:center;">31k</td><td style="text-align:center;"><span class="val-r">-2.6k</span></td><td style="text-align:center;"><span class="val-a">92</span></td><td style="text-align:center;"><span class="val-g">101</span></td><td style="text-align:center;"><span class="val-g">117</span></td><td style="text-align:center;font-weight:700;">78%</td></tr>
+            <tr><td style="color:var(--text-2);">IPD QTD</td><td style="text-align:center;">79.9k</td><td style="text-align:center;">91.5k</td><td style="text-align:center;"><span class="val-r">-11.6k</span></td><td style="text-align:center;"><span class="val-a">87</span></td><td style="text-align:center;"><span class="val-a">97</span></td><td style="text-align:center;"><span class="val-g">115</span></td><td style="text-align:center;">77%</td></tr>
+            <tr><td style="color:var(--text-2);">IPD YTD</td><td style="text-align:center;">216.5k</td><td style="text-align:center;">228.1k</td><td style="text-align:center;"><span class="val-r">-11.6k</span></td><td style="text-align:center;"><span class="val-a">95</span></td><td style="text-align:center;"><span class="val-g">106</span></td><td style="text-align:center;"><span class="val-g">119</span></td><td style="text-align:center;">77%</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div class="section">
+        <div class="sec-hdr"><span class="sec-hdr-text">Post-Auth IPD</span></div>
+        <div style="padding:6px 12px;background:rgba(7,196,217,0.1);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text-2);">
+          <span style="font-weight:600;">Active QBO Platform Customers This Month</span>
+          <span style="font-weight:700;color:var(--navy);margin-left:auto;">4.2M</span>
+          <span class="val-a">98 ITPM</span>
+          <span style="color:var(--text-3);">77% of Base</span>
+        </div>
+        <div class="sec-body-flush"><table class="tbl" style="width:100%;font-size:11px;">
+          <thead><tr><th style="text-align:left;"></th><th style="text-align:left;">Owner</th><th style="text-align:center;">#</th><th style="text-align:center;">Δ Mo</th><th style="text-align:center;">% IPD</th><th style="text-align:center;">ITPM</th></tr></thead>
+          <tbody>
+            <tr style="background:var(--row-odd);"><td style="font-weight:700;">Fixed Services Domain</td><td style="font-size:10px;color:var(--text-3);">Matt</td><td style="text-align:center;font-weight:700;"><span class="val-g">7.8K</span></td><td style="text-align:center;"><span style="color:#111;">+956</span></td><td style="text-align:center;font-weight:700;">28%</td><td style="text-align:center;"><span class="val-g">114</span></td></tr>
+            <tr style="background:var(--row-even);"><td style="font-weight:700;">AURA</td><td></td><td style="text-align:center;font-weight:700;">6.0K</td><td style="text-align:center;"><span style="color:#111;">-832</span></td><td style="text-align:center;font-weight:700;">22%</td><td style="text-align:center;"><span class="val-a">88</span></td></tr>
+            <tr style="background:var(--row-odd);"><td style="padding-left:16px;color:var(--text-2);font-size:10px;">Fixed AURA</td><td style="font-size:9px;color:var(--text-3);">Jessy, Colin, Joe</td><td style="text-align:center;">3.7K</td><td style="text-align:center;"><span style="color:#111;">-600</span></td><td style="text-align:center;">13%</td><td style="text-align:center;"><span class="val-a">86</span></td></tr>
+            <tr style="background:var(--row-even);"><td style="padding-left:16px;color:var(--text-2);font-size:10px;">Variable AURA</td><td></td><td style="text-align:center;">2.2K</td><td style="text-align:center;"><span style="color:#111;">-232</span></td><td style="text-align:center;">8%</td><td style="text-align:center;"><span class="val-a">91</span></td></tr>
+            <tr style="background:var(--row-odd);"><td style="font-weight:700;">CMS</td><td></td><td style="text-align:center;font-weight:700;">2.2K</td><td style="text-align:center;"><span style="color:#111;">-682</span></td><td style="text-align:center;font-weight:700;">8%</td><td style="text-align:center;"><span class="val-r">76</span></td></tr>
+            <tr style="background:var(--row-even);"><td style="padding-left:16px;color:var(--text-2);font-size:10px;">Fixed CMS</td><td style="font-size:9px;color:var(--text-3);">Jessy</td><td style="text-align:center;">0.6K</td><td style="text-align:center;"><span style="color:#111;">-165</span></td><td style="text-align:center;">2%</td><td style="text-align:center;"><span class="val-r">77</span></td></tr>
+            <tr style="background:var(--row-odd);"><td style="padding-left:16px;color:var(--text-2);font-size:10px;">Variable CMS</td><td></td><td style="text-align:center;">1.6K</td><td style="text-align:center;"><span style="color:#111;">-517</span></td><td style="text-align:center;">6%</td><td style="text-align:center;"><span class="val-r">76</span></td></tr>
+            <tr style="background:var(--row-even);"><td style="font-weight:700;">TBD:</td><td></td><td style="text-align:center;font-weight:700;"><span class="val-g">11.7K</span></td><td style="text-align:center;"><span style="color:#111;">+2.7K</span></td><td style="text-align:center;font-weight:700;">42%</td><td style="text-align:center;"><span class="val-g">129</span></td></tr>
+            <tr style="background:var(--row-odd);"><td style="padding-left:16px;color:var(--text-2);font-size:10px;">Unknown (no tracking)</td><td style="font-size:9px;color:var(--text-3);">CRMA</td><td style="text-align:center;"><span class="val-g">8.9K</span></td><td style="text-align:center;"><span style="color:#111;">+3.1K</span></td><td style="text-align:center;">32%</td><td style="text-align:center;"><span class="val-g">155</span></td></tr>
+            <tr style="background:var(--row-even);"><td style="padding-left:16px;color:var(--text-2);font-size:10px;">Not Yet Categorized</td><td></td><td style="text-align:center;">2.8K</td><td style="text-align:center;"><span style="color:#111;">-468</span></td><td style="text-align:center;">10%</td><td style="text-align:center;"><span class="val-a">85</span></td></tr>
+          </tbody>
+          <tfoot><tr style="border-top:2px solid var(--line);background:var(--tbl-hdr-bg);">
+            <td style="font-weight:700;color:var(--navy);">Post-Auth IPD Totals</td><td></td>
+            <td style="text-align:center;font-weight:700;color:var(--navy);">27.6K</td>
+            <td style="text-align:center;font-weight:700;color:var(--positive);">+2.1K</td>
+            <td style="text-align:center;font-weight:700;color:var(--navy);">97%</td>
+            <td style="text-align:center;font-weight:700;color:var(--positive);">106</td>
+          </tr></tfoot>
+        </table></div>
+      </div>
+      
+    </div>
+    <!-- RIGHT PANE -->
+    <div class="pane pane-right" style="gap:12px;">
+ <div class="pane pane-right" style="gap:12px;">
+      <div class="section">
+        <div class="sec-hdr"><span class="sec-hdr-text">April Performance</span></div>
+        <div class="commentary"><ul id="ipd-april-perf">
+              <li><div class="c-dot-wrap"><div class="c-dot"></div></div><div class="c-text" contenteditable="true">Aprils Payments IPD performance soft at <strong style="color:var(--negative);">92 ITF</strong> (Δ -2,409) though strong at <strong style="color:var(--positive);">ITT 104</strong>. Due to underperformance of incremental initiatives:<ul style="list-style:none;padding-left:0;margin-top:4px;"><li><div class="c-dot-wrap" style="padding-top:8px;"><div class="c-dot" style="background:var(--text-3);width:4px;height:4px;"></div></div><div class="c-text" contenteditable="true" style="font-size:12px;">42% of miss due to Onboarding (Unified + 1-Click): Expected 2.4K | actuals 1K | Δ -1.4K</div></li><li><div class="c-dot-wrap" style="padding-top:8px;"><div class="c-dot" style="background:var(--text-3);width:4px;height:4px;"></div></div><div class="c-text" contenteditable="true" style="font-size:12px;">30% of miss due to AURA: Expected 3.4K | actuals 2.7K | Δ -716</div></li><li><div class="c-dot-wrap" style="padding-top:8px;"><div class="c-dot" style="background:var(--text-3);width:4px;height:4px;"></div></div><div class="c-text" contenteditable="true" style="font-size:12px;">10% of miss due to GTM/ACQ: Expected 502 | actuals 274 <em>bought in by Squad</em> | Δ -228</div></li><li><div class="c-dot-wrap" style="padding-top:8px;"><div class="c-dot" style="background:var(--text-3);width:4px;height:4px;"></div></div><div class="c-text" contenteditable="true" style="font-size:12px;">17% of miss due to MAIP FY26 Initiatives: Expected 921 | actuals 400 | Δ -521</div></li></ul></div></li>
+              <li><div class="c-dot-wrap"><div class="c-dot"></div></div><div class="c-text" contenteditable="true">Baseline overperformance offset ~456 GNA of the incremental initiative misses.</div></li>
+            </ul><div class="add-btn" onclick="addBullet('ipd-april-perf')"><div class="add-icon">+</div><span>Add point</span></div></div>
+      </div>
+      <div class="section">
+        <div class="sec-hdr"><span class="sec-hdr-text">Fixed Services Domain</span></div>
+        <div class="commentary"><ul id="ipd-fsd">
+              <li><div class="c-dot-wrap"><div class="c-dot"></div></div><div class="c-text" contenteditable="true">+956 MoM (ITPM 114). <code style="font-family:var(--mono);font-size:11px;background:var(--row-odd);padding:1px 4px;border-radius:3px;">Invoice_save_and_send</code> is the primary driver of category growth (+1.4K, 148% of category delta).</div></li>
+            </ul><div class="add-btn" onclick="addBullet('ipd-fsd')"><div class="add-icon">+</div><span>Add point</span></div></div>
+      </div>
+      <div class="section">
+        <div class="sec-hdr"><span class="sec-hdr-text">CMS</span></div>
+        <div class="commentary"><ul id="ipd-cms">
+              <li><div class="c-dot-wrap"><div class="c-dot"></div></div><div class="c-text" contenteditable="true">Fixed CMS down -165 MoM (ITPM 77) due to AURA experiments. <em>No negative impact observed — units likely reallocated to AURA Fixed or TBD due to Unified Onboarding priority code tracking changes.</em><ul style="list-style:none;padding-left:0;margin-top:4px;"><li><div class="c-dot-wrap" style="padding-top:8px;"><div class="c-dot" style="background:var(--text-3);width:4px;height:4px;"></div></div><div class="c-text" contenteditable="true" style="font-size:12px;"><strong>Payment Link Hero State</strong> (-152, 92% of category delta): New AURA Payment Link Hero State "Show and tell" design launched 4/16</div></li><li><div class="c-dot-wrap" style="padding-top:8px;"><div class="c-dot" style="background:var(--text-3);width:4px;height:4px;"></div></div><div class="c-text" contenteditable="true" style="font-size:12px;"><strong>Payments Billing &amp; Subscription Card</strong> (-21, 13% of category delta): Subscriptions &amp; Billing Discover More Color/Position AURA experiment — positive overall but flat for Payments.</div></li></ul></div></li>
+              <li><div class="c-dot-wrap"><div class="c-dot"></div></div><div class="c-text" contenteditable="true">AURA Variable: GNA from GTKM priority code <strong>drove the decline with -259 and shows a 3-month sustained decline (1.9K → 1.8K → 1.5K).</strong><ul style="list-style:none;padding-left:0;margin-top:4px;"><li><div class="c-dot-wrap" style="padding-top:8px;"><div class="c-dot" style="background:var(--text-3);width:4px;height:4px;"></div></div><div class="c-text" contenteditable="true" style="font-size:12px;"><em style="color:var(--payments);">Root cause identified:</em> NEON and Unified Onboarding (TRON) experiments shifted from priority-code-based GNA mapping to a new event-tracking convention.</div></li><li><div class="c-dot-wrap" style="padding-top:8px;"><div class="c-dot" style="background:var(--text-3);width:4px;height:4px;"></div></div><div class="c-text" contenteditable="true" style="font-size:12px;"><strong>Status:</strong> 5/11 - Onboarding Product team identified as fix owner</div></li><li><div class="c-dot-wrap" style="padding-top:8px;"><div class="c-dot" style="background:var(--text-3);width:4px;height:4px;"></div></div><div class="c-text" contenteditable="true" style="font-size:12px;"><strong>Key next step:</strong> Onboarding Product team to prioritize the fix, date TBD</div></li></ul></div></li>
+            </ul><div class="add-btn" onclick="addBullet('ipd-cms')"><div class="add-icon">+</div><span>Add point</span></div></div>
+      </div>
+      <div class="section">
+        <div class="sec-hdr"><span class="sec-hdr-text">TBD</span></div>
+        <div class="commentary"><ul id="ipd-tbd">
+              <li><div class="c-dot-wrap"><div class="c-dot"></div></div><div class="c-text" contenteditable="true">NULL (no priority code) drove the growth with +2.8K showing a 3-month sustained growth (4.5K → 5.6K → 8.4K).</div></li>
+              <li><div class="c-dot-wrap"><div class="c-dot"></div></div><div class="c-text" contenteditable="true">9% of March GNA is "Not Yet Categorized"; technical investigation is underway.<ul style="list-style:none;padding-left:0;margin-top:4px;"><li><div class="c-dot-wrap" style="padding-top:8px;"><div class="c-dot" style="background:var(--text-3);width:4px;height:4px;"></div></div><div class="c-text" contenteditable="true" style="font-size:12px;">Priority codes need to be updated so that landing pages do not override the source that brought a customer to the landing page</div></li><li><div class="c-dot-wrap" style="padding-top:8px;"><div class="c-dot" style="background:var(--text-3);width:4px;height:4px;"></div></div><div class="c-text" contenteditable="true" style="font-size:12px;"><strong>Key next step:</strong> GTM Tech to prioritize tracking, date TBD</div></li></ul></div></li>
+            </ul><div class="add-btn" onclick="addBullet('ipd-tbd')"><div class="add-icon">+</div><span>Add point</span></div></div>
+      </div>
+      <div class="section">
+        <div class="sec-hdr"><span class="sec-hdr-text">Experiences Out of Product · Email</span></div>
+        <div class="commentary"><ul id="ipd-email">
+              <li><div class="c-dot-wrap"><div class="c-dot"></div></div><div class="c-text" contenteditable="true">Email priority code spike (Jan–Mar) was driven by a Payments Squad experiment tied to OINP AE Funds held transactional emails — now normalized as of April.</div></li>
+            </ul><div class="add-btn" onclick="addBullet('ipd-email')"><div class="add-icon">+</div><span>Add point</span></div></div>
+      </div>
+    </div>
   </div>
 
-  <!-- TAB 7: IPD Channel -->
-<div class="tab-panel" style="display:none;" id="tab-7">
-    <div class="placeholder"><div class="ph-icon">⚡</div><div class="ph-title">Velocity</div><div class="ph-sub">Experiment throughput, win rates, ship cadence, and team health metrics will live here.</div></div>
+
+  </div>
+  <div 
+    </div>
+    
   </div>
 
-  <!-- TAB 8: Email Channel -->
-<div class="tab-panel" style="display:none;" id="tab-8">
-    <div class="placeholder"><div class="ph-icon">🗺</div><div class="ph-title">Roadmap</div><div class="ph-sub">Upcoming initiatives, project pipeline, and milestone tracking will live here.</div></div>
+  <div id="ipd-cms-impressions" class="ipd-page" style="display:none;">
+    <div style="padding:32px 24px;color:var(--text-3);font-family:var(--font);">
+      <div style="font-size:18px;font-weight:600;color:var(--navy);margin-bottom:8px;">CMS Impressions</div>
+      <div style="font-size:13px;">Coming soon — build content here.</div>
+    </div>
+  </div>
+  <div id="ipd-cms-campaign" class="ipd-page" style="display:none;">
+    <div style="padding:32px 24px;color:var(--text-3);font-family:var(--font);">
+      <div style="font-size:18px;font-weight:600;color:var(--navy);margin-bottom:8px;">CMS Campaign View</div>
+      <div style="font-size:13px;">Coming soon — build content here.</div>
+    </div>
+  </div>
+  <div id="ipd-cms-funnel" class="ipd-page" style="display:none;">
+    <div style="padding:32px 24px;color:var(--text-3);font-family:var(--font);">
+      <div style="font-size:18px;font-weight:600;color:var(--navy);margin-bottom:8px;">CMS Funnel Performance</div>
+      <div style="font-size:13px;">Coming soon — build content here.</div>
+    </div>
+  </div>
+  </div>
+  <div class="tab-panel " style="display:none;" id="tab-8">
+  <!-- Email Sub-nav -->
+  <div id="email-subnav" style="background:var(--navy);padding:0 24px;display:flex;align-items:center;gap:2px;border-bottom:3px solid var(--payments);">
+    <button class="email-nav-btn active" onclick="switchEmailPage('overall')" style="font-size:12px;font-weight:700;padding:10px 18px;background:var(--payments);color:#fff;border:none;cursor:pointer;font-family:var(--font);border-radius:0;letter-spacing:.01em;transition:all .15s;">Email Overall</button>
+    <button class="email-nav-btn" onclick="switchEmailPage('by-campaign')" style="font-size:12px;font-weight:600;padding:10px 18px;background:transparent;color:rgba(255,255,255,0.7);border:none;cursor:pointer;font-family:var(--font);border-radius:0;letter-spacing:.01em;transition:all .15s;">Email By Campaign</button>
+    <button class="email-nav-btn" onclick="switchEmailPage('by-asset')" style="font-size:12px;font-weight:600;padding:10px 18px;background:transparent;color:rgba(255,255,255,0.7);border:none;cursor:pointer;font-family:var(--font);border-radius:0;letter-spacing:.01em;transition:all .15s;">Email By Individual Asset</button>
   </div>
 
-  <!-- TAB 9: Velocity -->
-<div class="tab-panel" style="display:none;" id="tab-9">
-    <div style="padding:40px 32px;color:var(--text-3);font-family:var(--font);font-size:14px;">Velocity tab — coming soon.</div>
+  <!-- Email Overall -->
+  <div id="email-overall" class="email-page" style="display:block;">
+    <div style="padding:12px 24px 4px;">
+      <div style="font-size:9px;font-weight:700;color:var(--payments);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;">Email Channel</div>
+      <div style="font-size:22px;font-weight:300;color:var(--navy);">Email Channel Performance</div>
+    </div>
+
+    <!-- Callout row -->
+    <div style="padding:12px 24px;">
+      <div style="display:flex;gap:12px;flex-wrap:nowrap;">
+        <div class="callout" style="flex:1;min-width:140px;">
+              <div style="height:10px;background:var(--payments);width:100%;flex-shrink:0;border-radius:3px 3px 0 0;"></div>
+              <div class="co-body">
+                <div class="co-label" style="font-size:10px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;">Send Volume</div>
+                <div class="co-big" style="font-size:22px;font-weight:700;color:var(--navy);line-height:1;">2.4M</div>
+                <div style="font-size:11px;color:var(--positive);font-weight:600;margin-top:2px;">+142K</div>
+                <div style="display:flex;align-items:center;gap:6px;margin-top:6px;">
+                  <span style="font-size:10px;color:var(--text-3);">ITPM</span>
+                  <span style="font-size:14px;font-weight:700;color:var(--positive);">108</span>
+                </div>
+                <div style="font-size:9px;color:var(--text-3);margin-top:2px;">vs prior month</div>
+              </div>
+            </div>
+        <div class="callout" style="flex:1;min-width:140px;">
+              <div style="height:10px;background:var(--payments);width:100%;flex-shrink:0;border-radius:3px 3px 0 0;"></div>
+              <div class="co-body">
+                <div class="co-label" style="font-size:10px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;">Opens</div>
+                <div class="co-big" style="font-size:22px;font-weight:700;color:var(--navy);line-height:1;">680K</div>
+                <div style="font-size:11px;color:var(--negative);font-weight:600;margin-top:2px;">-12K</div>
+                <div style="display:flex;align-items:center;gap:6px;margin-top:6px;">
+                  <span style="font-size:10px;color:var(--text-3);">ITPM</span>
+                  <span style="font-size:14px;font-weight:700;color:var(--flat);">94</span>
+                </div>
+                <div style="font-size:9px;color:var(--text-3);margin-top:2px;">vs prior month</div>
+              </div>
+            </div>
+        <div class="callout" style="flex:1;min-width:140px;">
+              <div style="height:10px;background:var(--payments);width:100%;flex-shrink:0;border-radius:3px 3px 0 0;"></div>
+              <div class="co-body">
+                <div class="co-label" style="font-size:10px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;">Open Rate</div>
+                <div class="co-big" style="font-size:22px;font-weight:700;color:var(--navy);line-height:1;">28.3%</div>
+                <div style="font-size:11px;color:var(--positive);font-weight:600;margin-top:2px;">+0.4pp</div>
+                <div style="display:flex;align-items:center;gap:6px;margin-top:6px;">
+                  <span style="font-size:10px;color:var(--text-3);">ITPM</span>
+                  <span style="font-size:14px;font-weight:700;color:var(--flat);">97</span>
+                </div>
+                <div style="font-size:9px;color:var(--text-3);margin-top:2px;">vs prior month</div>
+              </div>
+            </div>
+        <div class="callout" style="flex:1;min-width:140px;">
+              <div style="height:10px;background:var(--payments);width:100%;flex-shrink:0;border-radius:3px 3px 0 0;"></div>
+              <div class="co-body">
+                <div class="co-label" style="font-size:10px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;">Clicks</div>
+                <div class="co-big" style="font-size:22px;font-weight:700;color:var(--navy);line-height:1;">94K</div>
+                <div style="font-size:11px;color:var(--positive);font-weight:600;margin-top:2px;">+8.2K</div>
+                <div style="display:flex;align-items:center;gap:6px;margin-top:6px;">
+                  <span style="font-size:10px;color:var(--text-3);">ITPM</span>
+                  <span style="font-size:14px;font-weight:700;color:var(--positive);">112</span>
+                </div>
+                <div style="font-size:9px;color:var(--text-3);margin-top:2px;">vs prior month</div>
+              </div>
+            </div>
+        <div class="callout" style="flex:1;min-width:140px;">
+              <div style="height:10px;background:var(--payments);width:100%;flex-shrink:0;border-radius:3px 3px 0 0;"></div>
+              <div class="co-body">
+                <div class="co-label" style="font-size:10px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;">CTR</div>
+                <div class="co-big" style="font-size:22px;font-weight:700;color:var(--navy);line-height:1;">3.9%</div>
+                <div style="font-size:11px;color:var(--positive);font-weight:600;margin-top:2px;">+0.3pp</div>
+                <div style="display:flex;align-items:center;gap:6px;margin-top:6px;">
+                  <span style="font-size:10px;color:var(--text-3);">ITPM</span>
+                  <span style="font-size:14px;font-weight:700;color:var(--positive);">118</span>
+                </div>
+                <div style="font-size:9px;color:var(--text-3);margin-top:2px;">vs prior month</div>
+              </div>
+            </div>
+      </div>
+    </div>
+
+    <!-- Commentary placeholder -->
+    <div style="padding:0 24px 24px;color:var(--text-3);font-size:13px;">
+      Build content here — coming soon.
+    </div>
+  </div>
+
+  <!-- Email By Campaign -->
+  <div id="email-by-campaign" class="email-page" style="display:none;">
+    <div style="padding:32px 24px;color:var(--text-3);font-family:var(--font);">
+      <div style="font-size:18px;font-weight:600;color:var(--navy);margin-bottom:8px;">Email By Campaign</div>
+      <div style="font-size:13px;">Coming soon — build content here.</div>
+    </div>
+  </div>
+
+  <!-- Email By Individual Asset -->
+  <div id="email-by-asset" class="email-page" style="display:none;">
+    <div style="padding:32px 24px;color:var(--text-3);font-family:var(--font);">
+      <div style="font-size:18px;font-weight:600;color:var(--navy);margin-bottom:8px;">Email By Individual Asset</div>
+      <div style="font-size:13px;">Coming soon — build content here.</div>
+    </div>
+  </div>
+
+<div class="tab-panel " style="display:none;" id="tab-9"><div style="padding:40px 32px;color:var(--text-3);font-family:var(--font);font-size:14px;">Velocity tab — coming soon.</div>
   </div></div></main>
 <footer class="dash-footer">
   <span>ELM · Global Business Solutions Group</span>
@@ -1957,7 +2078,7 @@ document.addEventListener('DOMContentLoaded',function(){// project-detail-sectio
   window.addEventListener('resize', setStickyOffset);
   // POD Details revenue chart
   (function initRevPODDetail(){
-    var c=document.getElementById('revChartPODDetail');
+    if(window._revChartPODDetail){return;}var c=document.getElementById('revChartPODDetail');
     if(!c||typeof Chart==='undefined'){setTimeout(initRevPODDetail,100);return;}
     var pc=getComputedStyle(document.documentElement).getPropertyValue('--payments').trim()||'#07c4d9';
     var hex=pc.replace('#','').trim();var r=parseInt(hex.substr(0,2),16)||7,g=parseInt(hex.substr(2,2),16)||196,b=parseInt(hex.substr(4,2),16)||217;
@@ -1984,7 +2105,7 @@ document.addEventListener('DOMContentLoaded', function() {
   })();
   // POD Details revenue chart (active on load)
   (function initRevPODDetail(){
-    var c=document.getElementById('revChartPODDetail');
+    if(window._revChartPODDetail){return;}var c=document.getElementById('revChartPODDetail');
     if(!c||typeof Chart==='undefined'){setTimeout(initRevPODDetail,100);return;}
     var pc=getComputedStyle(document.documentElement).getPropertyValue('--payments').trim()||'#07c4d9';
     var hex=pc.replace('#','').trim();var r=parseInt(hex.substr(0,2),16)||7,g=parseInt(hex.substr(2,2),16)||196,b=parseInt(hex.substr(4,2),16)||217;
@@ -2395,6 +2516,39 @@ function switchMetric(m) {
 
   updateProjectTable(m);
   applyFilters();
+}
+
+
+function switchIPDPage(page) {
+  document.querySelectorAll('.ipd-nav-btn').forEach(function(btn) {
+    var on = btn.getAttribute('onclick').includes("'" + page + "'");
+    btn.style.background = on ? 'var(--payments)' : 'transparent';
+    btn.style.color      = on ? '#fff' : 'rgba(255,255,255,0.7)';
+    btn.style.fontWeight = on ? '700' : '600';
+  });
+  document.querySelectorAll('.ipd-page').forEach(function(p){ p.style.display='none'; });
+  var t = document.getElementById('ipd-'+page);
+  if(t) t.style.display = 'block';
+}
+
+// Silence all chart errors globally
+window.addEventListener('error', function(e){
+  if(e.message === 'Script error.' || (e.filename && e.filename.includes('chart'))) {
+    e.preventDefault(); return true;
+  }
+}, true);
+
+
+function switchEmailPage(page) {
+  document.querySelectorAll('.email-nav-btn').forEach(function(btn) {
+    var on = btn.getAttribute('onclick').includes("'" + page + "'");
+    btn.style.background = on ? 'var(--payments)' : 'transparent';
+    btn.style.color      = on ? '#fff'             : 'rgba(255,255,255,0.7)';
+    btn.style.fontWeight = on ? '700'              : '600';
+  });
+  document.querySelectorAll('.email-page').forEach(function(p){ p.style.display='none'; });
+  var t = document.getElementById('email-' + page);
+  if(t) t.style.display = 'block';
 }
 </script>
 </body>

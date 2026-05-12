@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>ELM Dashboard – Total ELM Impact</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js" crossorigin="anonymous"></script>
   <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -252,8 +252,7 @@ body{font-family:var(--font);background:#f4f4f0 !important;color:var(--text-1);f
 
 .outcomes-tbl tr{background:#fff !important;}
 .outcomes-tbl tr:hover{background:#f0f7ff !important;}
-
-.tab-panel{display:block;}</style>
+</style>
 </head>
 <body>
 <header class="dash-header">
@@ -310,10 +309,7 @@ body{font-family:var(--font);background:#f4f4f0 !important;color:var(--text-1);f
     </div>
   </div>
 </header>
-<main class="dash-body"><div class="tab-panel active"><div style="padding:40px 32px;color:var(--text-3);font-family:var(--font);font-size:14px;">Total ELM Impact — coming soon.</div>
-  </div>
-
-  <!-- TAB 1: POD Incremental Summary --></div></main>
+<main class="dash-body"><div class="tab-panel active" id="tab-0"><div style="padding:40px 32px;color:var(--text-3);font-family:var(--font);font-size:14px;">Total ELM Impact — coming soon.</div></div></main>
 <footer class="dash-footer">
   <span>ELM · Global Business Solutions Group</span>
   <span>Last updated Sep 2026</span>
@@ -847,7 +843,7 @@ document.addEventListener('DOMContentLoaded',function(){// project-detail-sectio
   window.addEventListener('resize', setStickyOffset);
   // POD Details revenue chart
   (function initRevPODDetail(){
-    var c=document.getElementById('revChartPODDetail');
+    if(window._revChartPODDetail){return;}var c=document.getElementById('revChartPODDetail');
     if(!c||typeof Chart==='undefined'){setTimeout(initRevPODDetail,100);return;}
     var pc=getComputedStyle(document.documentElement).getPropertyValue('--payments').trim()||'#07c4d9';
     var hex=pc.replace('#','').trim();var r=parseInt(hex.substr(0,2),16)||7,g=parseInt(hex.substr(2,2),16)||196,b=parseInt(hex.substr(4,2),16)||217;
@@ -874,7 +870,7 @@ document.addEventListener('DOMContentLoaded', function() {
   })();
   // POD Details revenue chart (active on load)
   (function initRevPODDetail(){
-    var c=document.getElementById('revChartPODDetail');
+    if(window._revChartPODDetail){return;}var c=document.getElementById('revChartPODDetail');
     if(!c||typeof Chart==='undefined'){setTimeout(initRevPODDetail,100);return;}
     var pc=getComputedStyle(document.documentElement).getPropertyValue('--payments').trim()||'#07c4d9';
     var hex=pc.replace('#','').trim();var r=parseInt(hex.substr(0,2),16)||7,g=parseInt(hex.substr(2,2),16)||196,b=parseInt(hex.substr(4,2),16)||217;
@@ -1285,6 +1281,39 @@ function switchMetric(m) {
 
   updateProjectTable(m);
   applyFilters();
+}
+
+
+function switchIPDPage(page) {
+  document.querySelectorAll('.ipd-nav-btn').forEach(function(btn) {
+    var on = btn.getAttribute('onclick').includes("'" + page + "'");
+    btn.style.background = on ? 'var(--payments)' : 'transparent';
+    btn.style.color      = on ? '#fff' : 'rgba(255,255,255,0.7)';
+    btn.style.fontWeight = on ? '700' : '600';
+  });
+  document.querySelectorAll('.ipd-page').forEach(function(p){ p.style.display='none'; });
+  var t = document.getElementById('ipd-'+page);
+  if(t) t.style.display = 'block';
+}
+
+// Silence all chart errors globally
+window.addEventListener('error', function(e){
+  if(e.message === 'Script error.' || (e.filename && e.filename.includes('chart'))) {
+    e.preventDefault(); return true;
+  }
+}, true);
+
+
+function switchEmailPage(page) {
+  document.querySelectorAll('.email-nav-btn').forEach(function(btn) {
+    var on = btn.getAttribute('onclick').includes("'" + page + "'");
+    btn.style.background = on ? 'var(--payments)' : 'transparent';
+    btn.style.color      = on ? '#fff'             : 'rgba(255,255,255,0.7)';
+    btn.style.fontWeight = on ? '700'              : '600';
+  });
+  document.querySelectorAll('.email-page').forEach(function(p){ p.style.display='none'; });
+  var t = document.getElementById('email-' + page);
+  if(t) t.style.display = 'block';
 }
 </script>
 </body>

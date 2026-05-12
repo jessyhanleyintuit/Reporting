@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>ELM Dashboard – IPD Channel</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js" crossorigin="anonymous"></script>
   <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -252,8 +252,7 @@ body{font-family:var(--font);background:#f4f4f0 !important;color:var(--text-1);f
 
 .outcomes-tbl tr{background:#fff !important;}
 .outcomes-tbl tr:hover{background:#f0f7ff !important;}
-
-.tab-panel{display:block;}</style>
+</style>
 </head>
 <body>
 <header class="dash-header">
@@ -296,7 +295,7 @@ body{font-family:var(--font);background:#f4f4f0 !important;color:var(--text-1);f
       </nav>
 
   <div id="sticky-subtitle-bar" style="border-top:4px solid var(--payments);background:var(--payments-bg);padding:10px 32px;border-bottom:1px solid var(--payments-mid);width:100%;box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;gap:16px;">
-    <div id="sticky-title" style="font-size:22px;font-weight:400;color:var(--navy);font-family:var(--font);letter-spacing:-.01em;white-space:nowrap;">Payments IPD Channel</div>
+    <div id="sticky-title" style="font-size:22px;font-weight:400;color:var(--navy);font-family:var(--font);letter-spacing:-.01em;white-space:nowrap;">IPD Channel Performance</div>
     <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
       <span style="font-size:10px;font-weight:600;color:var(--navy);text-transform:uppercase;letter-spacing:.06em;font-family:var(--font);">View By</span><div style="display:flex;gap:0;margin-left:4px;"><button onclick="setViewByMonth('week')" id="vbm-week" style="font-size:11px;padding:4px 12px;border:none;font-weight:600;cursor:pointer;font-family:var(--font);background:var(--navy);color:rgba(255,255,255,0.65);border-radius:4px 0 0 4px;">Week</button><button onclick="setViewByMonth('month')" id="vbm-month" style="font-size:11px;padding:4px 12px;border:none;font-weight:600;cursor:pointer;font-family:var(--font);background:var(--navy-mid);color:#fff;font-weight:700;border-left:1px solid rgba(255,255,255,0.15);border-radius:0;">Month</button><button onclick="setViewByMonth('quarter')" id="vbm-quarter" style="font-size:11px;padding:4px 12px;border:none;font-weight:600;cursor:pointer;font-family:var(--font);background:var(--navy);color:rgba(255,255,255,0.65);border-left:1px solid rgba(255,255,255,0.15);border-radius:0;">Quarter</button><button onclick="setViewByMonth('ytd')" id="vbm-ytd" style="font-size:11px;padding:4px 12px;border:none;font-weight:600;cursor:pointer;font-family:var(--font);background:var(--navy);color:rgba(255,255,255,0.65);border-left:1px solid rgba(255,255,255,0.15);border-radius:0 4px 4px 0;">YTD</button></div><div style="width:1px;height:18px;background:var(--payments-mid);margin:0 2px;"></div><div style="position:relative;"><select id="current-month-sel" onchange="setCurrentMonth(this.value)" data-mode="month" style="appearance:none;background:var(--navy);color:#fff;border:none;border-radius:5px;font-size:12px;font-weight:600;padding:4px 28px 4px 10px;font-family:var(--font);cursor:pointer;background-image:url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'10\' height=\'6\' viewBox=\'0 0 10 6\'%3E%3Cpath d=\'M1 1l4 4 4-4\' stroke=\'%23ffffff\' stroke-width=\'1.5\' fill=\'none\' stroke-linecap=\'round\'/%3E%3C/svg%3E');background-repeat:no-repeat;background-position:right 8px center;"><option value="Aug" >August</option><option value="Sep" selected>September</option><option value="Oct" >October</option><option value="Nov" >November</option><option value="Dec" >December</option><option value="Jan" >January</option><option value="Feb" >February</option><option value="Mar" >March</option><option value="Apr" >April</option><option value="May" >May</option><option value="Jun" >June</option><option value="Jul" >July</option></select><div id="quarter-picker-wrap" style="display:none;position:relative;"><button id="quarter-picker-btn" onclick="toggleQuarterPicker()" style="background:var(--navy);color:#fff;border:none;border-radius:5px;font-size:12px;font-weight:600;padding:4px 28px 4px 10px;font-family:var(--font);cursor:pointer;min-width:160px;text-align:left;">Select Quarters ▾</button><div id="quarter-picker-dd" style="display:none;position:absolute;top:calc(100% + 4px);right:0;background:#fff;border:1.5px solid var(--line);border-radius:6px;box-shadow:0 4px 16px rgba(0,0,0,0.15);z-index:1200;min-width:220px;"><label style="display:flex;align-items:center;gap:6px;padding:5px 12px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="Q1" onchange="updateQuarterSel()" style="accent-color:var(--navy);"> Q1 FY'26 · Aug–Oct</label><label style="display:flex;align-items:center;gap:6px;padding:5px 12px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="Q2" onchange="updateQuarterSel()" style="accent-color:var(--navy);"> Q2 FY'26 · Nov–Jan</label><label style="display:flex;align-items:center;gap:6px;padding:5px 12px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="Q3" onchange="updateQuarterSel()" style="accent-color:var(--navy);"> Q3 FY'26 · Feb–Apr</label><label style="display:flex;align-items:center;gap:6px;padding:5px 12px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="Q4" onchange="updateQuarterSel()" style="accent-color:var(--navy);"> Q4 FY'26 · May–Jul</label></div></div><div id="week-picker-wrap" style="display:none;position:relative;"><button id="week-picker-btn" onclick="toggleWeekPicker()" style="background:var(--navy);color:#fff;border:none;border-radius:5px;font-size:12px;font-weight:600;padding:4px 28px 4px 10px;font-family:var(--font);cursor:pointer;min-width:160px;text-align:left;">Select Weeks ▾</button><div id="week-picker-dd" style="display:none;position:absolute;top:calc(100% + 4px);right:0;background:#fff;border:1.5px solid var(--line);border-radius:6px;box-shadow:0 4px 16px rgba(0,0,0,0.15);z-index:1200;max-height:280px;overflow-y:auto;min-width:200px;"><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W1" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W1 (Aug 4–Aug 10)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W2" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W2 (Aug 11–Aug 17)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W3" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W3 (Aug 18–Aug 24)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W4" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W4 (Aug 25–Aug 31)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W5" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W5 (Sep 1–Sep 7)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W6" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W6 (Sep 8–Sep 14)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W7" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W7 (Sep 15–Sep 21)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W8" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W8 (Sep 22–Sep 28)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W9" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W9 (Sep 29–Oct 5)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W10" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W10 (Oct 6–Oct 12)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W11" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W11 (Oct 13–Oct 19)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W12" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W12 (Oct 20–Oct 26)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W13" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W13 (Oct 27–Nov 2)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W14" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W14 (Nov 3–Nov 9)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W15" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W15 (Nov 10–Nov 16)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W16" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W16 (Nov 17–Nov 23)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W17" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W17 (Nov 24–Nov 30)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W18" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W18 (Dec 1–Dec 7)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W19" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W19 (Dec 8–Dec 14)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W20" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W20 (Dec 15–Dec 21)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W21" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W21 (Dec 22–Dec 28)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W22" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W22 (Dec 29–Jan 4)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W23" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W23 (Jan 5–Jan 11)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W24" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W24 (Jan 12–Jan 18)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W25" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W25 (Jan 19–Jan 25)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W26" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W26 (Jan 26–Feb 1)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W27" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W27 (Feb 2–Feb 8)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W28" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W28 (Feb 9–Feb 15)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W29" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W29 (Feb 16–Feb 22)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W30" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W30 (Feb 23–Mar 1)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W31" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W31 (Mar 2–Mar 8)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W32" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W32 (Mar 9–Mar 15)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W33" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W33 (Mar 16–Mar 22)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W34" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W34 (Mar 23–Mar 29)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W35" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W35 (Mar 30–Apr 5)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W36" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W36 (Apr 6–Apr 12)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W37" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W37 (Apr 13–Apr 19)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W38" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W38 (Apr 20–Apr 26)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W39" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W39 (Apr 27–May 3)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W40" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W40 (May 4–May 10)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W41" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W41 (May 11–May 17)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W42" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W42 (May 18–May 24)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W43" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W43 (May 25–May 31)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W44" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W44 (Jun 1–Jun 7)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W45" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W45 (Jun 8–Jun 14)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W46" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W46 (Jun 15–Jun 21)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W47" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W47 (Jun 22–Jun 28)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W48" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W48 (Jun 29–Jul 5)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W49" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W49 (Jul 6–Jul 12)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W50" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W50 (Jul 13–Jul 19)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W51" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W51 (Jul 20–Jul 26)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W52" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W52 (Jul 27–Aug 2)</label></div></div></div>
       <div style="width:1px;height:18px;background:var(--payments-mid);"></div>
@@ -310,10 +309,133 @@ body{font-family:var(--font);background:#f4f4f0 !important;color:var(--text-1);f
     </div>
   </div>
 </header>
-<main class="dash-body"><div class="tab-panel active"><div class="placeholder"><div class="ph-icon">⚡</div><div class="ph-title">Velocity</div><div class="ph-sub">Experiment throughput, win rates, ship cadence, and team health metrics will live here.</div></div>
+<main class="dash-body"><div class="tab-panel active" id="tab-7"><!-- IPD Sub-nav -->
+  <div id="ipd-subnav" style="background:var(--navy);padding:0 24px;display:flex;align-items:center;gap:2px;border-bottom:3px solid var(--payments);">
+    <button class="ipd-nav-btn active" onclick="switchIPDPage('perf-sub')" style="font-size:12px;font-weight:600;padding:10px 18px;background:var(--payments);color:#fff;border:none;cursor:pointer;font-family:var(--font);border-radius:0;letter-spacing:.01em;transition:all .15s;">Performance by IPD Subcategory</button>
+    <button class="ipd-nav-btn" onclick="switchIPDPage('cms-impressions')" style="font-size:12px;font-weight:600;padding:10px 18px;background:transparent;color:rgba(255,255,255,0.7);border:none;cursor:pointer;font-family:var(--font);border-radius:0;letter-spacing:.01em;transition:all .15s;">CMS Impressions</button>
+    <button class="ipd-nav-btn" onclick="switchIPDPage('cms-campaign')" style="font-size:12px;font-weight:600;padding:10px 18px;background:transparent;color:rgba(255,255,255,0.7);border:none;cursor:pointer;font-family:var(--font);border-radius:0;letter-spacing:.01em;transition:all .15s;">CMS Campaign View</button>
+    <button class="ipd-nav-btn" onclick="switchIPDPage('cms-funnel')" style="font-size:12px;font-weight:600;padding:10px 18px;background:transparent;color:rgba(255,255,255,0.7);border:none;cursor:pointer;font-family:var(--font);border-radius:0;letter-spacing:.01em;transition:all .15s;">CMS Funnel Performance</button>
   </div>
 
-  <!-- TAB 8: Email Channel --></div></main>
+  <!-- perf-sub page -->
+  <div id="ipd-perf-sub" class="ipd-page" style="display:block;">
+  <!-- Page Title -->
+  <div style="padding:10px 24px 4px;">
+    <div style="font-size:9px;font-weight:700;color:var(--payments);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;">IPD Performance</div>
+    <div style="font-size:24px;font-weight:300;color:var(--navy);line-height:1.2;">Full Payments IPD April Performance <span style="font-size:17px;font-weight:400;color:var(--text-3);">(Baseline &amp; Incremental)</span></div>
+  </div>
+    <div class="split" style="grid-template-columns:1fr 1fr;align-items:start;">
+<!-- LEFT PANE -->
+    <div class="pane pane-left" style="gap:12px;">
+      <div class="section">
+        <div class="sec-hdr"><span class="sec-hdr-text">IPD Totals</span></div>
+        <div class="sec-body-flush"><table class="tbl" style="width:100%;font-size:11px;">
+          <thead><tr><th style="text-align:left;"></th><th style="text-align:center;">Actuals</th><th style="text-align:center;">Forecast</th><th style="text-align:center;">Δ</th><th style="text-align:center;">ITF</th><th style="text-align:center;">ITT</th><th style="text-align:center;">ITPY</th><th style="text-align:center;">% GNA</th></tr></thead>
+          <tbody>
+            <tr><td style="font-weight:700;">ALL GNA</td><td style="text-align:center;">36.5K</td><td style="text-align:center;">39.2K</td><td style="text-align:center;"><span class="val-r">-2.6k</span></td><td style="text-align:center;"><span class="val-a">93</span></td><td style="text-align:center;"><span class="val-g">104</span></td><td style="text-align:center;"><span class="val-g">119</span></td><td style="text-align:center;font-weight:700;">100%</td></tr>
+            <tr><td style="font-weight:700;">IPD APR</td><td style="text-align:center;">28.4k</td><td style="text-align:center;">31k</td><td style="text-align:center;"><span class="val-r">-2.6k</span></td><td style="text-align:center;"><span class="val-a">92</span></td><td style="text-align:center;"><span class="val-g">101</span></td><td style="text-align:center;"><span class="val-g">117</span></td><td style="text-align:center;font-weight:700;">78%</td></tr>
+            <tr><td style="color:var(--text-2);">IPD QTD</td><td style="text-align:center;">79.9k</td><td style="text-align:center;">91.5k</td><td style="text-align:center;"><span class="val-r">-11.6k</span></td><td style="text-align:center;"><span class="val-a">87</span></td><td style="text-align:center;"><span class="val-a">97</span></td><td style="text-align:center;"><span class="val-g">115</span></td><td style="text-align:center;">77%</td></tr>
+            <tr><td style="color:var(--text-2);">IPD YTD</td><td style="text-align:center;">216.5k</td><td style="text-align:center;">228.1k</td><td style="text-align:center;"><span class="val-r">-11.6k</span></td><td style="text-align:center;"><span class="val-a">95</span></td><td style="text-align:center;"><span class="val-g">106</span></td><td style="text-align:center;"><span class="val-g">119</span></td><td style="text-align:center;">77%</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+      <div class="section">
+        <div class="sec-hdr"><span class="sec-hdr-text">Post-Auth IPD</span></div>
+        <div style="padding:6px 12px;background:rgba(7,196,217,0.1);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text-2);">
+          <span style="font-weight:600;">Active QBO Platform Customers This Month</span>
+          <span style="font-weight:700;color:var(--navy);margin-left:auto;">4.2M</span>
+          <span class="val-a">98 ITPM</span>
+          <span style="color:var(--text-3);">77% of Base</span>
+        </div>
+        <div class="sec-body-flush"><table class="tbl" style="width:100%;font-size:11px;">
+          <thead><tr><th style="text-align:left;"></th><th style="text-align:left;">Owner</th><th style="text-align:center;">#</th><th style="text-align:center;">Δ Mo</th><th style="text-align:center;">% IPD</th><th style="text-align:center;">ITPM</th></tr></thead>
+          <tbody>
+            <tr style="background:var(--row-odd);"><td style="font-weight:700;">Fixed Services Domain</td><td style="font-size:10px;color:var(--text-3);">Matt</td><td style="text-align:center;font-weight:700;"><span class="val-g">7.8K</span></td><td style="text-align:center;"><span style="color:#111;">+956</span></td><td style="text-align:center;font-weight:700;">28%</td><td style="text-align:center;"><span class="val-g">114</span></td></tr>
+            <tr style="background:var(--row-even);"><td style="font-weight:700;">AURA</td><td></td><td style="text-align:center;font-weight:700;">6.0K</td><td style="text-align:center;"><span style="color:#111;">-832</span></td><td style="text-align:center;font-weight:700;">22%</td><td style="text-align:center;"><span class="val-a">88</span></td></tr>
+            <tr style="background:var(--row-odd);"><td style="padding-left:16px;color:var(--text-2);font-size:10px;">Fixed AURA</td><td style="font-size:9px;color:var(--text-3);">Jessy, Colin, Joe</td><td style="text-align:center;">3.7K</td><td style="text-align:center;"><span style="color:#111;">-600</span></td><td style="text-align:center;">13%</td><td style="text-align:center;"><span class="val-a">86</span></td></tr>
+            <tr style="background:var(--row-even);"><td style="padding-left:16px;color:var(--text-2);font-size:10px;">Variable AURA</td><td></td><td style="text-align:center;">2.2K</td><td style="text-align:center;"><span style="color:#111;">-232</span></td><td style="text-align:center;">8%</td><td style="text-align:center;"><span class="val-a">91</span></td></tr>
+            <tr style="background:var(--row-odd);"><td style="font-weight:700;">CMS</td><td></td><td style="text-align:center;font-weight:700;">2.2K</td><td style="text-align:center;"><span style="color:#111;">-682</span></td><td style="text-align:center;font-weight:700;">8%</td><td style="text-align:center;"><span class="val-r">76</span></td></tr>
+            <tr style="background:var(--row-even);"><td style="padding-left:16px;color:var(--text-2);font-size:10px;">Fixed CMS</td><td style="font-size:9px;color:var(--text-3);">Jessy</td><td style="text-align:center;">0.6K</td><td style="text-align:center;"><span style="color:#111;">-165</span></td><td style="text-align:center;">2%</td><td style="text-align:center;"><span class="val-r">77</span></td></tr>
+            <tr style="background:var(--row-odd);"><td style="padding-left:16px;color:var(--text-2);font-size:10px;">Variable CMS</td><td></td><td style="text-align:center;">1.6K</td><td style="text-align:center;"><span style="color:#111;">-517</span></td><td style="text-align:center;">6%</td><td style="text-align:center;"><span class="val-r">76</span></td></tr>
+            <tr style="background:var(--row-even);"><td style="font-weight:700;">TBD:</td><td></td><td style="text-align:center;font-weight:700;"><span class="val-g">11.7K</span></td><td style="text-align:center;"><span style="color:#111;">+2.7K</span></td><td style="text-align:center;font-weight:700;">42%</td><td style="text-align:center;"><span class="val-g">129</span></td></tr>
+            <tr style="background:var(--row-odd);"><td style="padding-left:16px;color:var(--text-2);font-size:10px;">Unknown (no tracking)</td><td style="font-size:9px;color:var(--text-3);">CRMA</td><td style="text-align:center;"><span class="val-g">8.9K</span></td><td style="text-align:center;"><span style="color:#111;">+3.1K</span></td><td style="text-align:center;">32%</td><td style="text-align:center;"><span class="val-g">155</span></td></tr>
+            <tr style="background:var(--row-even);"><td style="padding-left:16px;color:var(--text-2);font-size:10px;">Not Yet Categorized</td><td></td><td style="text-align:center;">2.8K</td><td style="text-align:center;"><span style="color:#111;">-468</span></td><td style="text-align:center;">10%</td><td style="text-align:center;"><span class="val-a">85</span></td></tr>
+          </tbody>
+          <tfoot><tr style="border-top:2px solid var(--line);background:var(--tbl-hdr-bg);">
+            <td style="font-weight:700;color:var(--navy);">Post-Auth IPD Totals</td><td></td>
+            <td style="text-align:center;font-weight:700;color:var(--navy);">27.6K</td>
+            <td style="text-align:center;font-weight:700;color:var(--positive);">+2.1K</td>
+            <td style="text-align:center;font-weight:700;color:var(--navy);">97%</td>
+            <td style="text-align:center;font-weight:700;color:var(--positive);">106</td>
+          </tr></tfoot>
+        </table></div>
+      </div>
+      
+    </div>
+    <!-- RIGHT PANE -->
+    <div class="pane pane-right" style="gap:12px;">
+ <div class="pane pane-right" style="gap:12px;">
+      <div class="section">
+        <div class="sec-hdr"><span class="sec-hdr-text">April Performance</span></div>
+        <div class="commentary"><ul id="ipd-april-perf">
+              <li><div class="c-dot-wrap"><div class="c-dot"></div></div><div class="c-text" contenteditable="true">Aprils Payments IPD performance soft at <strong style="color:var(--negative);">92 ITF</strong> (Δ -2,409) though strong at <strong style="color:var(--positive);">ITT 104</strong>. Due to underperformance of incremental initiatives:<ul style="list-style:none;padding-left:0;margin-top:4px;"><li><div class="c-dot-wrap" style="padding-top:8px;"><div class="c-dot" style="background:var(--text-3);width:4px;height:4px;"></div></div><div class="c-text" contenteditable="true" style="font-size:12px;">42% of miss due to Onboarding (Unified + 1-Click): Expected 2.4K | actuals 1K | Δ -1.4K</div></li><li><div class="c-dot-wrap" style="padding-top:8px;"><div class="c-dot" style="background:var(--text-3);width:4px;height:4px;"></div></div><div class="c-text" contenteditable="true" style="font-size:12px;">30% of miss due to AURA: Expected 3.4K | actuals 2.7K | Δ -716</div></li><li><div class="c-dot-wrap" style="padding-top:8px;"><div class="c-dot" style="background:var(--text-3);width:4px;height:4px;"></div></div><div class="c-text" contenteditable="true" style="font-size:12px;">10% of miss due to GTM/ACQ: Expected 502 | actuals 274 <em>bought in by Squad</em> | Δ -228</div></li><li><div class="c-dot-wrap" style="padding-top:8px;"><div class="c-dot" style="background:var(--text-3);width:4px;height:4px;"></div></div><div class="c-text" contenteditable="true" style="font-size:12px;">17% of miss due to MAIP FY26 Initiatives: Expected 921 | actuals 400 | Δ -521</div></li></ul></div></li>
+              <li><div class="c-dot-wrap"><div class="c-dot"></div></div><div class="c-text" contenteditable="true">Baseline overperformance offset ~456 GNA of the incremental initiative misses.</div></li>
+            </ul><div class="add-btn" onclick="addBullet('ipd-april-perf')"><div class="add-icon">+</div><span>Add point</span></div></div>
+      </div>
+      <div class="section">
+        <div class="sec-hdr"><span class="sec-hdr-text">Fixed Services Domain</span></div>
+        <div class="commentary"><ul id="ipd-fsd">
+              <li><div class="c-dot-wrap"><div class="c-dot"></div></div><div class="c-text" contenteditable="true">+956 MoM (ITPM 114). <code style="font-family:var(--mono);font-size:11px;background:var(--row-odd);padding:1px 4px;border-radius:3px;">Invoice_save_and_send</code> is the primary driver of category growth (+1.4K, 148% of category delta).</div></li>
+            </ul><div class="add-btn" onclick="addBullet('ipd-fsd')"><div class="add-icon">+</div><span>Add point</span></div></div>
+      </div>
+      <div class="section">
+        <div class="sec-hdr"><span class="sec-hdr-text">CMS</span></div>
+        <div class="commentary"><ul id="ipd-cms">
+              <li><div class="c-dot-wrap"><div class="c-dot"></div></div><div class="c-text" contenteditable="true">Fixed CMS down -165 MoM (ITPM 77) due to AURA experiments. <em>No negative impact observed — units likely reallocated to AURA Fixed or TBD due to Unified Onboarding priority code tracking changes.</em><ul style="list-style:none;padding-left:0;margin-top:4px;"><li><div class="c-dot-wrap" style="padding-top:8px;"><div class="c-dot" style="background:var(--text-3);width:4px;height:4px;"></div></div><div class="c-text" contenteditable="true" style="font-size:12px;"><strong>Payment Link Hero State</strong> (-152, 92% of category delta): New AURA Payment Link Hero State "Show and tell" design launched 4/16</div></li><li><div class="c-dot-wrap" style="padding-top:8px;"><div class="c-dot" style="background:var(--text-3);width:4px;height:4px;"></div></div><div class="c-text" contenteditable="true" style="font-size:12px;"><strong>Payments Billing &amp; Subscription Card</strong> (-21, 13% of category delta): Subscriptions &amp; Billing Discover More Color/Position AURA experiment — positive overall but flat for Payments.</div></li></ul></div></li>
+              <li><div class="c-dot-wrap"><div class="c-dot"></div></div><div class="c-text" contenteditable="true">AURA Variable: GNA from GTKM priority code <strong>drove the decline with -259 and shows a 3-month sustained decline (1.9K → 1.8K → 1.5K).</strong><ul style="list-style:none;padding-left:0;margin-top:4px;"><li><div class="c-dot-wrap" style="padding-top:8px;"><div class="c-dot" style="background:var(--text-3);width:4px;height:4px;"></div></div><div class="c-text" contenteditable="true" style="font-size:12px;"><em style="color:var(--payments);">Root cause identified:</em> NEON and Unified Onboarding (TRON) experiments shifted from priority-code-based GNA mapping to a new event-tracking convention.</div></li><li><div class="c-dot-wrap" style="padding-top:8px;"><div class="c-dot" style="background:var(--text-3);width:4px;height:4px;"></div></div><div class="c-text" contenteditable="true" style="font-size:12px;"><strong>Status:</strong> 5/11 - Onboarding Product team identified as fix owner</div></li><li><div class="c-dot-wrap" style="padding-top:8px;"><div class="c-dot" style="background:var(--text-3);width:4px;height:4px;"></div></div><div class="c-text" contenteditable="true" style="font-size:12px;"><strong>Key next step:</strong> Onboarding Product team to prioritize the fix, date TBD</div></li></ul></div></li>
+            </ul><div class="add-btn" onclick="addBullet('ipd-cms')"><div class="add-icon">+</div><span>Add point</span></div></div>
+      </div>
+      <div class="section">
+        <div class="sec-hdr"><span class="sec-hdr-text">TBD</span></div>
+        <div class="commentary"><ul id="ipd-tbd">
+              <li><div class="c-dot-wrap"><div class="c-dot"></div></div><div class="c-text" contenteditable="true">NULL (no priority code) drove the growth with +2.8K showing a 3-month sustained growth (4.5K → 5.6K → 8.4K).</div></li>
+              <li><div class="c-dot-wrap"><div class="c-dot"></div></div><div class="c-text" contenteditable="true">9% of March GNA is "Not Yet Categorized"; technical investigation is underway.<ul style="list-style:none;padding-left:0;margin-top:4px;"><li><div class="c-dot-wrap" style="padding-top:8px;"><div class="c-dot" style="background:var(--text-3);width:4px;height:4px;"></div></div><div class="c-text" contenteditable="true" style="font-size:12px;">Priority codes need to be updated so that landing pages do not override the source that brought a customer to the landing page</div></li><li><div class="c-dot-wrap" style="padding-top:8px;"><div class="c-dot" style="background:var(--text-3);width:4px;height:4px;"></div></div><div class="c-text" contenteditable="true" style="font-size:12px;"><strong>Key next step:</strong> GTM Tech to prioritize tracking, date TBD</div></li></ul></div></li>
+            </ul><div class="add-btn" onclick="addBullet('ipd-tbd')"><div class="add-icon">+</div><span>Add point</span></div></div>
+      </div>
+      <div class="section">
+        <div class="sec-hdr"><span class="sec-hdr-text">Experiences Out of Product · Email</span></div>
+        <div class="commentary"><ul id="ipd-email">
+              <li><div class="c-dot-wrap"><div class="c-dot"></div></div><div class="c-text" contenteditable="true">Email priority code spike (Jan–Mar) was driven by a Payments Squad experiment tied to OINP AE Funds held transactional emails — now normalized as of April.</div></li>
+            </ul><div class="add-btn" onclick="addBullet('ipd-email')"><div class="add-icon">+</div><span>Add point</span></div></div>
+      </div>
+    </div>
+  </div>
+
+
+  </div>
+  <div 
+    </div>
+    
+  </div>
+
+  <div id="ipd-cms-impressions" class="ipd-page" style="display:none;">
+    <div style="padding:32px 24px;color:var(--text-3);font-family:var(--font);">
+      <div style="font-size:18px;font-weight:600;color:var(--navy);margin-bottom:8px;">CMS Impressions</div>
+      <div style="font-size:13px;">Coming soon — build content here.</div>
+    </div>
+  </div>
+  <div id="ipd-cms-campaign" class="ipd-page" style="display:none;">
+    <div style="padding:32px 24px;color:var(--text-3);font-family:var(--font);">
+      <div style="font-size:18px;font-weight:600;color:var(--navy);margin-bottom:8px;">CMS Campaign View</div>
+      <div style="font-size:13px;">Coming soon — build content here.</div>
+    </div>
+  </div>
+  <div id="ipd-cms-funnel" class="ipd-page" style="display:none;">
+    <div style="padding:32px 24px;color:var(--text-3);font-family:var(--font);">
+      <div style="font-size:18px;font-weight:600;color:var(--navy);margin-bottom:8px;">CMS Funnel Performance</div>
+      <div style="font-size:13px;">Coming soon — build content here.</div>
+    </div>
+  </div></div></main>
 <footer class="dash-footer">
   <span>ELM · Global Business Solutions Group</span>
   <span>Last updated Sep 2026</span>
@@ -847,7 +969,7 @@ document.addEventListener('DOMContentLoaded',function(){// project-detail-sectio
   window.addEventListener('resize', setStickyOffset);
   // POD Details revenue chart
   (function initRevPODDetail(){
-    var c=document.getElementById('revChartPODDetail');
+    if(window._revChartPODDetail){return;}var c=document.getElementById('revChartPODDetail');
     if(!c||typeof Chart==='undefined'){setTimeout(initRevPODDetail,100);return;}
     var pc=getComputedStyle(document.documentElement).getPropertyValue('--payments').trim()||'#07c4d9';
     var hex=pc.replace('#','').trim();var r=parseInt(hex.substr(0,2),16)||7,g=parseInt(hex.substr(2,2),16)||196,b=parseInt(hex.substr(4,2),16)||217;
@@ -874,7 +996,7 @@ document.addEventListener('DOMContentLoaded', function() {
   })();
   // POD Details revenue chart (active on load)
   (function initRevPODDetail(){
-    var c=document.getElementById('revChartPODDetail');
+    if(window._revChartPODDetail){return;}var c=document.getElementById('revChartPODDetail');
     if(!c||typeof Chart==='undefined'){setTimeout(initRevPODDetail,100);return;}
     var pc=getComputedStyle(document.documentElement).getPropertyValue('--payments').trim()||'#07c4d9';
     var hex=pc.replace('#','').trim();var r=parseInt(hex.substr(0,2),16)||7,g=parseInt(hex.substr(2,2),16)||196,b=parseInt(hex.substr(4,2),16)||217;
@@ -1285,6 +1407,39 @@ function switchMetric(m) {
 
   updateProjectTable(m);
   applyFilters();
+}
+
+
+function switchIPDPage(page) {
+  document.querySelectorAll('.ipd-nav-btn').forEach(function(btn) {
+    var on = btn.getAttribute('onclick').includes("'" + page + "'");
+    btn.style.background = on ? 'var(--payments)' : 'transparent';
+    btn.style.color      = on ? '#fff' : 'rgba(255,255,255,0.7)';
+    btn.style.fontWeight = on ? '700' : '600';
+  });
+  document.querySelectorAll('.ipd-page').forEach(function(p){ p.style.display='none'; });
+  var t = document.getElementById('ipd-'+page);
+  if(t) t.style.display = 'block';
+}
+
+// Silence all chart errors globally
+window.addEventListener('error', function(e){
+  if(e.message === 'Script error.' || (e.filename && e.filename.includes('chart'))) {
+    e.preventDefault(); return true;
+  }
+}, true);
+
+
+function switchEmailPage(page) {
+  document.querySelectorAll('.email-nav-btn').forEach(function(btn) {
+    var on = btn.getAttribute('onclick').includes("'" + page + "'");
+    btn.style.background = on ? 'var(--payments)' : 'transparent';
+    btn.style.color      = on ? '#fff'             : 'rgba(255,255,255,0.7)';
+    btn.style.fontWeight = on ? '700'              : '600';
+  });
+  document.querySelectorAll('.email-page').forEach(function(p){ p.style.display='none'; });
+  var t = document.getElementById('email-' + page);
+  if(t) t.style.display = 'block';
 }
 </script>
 </body>
