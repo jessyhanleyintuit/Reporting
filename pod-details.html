@@ -248,6 +248,11 @@ body{font-family:var(--font);background:#f4f4f0 !important;color:var(--text-1);f
 /* FOOTER */
 .dash-footer{background:var(--navy);color:#fff;font-size:10px;padding:10px 32px;display:flex;justify-content:space-between;align-items:center;letter-spacing:.04em}
 
+.metric-label-units{display:none;}
+
+.outcomes-tbl tr{background:#fff !important;}
+.outcomes-tbl tr:hover{background:#f0f7ff !important;}
+
 .tab-panel{display:block;}</style>
 </head>
 <body>
@@ -307,41 +312,56 @@ body{font-family:var(--font);background:#f4f4f0 !important;color:var(--text-1);f
     </div>
   </div>
 </header>
-<main class="dash-body"><div class="tab-panel active"><div style="background:var(--payments-bg);border-bottom:1px solid var(--payments-mid);width:100%;box-sizing:border-box;">
+<main class="dash-body"><div class="tab-panel active"><div id="pod-filter-bar" style="background:#ffffff;border-bottom:1px solid var(--line);width:100%;box-sizing:border-box;position:sticky;top:0;z-index:50;">
     <div style="display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:8px 24px;">
       <span style="font-size:10px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.07em;font-family:var(--font);white-space:nowrap;">View by</span>
-      <select onchange="setGlobalMonth(this.value)" style="font-size:11px;padding:5px 10px;background:var(--navy);color:#fff;border:1px solid rgba(255,255,255,0.25);border-radius:5px;font-family:var(--font);cursor:pointer;font-weight:500;">
-        <option>Aug</option><option selected>Sep</option><option>Oct</option><option>Nov</option>
-        <option>Dec</option><option>Jan</option><option>Feb</option><option>Mar</option>
-        <option>Apr</option><option>May</option><option>Jun</option><option>Jul</option>
-      </select>
-      <div style="width:1px;height:16px;background:var(--payments-mid);flex-shrink:0;"></div>
       <div style="display:flex;gap:0;border-radius:5px;overflow:hidden;">
         <button id="btn-rev" onclick="switchMetric('revenue')" style="font-size:11px;padding:5px 16px;background:var(--navy);color:#fff;border:none;border-radius:5px 0 0 5px;font-weight:700;cursor:pointer;font-family:var(--font);">Revenue</button>
-        <button id="btn-gna" onclick="switchMetric('gna')" style="font-size:11px;padding:5px 16px;background:rgba(255,255,255,0.25);color:var(--navy);border:1px solid rgba(20,50,79,0.25);border-radius:0 5px 5px 0;font-weight:600;cursor:pointer;font-family:var(--font);"><span class="gna-metric">GNA</span></button>
+        <button id="btn-gna" onclick="switchMetric('gna')" style="font-size:11px;padding:5px 16px;background:rgba(255,255,255,0.25);color:var(--navy);border:1px solid rgba(20,50,79,0.25);border-radius:0 5px 5px 0;font-weight:600;cursor:pointer;font-family:var(--font);">Units</button>
       </div>
-      <div style="width:1px;height:16px;background:var(--payments-mid);flex-shrink:0;"></div>
+      <div style="width:1px;height:16px;background:rgba(20,50,79,0.2);flex-shrink:0;"></div>
       <span style="font-size:10px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.07em;font-family:var(--font);white-space:nowrap;">Filter by</span>
-      <select class="filter-sel" id="flt-outcome" onchange="setFilter('outcomeType', this.value)" style="font-size:11px;padding:5px 10px;background:var(--navy);color:#fff;border:1px solid rgba(255,255,255,0.25);border-radius:5px;font-family:var(--font);cursor:pointer;font-weight:500;">
-        <option value="all">All Outcomes</option><option value="t-pos">Positive</option>
-        <option value="t-neg">Negative</option><option value="t-flat">Flat</option>
-        <option value="t-bake">Still Baking</option><option value="t-nox">No Experiment</option>
-      </select>
-      <select class="filter-sel" id="flt-team" onchange="setFilter('requestorTeam', this.value)" style="font-size:11px;padding:5px 10px;background:var(--navy);color:#fff;border:1px solid rgba(255,255,255,0.25);border-radius:5px;font-family:var(--font);cursor:pointer;font-weight:500;">
-        <option value="all">All Teams</option><option value="ELM Squad">ELM</option>
-        <option value="Segment">Segment</option><option value="Sales">Sales</option><option value="CS">CS</option>
-      </select>
+
+      <!-- 1. All Levers with short titles -->
       <div style="position:relative;">
         <button class="filter-sel" id="flt-lever-btn" onclick="toggleLeverDd()" style="font-size:11px;padding:5px 10px;background:var(--navy);color:#fff;border:1px solid rgba(255,255,255,0.25);border-radius:5px;font-family:var(--font);cursor:pointer;font-weight:500;">All Levers ▾</button>
         <div class="multi-dd" id="dd-lever" style="display:none;">
-          <label><input type="checkbox" value="Lever 1" onchange="updateLeverSel()"> Lever 1</label>
-          <label><input type="checkbox" value="Lever 2" onchange="updateLeverSel()"> Lever 2</label>
-          <label><input type="checkbox" value="Lever 3" onchange="updateLeverSel()"> Lever 3</label>
-          <label><input type="checkbox" value="Lever 4" onchange="updateLeverSel()"> Lever 4</label>
-          <label><input type="checkbox" value="Lever 5" onchange="updateLeverSel()"> Lever 5</label>
-          <label><input type="checkbox" value="Lever 6" onchange="updateLeverSel()"> Lever 6</label>
+          <label><input type="checkbox" value="Lever 1" onchange="updateLeverSel()"> Lever 1: Bring Innovation to Life</label>
+          <label><input type="checkbox" value="Lever 2" onchange="updateLeverSel()"> Lever 2: Personalize Every Experience</label>
+          <label><input type="checkbox" value="Lever 3" onchange="updateLeverSel()"> Lever 3: Drive Purchase with the Right Offers</label>
+          <label><input type="checkbox" value="Lever 4" onchange="updateLeverSel()"> Lever 4: Accelerate Revenue-Driving Consumption</label>
+          <label><input type="checkbox" value="Lever 5" onchange="updateLeverSel()"> Lever 5: Drive Active Use and Re-Engagement</label>
+          <label><input type="checkbox" value="Lever 6" onchange="updateLeverSel()"> Lever 6: Turn Demand into Pipeline</label>
         </div>
       </div>
+
+      <!-- 2. All Outcome KPIs (was Categories) -->
+      <div style="position:relative;">
+        <button class="filter-sel" id="flt-category-btn" onclick="toggleCategoryDd()" style="font-size:11px;padding:5px 10px;background:var(--navy);color:#fff;border:1px solid rgba(255,255,255,0.25);border-radius:5px;font-family:var(--font);cursor:pointer;font-weight:500;">All Outcome KPIs ▾</button>
+        <div class="multi-dd" id="dd-category" style="display:none;">
+          <label><input type="checkbox" value="GNS" onchange="updateCategorySel()"> GNS</label>
+          <label><input type="checkbox" value="GNA" onchange="updateCategorySel()"> GNA</label>
+          <label><input type="checkbox" value="Saves" onchange="updateCategorySel()"> Saves</label>
+          <label><input type="checkbox" value="Upgrades" onchange="updateCategorySel()"> Upgrades</label>
+          <label><input type="checkbox" value="Retention" onchange="updateCategorySel()"> Retention</label>
+          <label><input type="checkbox" value="TPV" onchange="updateCategorySel()"> TPV</label>
+          <label><input type="checkbox" value="Applications" onchange="updateCategorySel()"> Applications</label>
+          <label><input type="checkbox" value="Loan Volume" onchange="updateCategorySel()"> Loan Volume</label>
+          <label><input type="checkbox" value="Tenured Retention" onchange="updateCategorySel()"> Tenured Retention</label>
+        </div>
+      </div>
+
+      <!-- 3. All Experiment Outcomes (was All Outcomes) -->
+      <select class="filter-sel" id="flt-outcome" onchange="setFilter('outcomeType', this.value)" style="font-size:11px;padding:5px 10px;background:var(--navy);color:#fff;border:1px solid rgba(255,255,255,0.25);border-radius:5px;font-family:var(--font);cursor:pointer;font-weight:500;">
+        <option value="all">All Experiment Outcomes</option>
+        <option value="t-pos">Positive</option>
+        <option value="t-neg">Negative</option>
+        <option value="t-flat">Flat</option>
+        <option value="t-bake">Still Baking</option>
+        <option value="t-nox">No Experiment</option>
+      </select>
+
+      <!-- 4. All Sub-Products -->
       <div style="position:relative;">
         <button class="filter-sel" id="flt-subprod-btn" onclick="toggleSubprodDd()" style="font-size:11px;padding:5px 10px;background:var(--navy);color:#fff;border:1px solid rgba(255,255,255,0.25);border-radius:5px;font-family:var(--font);cursor:pointer;font-weight:500;">All Sub-Products ▾</button>
         <div class="multi-dd" id="dd-subprod" style="display:none;">
@@ -350,6 +370,8 @@ body{font-family:var(--font);background:#f4f4f0 !important;color:var(--text-1);f
           <label><input type="checkbox" value="Get Paid Upfront" onchange="updateSubprodSel()"> Get Paid Upfront</label>
         </div>
       </div>
+
+      <!-- 5. All Audiences -->
       <div style="position:relative;">
         <button class="filter-sel" id="flt-audience-btn" onclick="toggleAudienceDd()" style="font-size:11px;padding:5px 10px;background:var(--navy);color:#fff;border:1px solid rgba(255,255,255,0.25);border-radius:5px;font-family:var(--font);cursor:pointer;font-weight:500;">All Audiences ▾</button>
         <div class="multi-dd" id="dd-audience" style="display:none;">
@@ -359,121 +381,384 @@ body{font-family:var(--font);background:#f4f4f0 !important;color:var(--text-1);f
           <label><input type="checkbox" value="HVB" onchange="updateAudienceSel()"> HVB</label>
         </div>
       </div>
-      <div style="position:relative;">
-        <button class="filter-sel" id="flt-category-btn" onclick="toggleCategoryDd()" style="font-size:11px;padding:5px 10px;background:var(--navy);color:#fff;border:1px solid rgba(255,255,255,0.25);border-radius:5px;font-family:var(--font);cursor:pointer;font-weight:500;">All Categories ▾</button>
-        <div class="multi-dd" id="dd-category" style="display:none;">
-          <label><input type="checkbox" value="Payments - GNA" onchange="updateCategorySel()"> Payments – GNA</label>
-          <label><input type="checkbox" value="Payments - TPV" onchange="updateCategorySel()"> Payments – TPV</label>
-          <label><input type="checkbox" value="Capital - LOC" onchange="updateCategorySel()"> Capital – LOC</label>
-          <label><input type="checkbox" value="Bill Pay - GNA" onchange="updateCategorySel()"> Bill Pay – GNA</label>
-          <label><input type="checkbox" value="Workforce - GNS" onchange="updateCategorySel()"> Workforce – GNS</label>
-          <label><input type="checkbox" value="Workforce - Upgrades" onchange="updateCategorySel()"> Workforce – Upgrades</label>
-        </div>
-      </div>
+
       <button onclick="resetFilters()" style="font-size:11px;padding:5px 12px;background:transparent;color:var(--navy);border:1px solid rgba(20,50,79,0.35);border-radius:5px;font-weight:600;cursor:pointer;font-family:var(--font);">✕ Clear</button>
     </div>
   </div>
+  <div style="background:#f4f4f0;padding:0 16px 8px;">
+    <div class="callout-groups" style="display:flex;flex-wrap:nowrap;gap:20px;align-items:stretch;">
+
+      <!-- Group 1: September Incremental Revenue Outcomes -->
+      <div class="callout-group">
+        <div class="callout-group-hdr">ELM LCM Pod · September Incremental Revenue Outcomes</div>
+        <div class="callout-group-tiles">
+          <div class="callout">
+            <div style="font-size:9px;font-weight:700;color:var(--tbl-hdr-tx);text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px;">September</div>
+            <div class="co-big">$320K</div>
+            <div class="co-label">Actuals</div>
+          </div>
+          <div class="callout">
+            <div style="font-size:9px;font-weight:700;color:var(--tbl-hdr-tx);text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px;">September</div>
+            <div class="co-big">$480K</div>
+            <div class="co-label">Target &nbsp;<span class="val-r" style="font-size:11px;">67</span> <span style="font-size:9px;color:var(--text-3);font-weight:500;">ITT</span></div>
+          </div>
+          <div class="callout">
+            <div style="font-size:9px;font-weight:700;color:var(--tbl-hdr-tx);text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px;">September</div>
+            <div class="co-big">$300K</div>
+            <div class="co-label">Forecast &nbsp;<span class="val-g" style="font-size:11px;">106</span> <span style="font-size:9px;color:var(--text-3);font-weight:500;">ITF</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Group 2: Incremental Revenue Outcomes YTD -->
+      <div class="callout-group">
+        <div class="callout-group-hdr">ELM LCM Pod · Incremental Revenue Outcomes YTD</div>
+        <div class="callout-group-tiles">
+          <div class="callout">
+            <div class="co-big">$8.4M</div>
+            <div class="co-label">ARR</div>
+            <div class="co-sub"><span class="val-g">108</span> <span style="font-size:9px;color:var(--text-3);font-weight:500;">ITPY</span></div>
+          </div>
+          <div class="callout">
+            <div class="co-big">$4.2M</div>
+            <div class="co-label">In Year Inc. Rev.</div>
+            <div class="co-sub"><span class="val-g">108</span> <span style="font-size:9px;color:var(--text-3);font-weight:500;">ITF</span>&nbsp;&nbsp;<span class="val-r">72</span> <span style="font-size:9px;color:var(--text-3);font-weight:500;">ITT</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Group 3: Campaigns YTD -->
+      <div class="callout-group" style="flex:1;">
+        <div class="callout-group-hdr">ELM LCM Pod · Campaigns YTD</div>
+        <div class="callout-group-tiles">
+          <div style="padding:0;background:#fff;position:relative;border-radius:8px;border:1px solid var(--line);box-sizing:border-box;display:flex;flex-direction:column;min-height:110px;overflow:hidden;">
+            <div style="height:5px;background:var(--navy);width:100%;flex-shrink:0;"></div>
+            <div style="padding:8px 12px 10px;flex:1;">
+              <div class="co-big" style="color:var(--navy);">43</div>
+              <div class="co-label">Total Projects</div>
+            </div>
+          </div>
+          <div style="padding:0;background:#fff;position:relative;border-radius:8px;border:1px solid var(--line);box-sizing:border-box;display:flex;flex-direction:column;min-height:110px;overflow:hidden;">
+            <div style="height:5px;background:var(--payments);width:100%;flex-shrink:0;"></div>
+            <div style="padding:8px 12px 10px;flex:1;">
+              <div class="co-big" style="color:var(--payments);">37</div>
+              <div class="co-label">Experiments</div>
+              <div style="font-size:10px;font-weight:600;color:var(--payments);opacity:0.7;margin-top:4px;">86%<span style="font-size:9px;font-weight:400;color:var(--text-3);margin-left:3px;">of projects</span></div>
+            </div>
+          </div>
+          <div style="padding:0;background:#fff;position:relative;border-radius:8px;border:1px solid var(--line);box-sizing:border-box;display:flex;flex-direction:column;min-height:110px;overflow:hidden;">
+            <div style="height:5px;background:var(--positive);width:100%;flex-shrink:0;"></div>
+            <div style="padding:8px 12px 10px;flex:1;">
+              <div class="co-big" style="color:var(--positive);">12</div>
+              <div class="co-label">Positive</div>
+              <div style="font-size:10px;font-weight:600;color:var(--positive);opacity:0.7;margin-top:4px;">46%<span style="font-size:9px;font-weight:400;color:var(--text-3);margin-left:3px;">win rate</span></div>
+            </div>
+          </div>
+          <div style="padding:0;background:#fff;position:relative;border-radius:8px;border:1px solid var(--line);box-sizing:border-box;display:flex;flex-direction:column;min-height:110px;overflow:hidden;">
+            <div style="height:5px;background:var(--negative);width:100%;flex-shrink:0;"></div>
+            <div style="padding:8px 12px 10px;flex:1;">
+              <div class="co-big" style="color:var(--negative);">2</div>
+              <div class="co-label">Negative</div>
+              <div style="font-size:10px;font-weight:600;color:var(--negative);opacity:0.7;margin-top:4px;">8%<span style="font-size:9px;font-weight:400;color:var(--text-3);margin-left:3px;">of decided</span></div>
+            </div>
+          </div>
+          <div style="padding:0;background:#fff;position:relative;border-radius:8px;border:1px solid var(--line);box-sizing:border-box;display:flex;flex-direction:column;min-height:110px;overflow:hidden;">
+            <div style="height:5px;background:var(--flat);width:100%;flex-shrink:0;"></div>
+            <div style="padding:8px 12px 10px;flex:1;">
+              <div class="co-big" style="color:#c8970a;">12</div>
+              <div class="co-label">Flat</div>
+              <div style="font-size:10px;font-weight:600;color:#c8970a;opacity:0.7;margin-top:4px;">46%<span style="font-size:9px;font-weight:400;color:var(--text-3);margin-left:3px;">of decided</span></div>
+            </div>
+          </div>
+          <div style="padding:0;background:#fff;position:relative;border-radius:8px;border:1px solid var(--line);box-sizing:border-box;display:flex;flex-direction:column;min-height:110px;overflow:hidden;">
+            <div style="height:5px;background:var(--baking);width:100%;flex-shrink:0;"></div>
+            <div style="padding:8px 12px 10px;flex:1;">
+              <div class="co-big" style="color:var(--baking);">11</div>
+              <div class="co-label">Still Baking</div>
+              <div style="font-size:10px;font-weight:600;color:var(--baking);opacity:0.7;margin-top:4px;">30%<span style="font-size:9px;font-weight:400;color:var(--text-3);margin-left:3px;">of exp.</span></div>
+            </div>
+          </div>
+          <div style="padding:0;background:#fff;position:relative;border-radius:8px;border:1px solid var(--line);box-sizing:border-box;display:flex;flex-direction:column;min-height:110px;overflow:hidden;">
+            <div style="height:5px;background:var(--broken);width:100%;flex-shrink:0;"></div>
+            <div style="padding:8px 12px 10px;flex:1;">
+              <div class="co-big" style="color:var(--broken);">6</div>
+              <div class="co-label">No Experiment</div>
+              <div style="font-size:10px;font-weight:600;color:var(--broken);opacity:0.7;margin-top:4px;">14%<span style="font-size:9px;font-weight:400;color:var(--text-3);margin-left:3px;">of projects</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+  </div>
+    </div>
 
   <div style="padding:0 16px 16px;">    <!-- REVENUE VIEW -->
     <div class="metric-panel active" id="metric-revenue">
 
-    <div class="tab-callouts" style="grid-template-columns:repeat(8,1fr);">
-      <div class="tab-callout co-rev">
-        <div class="tab-co-big">$4.2M</div>
-        <div class="tab-co-label">Total ARR</div>
-      </div>
-      <div class="tab-callout co-rev">
-        <div class="tab-co-big">$1.8M</div>
-        <div class="tab-co-label">In Year Incremental Revenue</div>
-        <div class="tab-co-sub"><span class="val-g" style="font-size:10px;">105</span> <span style="font-size:8px;">ITF</span> &nbsp;|&nbsp; <span class="val-r" style="font-size:10px;">72</span> <span style="font-size:8px;">ITT</span></div>
-      </div>
-      <div class="tab-callout co-rev">
-        <div class="tab-co-big">30</div>
-        <div class="tab-co-label">Total Projects</div>
-        <div class="tab-co-sub" style="color:var(--payments);font-weight:600;font-size:10px;">FY'26 · Payments</div>
-      </div>
-            <div class="tab-callout co-pos">
-        <div class="tab-co-big pos co-stat-pos-n">20</div>
-        <div class="tab-co-label">Positive Outcomes</div>
-        <div class="tab-co-sub"><span class="tab-co-pct co-stat-pos-pct" style="color:var(--positive);">83%</span> of experiments</div>
-      </div>
-      <div class="tab-callout co-neg">
-        <div class="tab-co-big neg co-stat-neg-n">2</div>
-        <div class="tab-co-label">Negative Outcomes</div>
-        <div class="tab-co-sub"><span class="tab-co-pct co-stat-neg-pct" style="color:var(--negative);">8%</span> of experiments</div>
-      </div>
-      <div class="tab-callout co-flat">
-        <div class="tab-co-big flat co-stat-flat-n">2</div>
-        <div class="tab-co-label">Flat Outcomes</div>
-        <div class="tab-co-sub"><span class="tab-co-pct co-stat-flat-pct" style="color:#c8970a;">9%</span> of experiments</div>
-      </div>
-      <div class="tab-callout co-bake">
-        <div class="tab-co-big bake co-stat-bake-n">2</div>
-        <div class="tab-co-label">Still Baking</div>
-        <div class="tab-co-sub">Not yet measured</div>
-      </div>
-      <div class="tab-callout co-nox">
-        <div class="tab-co-big nox co-stat-nox-n">6</div>
-        <div class="tab-co-label">Non-Experiments</div>
-        <div class="tab-co-sub">No test design</div>
-      </div>
-    </div>
+    
 
-      <div style="padding:0;margin-bottom:24px;">
-        <div class="sec-hdr"><span class="sec-hdr-text">ELM · Incremental Revenue Outcomes YTD</span></div>
-        <div style="padding:14px 20px 16px;">
-          <div class="legend">
-            <span><span class="leg-sq" style="background:var(--payments);"></span>Achieved</span>
-            <span><span class="leg-sq" style="background:var(--payments-mid);"></span>High Confidence Path To</span>
-            <span><span class="leg-sq" style="background:var(--payments-light);border:1px solid #ccccc0;"></span>Low Confidence Path To</span>
-            <span><span class="leg-ln" style="background:#000;"></span>Forecast</span>
-            <span><span class="leg-dash" style="border-color:#aaaaaa;"></span>Target</span>
+      <div style="display:flex;gap:16px;align-items:flex-start;margin-bottom:24px;">
+        <div class="section" style="flex:2;min-width:0;margin-bottom:0;">
+          <div class="sec-hdr"><span class="sec-hdr-text">ELM LCM Pod · Incremental Revenue Outcomes YTD</span></div>
+          <div class="sec-body" style="padding:12px 16px 16px;">
+            <div class="legend">
+              <span><span class="leg-sq" style="background:var(--payments);"></span>Achieved</span>
+              <span><span class="leg-sq" style="background:var(--payments-mid);"></span>High Confidence Path To</span>
+              <span><span class="leg-sq" style="background:var(--payments-light);border:1px solid #ccccc0;"></span>Low Confidence Path To</span>
+              <span><span class="leg-ln" style="background:#000;"></span>Forecast</span>
+              <span><span class="leg-dash" style="border-color:#aaaaaa;"></span>Target</span>
+            </div>
+            <div style="position:relative;width:100%;height:240px;"><canvas id="revChartPODDetail"></canvas></div>
+          <div style="margin-top:8px;padding-top:0;">
+<div style="padding:6px 0 2px;font-size:10px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.05em;">ELM LCM Pod · In-Year Outcomes</div>
+<div style="overflow-x:auto;"><table class="tbl outcomes-tbl" style="width:100%;background:#fff;">
+  <thead><tr>
+      <th style="text-align:left;min-width:240px;">Metric</th>
+      <th style="text-align:center;width:60px;border-left:1px solid rgba(0,0,0,0.18);">QTD</th>
+      <th style="text-align:center;width:70px;border-left:1px solid rgba(0,0,0,0.18);border-right:1px solid rgba(0,0,0,0.18);">YTD</th>
+      <th style="text-align:center;">Aug</th><th style="text-align:center;">Sep</th><th style="text-align:center;">Oct</th><th style="text-align:center;">Nov</th><th style="text-align:center;">Dec</th><th style="text-align:center;">Jan</th><th style="text-align:center;">Feb</th><th style="text-align:center;">Mar</th><th style="text-align:center;">Apr</th><th style="text-align:center;">May</th><th style="text-align:center;">Jun</th><th style="text-align:center;">Jul</th>
+    </tr></thead>
+  <tbody style="background:#fff;"><tr><td style="font-weight:700;"><span class="metric-label-rev">Actual Revenue</span><span class="metric-label-units" style="display:none;">Actual Units</span></td><td style="text-align:center;font-weight:700;border-left:1px solid rgba(0,0,0,0.18);">$1.26M</td><td style="text-align:center;font-weight:700;border-left:1px solid rgba(0,0,0,0.18);border-right:1px solid rgba(0,0,0,0.18);">$1.68M</td><td style="text-align:center;font-weight:700;">$420K</td><td style="text-align:center;font-weight:700;">$580K</td><td style="text-align:center;font-weight:700;">$680K</td><td style="text-align:center;font-weight:700;">—</td><td style="text-align:center;font-weight:700;">—</td><td style="text-align:center;font-weight:700;">—</td><td style="text-align:center;font-weight:700;">—</td><td style="text-align:center;font-weight:700;">—</td><td style="text-align:center;font-weight:700;">—</td><td style="text-align:center;font-weight:700;">—</td><td style="text-align:center;font-weight:700;">—</td><td style="text-align:center;font-weight:700;">—</td></tr>
+<tr style="height:6px;background:#fff;"><td colspan="15"></td></tr>
+<tr><td><span class="metric-label-rev">Forecast</span><span class="metric-label-units" style="display:none;">Forecast</span></td><td style="text-align:center;border-left:1px solid rgba(0,0,0,0.18);">$730K</td><td style="text-align:center;border-left:1px solid rgba(0,0,0,0.18);border-right:1px solid rgba(0,0,0,0.18);">$950K</td><td style="text-align:center;">$500K</td><td style="text-align:center;">$620K</td><td style="text-align:center;">$700K</td><td style="text-align:center;">$780K</td><td style="text-align:center;">$870K</td><td style="text-align:center;">$950K</td><td style="text-align:center;">$1.1M</td><td style="text-align:center;">$1.1M</td><td style="text-align:center;">$1.3M</td><td style="text-align:center;">$1.4M</td><td style="text-align:center;">$1.5M</td><td style="text-align:center;">$1.7M</td></tr>
+<tr><td style="color:var(--text-3);">Δ to Forecast</td><td style="text-align:center;border-left:1px solid rgba(0,0,0,0.18);"><span class="val-delta">+$40K</span></td><td style="text-align:center;border-left:1px solid rgba(0,0,0,0.18);border-right:1px solid rgba(0,0,0,0.18);"><span class="val-delta">+$50K</span></td><td style="text-align:center;"><span class="val-delta">+$20K</span></td><td style="text-align:center;"><span class="val-delta">+$30K</span></td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td></tr>
+<tr><td style="color:var(--text-3);">ITF</td><td style="text-align:center;border-left:1px solid rgba(0,0,0,0.18);"><span class="val-g">105</span></td><td style="text-align:center;border-left:1px solid rgba(0,0,0,0.18);border-right:1px solid rgba(0,0,0,0.18);"><span class="val-g">105</span></td><td style="text-align:center;"><span class="val-g">105</span></td><td style="text-align:center;"><span class="val-g">105</span></td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td></tr>
+<tr style="height:6px;background:#fff;"><td colspan="15"></td></tr>
+<tr><td>Target</td><td style="text-align:center;border-left:1px solid rgba(0,0,0,0.18);">$1.0M</td><td style="text-align:center;border-left:1px solid rgba(0,0,0,0.18);border-right:1px solid rgba(0,0,0,0.18);">$1.34M</td><td style="text-align:center;">$580K</td><td style="text-align:center;">$760K</td><td style="text-align:center;">$900K</td><td style="text-align:center;">$1.0M</td><td style="text-align:center;">$1.2M</td><td style="text-align:center;">$1.3M</td><td style="text-align:center;">$1.5M</td><td style="text-align:center;">$1.6M</td><td style="text-align:center;">$1.8M</td><td style="text-align:center;">$2.0M</td><td style="text-align:center;">$2.2M</td><td style="text-align:center;">$2.5M</td></tr>
+<tr><td style="color:var(--text-3);">Δ to Target</td><td style="text-align:center;border-left:1px solid rgba(0,0,0,0.18);"><span class="val-delta">-$260K</span></td><td style="text-align:center;border-left:1px solid rgba(0,0,0,0.18);border-right:1px solid rgba(0,0,0,0.18);"><span class="val-delta">-$340K</span></td><td style="text-align:center;"><span class="val-delta">-$160K</span></td><td style="text-align:center;"><span class="val-delta">-$180K</span></td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td></tr>
+<tr><td style="color:var(--text-3);">ITT</td><td style="text-align:center;border-left:1px solid rgba(0,0,0,0.18);"><span class="val-r">76</span></td><td style="text-align:center;border-left:1px solid rgba(0,0,0,0.18);border-right:1px solid rgba(0,0,0,0.18);"><span class="val-r">75</span></td><td style="text-align:center;"><span class="val-r">72</span></td><td style="text-align:center;"><span class="val-r">76</span></td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td></tr></tbody>
+</table></div>
+<div style="padding:10px 0 2px;font-size:10px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.05em;">ELM LCM Pod · Annualized Outcomes</div>
+<div style="overflow-x:auto;"><table class="tbl outcomes-tbl" style="width:100%;background:#fff;">
+  <thead><tr>
+      <th style="text-align:left;min-width:240px;">Metric</th>
+      <th style="text-align:center;width:60px;border-left:1px solid rgba(0,0,0,0.18);">QTD</th>
+      <th style="text-align:center;width:70px;border-left:1px solid rgba(0,0,0,0.18);border-right:1px solid rgba(0,0,0,0.18);">YTD</th>
+      <th style="text-align:center;">Aug</th><th style="text-align:center;">Sep</th><th style="text-align:center;">Oct</th><th style="text-align:center;">Nov</th><th style="text-align:center;">Dec</th><th style="text-align:center;">Jan</th><th style="text-align:center;">Feb</th><th style="text-align:center;">Mar</th><th style="text-align:center;">Apr</th><th style="text-align:center;">May</th><th style="text-align:center;">Jun</th><th style="text-align:center;">Jul</th>
+    </tr></thead>
+  <tbody style="background:#fff;"><tr><td style="font-weight:700;"><span class="metric-label-rev">Actual ARR</span><span class="metric-label-units" style="display:none;">Actual Annualized Units</span></td><td style="text-align:center;font-weight:700;border-left:1px solid rgba(0,0,0,0.18);">$418K</td><td style="text-align:center;font-weight:700;border-left:1px solid rgba(0,0,0,0.18);border-right:1px solid rgba(0,0,0,0.18);">$558K</td><td style="text-align:center;font-weight:700;">$117K</td><td style="text-align:center;font-weight:700;">$203K</td><td style="text-align:center;font-weight:700;">$238K</td><td style="text-align:center;font-weight:700;">—</td><td style="text-align:center;font-weight:700;">—</td><td style="text-align:center;font-weight:700;">—</td><td style="text-align:center;font-weight:700;">—</td><td style="text-align:center;font-weight:700;">—</td><td style="text-align:center;font-weight:700;">—</td><td style="text-align:center;font-weight:700;">—</td><td style="text-align:center;font-weight:700;">—</td><td style="text-align:center;font-weight:700;">—</td></tr></tbody>
+</table></div>
+          </div></div>
+        </div>
+        <div style="flex:1;min-width:0;display:flex;flex-direction:column;">
+          <div class="section" style="flex:1;min-width:0;margin-bottom:0;">
+          <div class="sec-hdr"><span class="sec-hdr-text">ELM LCM Pod · Outcomes By Lever YTD</span></div>
+          <div class="sec-body" style="padding:10px 14px 14px;">
+            <table class="tbl" style="width:100%;font-size:11px;">
+              <thead>
+                <tr>
+                  <th style="width:28px;"></th>
+                  <th style="text-align:left;">Lever</th>
+                  <th style="text-align:right;">Rev YTD</th>
+                  <th style="text-align:right;">ARR</th>
+                </tr>
+              </thead>
+              <tbody>
+              <tr>
+                <td style="white-space:nowrap;font-weight:700;color:var(--navy);font-size:10px;">L1</td>
+                <td style="font-size:10px;color:var(--text-2);text-align:left;">Bring Innovation to Life</td>
+                <td style="text-align:right;font-weight:700;font-size:11px;color:var(--text-1);white-space:nowrap;">$920K</td>
+                <td style="text-align:right;font-weight:600;font-size:10px;color:var(--text-3);white-space:nowrap;">$1.84M</td>
+              </tr>
+              <tr>
+                <td style="white-space:nowrap;font-weight:700;color:var(--navy);font-size:10px;">L2</td>
+                <td style="font-size:10px;color:var(--text-2);text-align:left;">Personalize Every Experience</td>
+                <td style="text-align:right;font-weight:700;font-size:11px;color:var(--text-1);white-space:nowrap;">$1.3M</td>
+                <td style="text-align:right;font-weight:600;font-size:10px;color:var(--text-3);white-space:nowrap;">$2.60M</td>
+              </tr>
+              <tr>
+                <td style="white-space:nowrap;font-weight:700;color:var(--navy);font-size:10px;">L3</td>
+                <td style="font-size:10px;color:var(--text-2);text-align:left;">Drive Purchase with the Right Offers</td>
+                <td style="text-align:right;font-weight:700;font-size:11px;color:var(--text-1);white-space:nowrap;">$680K</td>
+                <td style="text-align:right;font-weight:600;font-size:10px;color:var(--text-3);white-space:nowrap;">$1.36M</td>
+              </tr>
+              <tr>
+                <td style="white-space:nowrap;font-weight:700;color:var(--navy);font-size:10px;">L4</td>
+                <td style="font-size:10px;color:var(--text-2);text-align:left;">Accelerate Revenue-Driving Consumption</td>
+                <td style="text-align:right;font-weight:700;font-size:11px;color:var(--text-1);white-space:nowrap;">$540K</td>
+                <td style="text-align:right;font-weight:600;font-size:10px;color:var(--text-3);white-space:nowrap;">$1.08M</td>
+              </tr>
+              <tr>
+                <td style="white-space:nowrap;font-weight:700;color:var(--navy);font-size:10px;">L5</td>
+                <td style="font-size:10px;color:var(--text-2);text-align:left;">Drive Active Use and Re-Engagement</td>
+                <td style="text-align:right;font-weight:700;font-size:11px;color:var(--text-1);white-space:nowrap;">$580K</td>
+                <td style="text-align:right;font-weight:600;font-size:10px;color:var(--text-3);white-space:nowrap;">$1.16M</td>
+              </tr>
+              <tr>
+                <td style="white-space:nowrap;font-weight:700;color:var(--navy);font-size:10px;">L6</td>
+                <td style="font-size:10px;color:var(--text-2);text-align:left;">Turn Demand into Pipeline</td>
+                <td style="text-align:right;font-weight:700;font-size:11px;color:var(--text-1);white-space:nowrap;">$180K</td>
+                <td style="text-align:right;font-weight:600;font-size:10px;color:var(--text-3);white-space:nowrap;">$0.36M</td>
+              </tr>
+              </tbody>
+              <tfoot>
+                <tr style="border-top:2px solid var(--line);">
+                  <td></td>
+                  <td style="font-size:10px;font-weight:700;color:var(--navy);">Total</td>
+                  <td style="text-align:right;font-weight:700;font-size:11px;color:var(--navy);">$4.2M</td>
+                  <td style="text-align:right;font-weight:700;font-size:10px;color:var(--navy);">$8.4M</td>
+                </tr>
+              </tfoot>
+            </table>
           </div>
-          <div style="position:relative;width:100%;height:200px;"><canvas id="revChart2"></canvas></div>
+        </div>
+          <div class="section" style="margin-bottom:0;margin-top:16px;">
+          <div class="sec-hdr"><span class="sec-hdr-text">ELM LCM Pod · Outcomes By Audience YTD</span></div>
+          <div class="sec-body" style="padding:10px 14px 14px;">
+            <table class="tbl" style="width:100%;font-size:11px;">
+              <thead>
+                <tr>
+                  <th style="text-align:left;">Audience</th>
+                  <th style="text-align:right;">Rev YTD</th>
+                  <th style="text-align:right;">ARR</th>
+                </tr>
+              </thead>
+              <tbody>
+              <tr>
+                <td style="font-size:10px;color:var(--text-2);text-align:left;">SMB</td>
+                <td style="text-align:right;font-weight:700;font-size:11px;color:var(--text-1);white-space:nowrap;">$2.1M</td>
+                <td style="text-align:right;font-weight:600;font-size:10px;color:var(--text-3);white-space:nowrap;">$4.2M</td>
+              </tr>
+              <tr>
+                <td style="font-size:10px;color:var(--text-2);text-align:left;">Emerging MM</td>
+                <td style="text-align:right;font-weight:700;font-size:11px;color:var(--text-1);white-space:nowrap;">$1.0M</td>
+                <td style="text-align:right;font-weight:600;font-size:10px;color:var(--text-3);white-space:nowrap;">$2.0M</td>
+              </tr>
+              <tr>
+                <td style="font-size:10px;color:var(--text-2);text-align:left;">Mid-Market</td>
+                <td style="text-align:right;font-weight:700;font-size:11px;color:var(--text-1);white-space:nowrap;">$680K</td>
+                <td style="text-align:right;font-weight:600;font-size:10px;color:var(--text-3);white-space:nowrap;">$1.36M</td>
+              </tr>
+              </tbody>
+              <tfoot>
+                <tr style="border-top:2px solid var(--line);">
+                  <td style="font-size:10px;font-weight:700;color:var(--navy);">Total</td>
+                  <td style="text-align:right;font-weight:700;font-size:11px;color:var(--navy);">$4.2M</td>
+                  <td style="text-align:right;font-weight:700;font-size:10px;color:var(--navy);">$8.4M</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+          <div class="section" style="margin-bottom:0;margin-top:16px;">
+          <div class="sec-hdr"><span class="sec-hdr-text">ELM LCM Pod · Outcomes By Sub-Product YTD</span></div>
+          <div class="sec-body" style="padding:10px 14px 14px;">
+            <table class="tbl" style="width:100%;font-size:11px;">
+              <thead>
+                <tr>
+                  <th style="text-align:left;">Sub-Product</th>
+                  <th style="text-align:right;">Rev YTD</th>
+                  <th style="text-align:right;">ARR</th>
+                </tr>
+              </thead>
+              <tbody>
+              <tr data-subprod-product="Payments">
+                <td style="font-size:10px;color:var(--text-2);text-align:left;">Get Paid Upfront</td>
+                <td style="text-align:right;font-weight:700;font-size:11px;color:var(--text-1);white-space:nowrap;">$510K</td>
+                <td style="text-align:right;font-weight:600;font-size:10px;color:var(--text-3);white-space:nowrap;">$1.02M</td>
+              </tr>
+              <tr data-subprod-product="Payments">
+                <td style="font-size:10px;color:var(--text-2);text-align:left;">Payment Links</td>
+                <td style="text-align:right;font-weight:700;font-size:11px;color:var(--text-1);white-space:nowrap;">$280K</td>
+                <td style="text-align:right;font-weight:600;font-size:10px;color:var(--text-3);white-space:nowrap;">$0.56M</td>
+              </tr>
+              <tr data-subprod-product="Payments">
+                <td style="font-size:10px;color:var(--text-2);text-align:left;">Instant Deposit</td>
+                <td style="text-align:right;font-weight:700;font-size:11px;color:var(--text-1);white-space:nowrap;">$360K</td>
+                <td style="text-align:right;font-weight:600;font-size:10px;color:var(--text-3);white-space:nowrap;">$0.72M</td>
+              </tr>
+              <tr data-subprod-product="Capital">
+                <td style="font-size:10px;color:var(--text-2);text-align:left;"><span style="font-size:9px;font-weight:700;color:var(--tbl-hdr-tx);display:block;">Capital</span>TL</td>
+                <td style="text-align:right;font-weight:700;font-size:11px;color:var(--text-1);white-space:nowrap;">$210K</td>
+                <td style="text-align:right;font-weight:600;font-size:10px;color:var(--text-3);white-space:nowrap;">$0.42M</td>
+              </tr>
+              <tr data-subprod-product="Capital">
+                <td style="font-size:10px;color:var(--text-2);text-align:left;">LOC</td>
+                <td style="text-align:right;font-weight:700;font-size:11px;color:var(--text-1);white-space:nowrap;">$190K</td>
+                <td style="text-align:right;font-weight:600;font-size:10px;color:var(--text-3);white-space:nowrap;">$0.38M</td>
+              </tr>
+              <tr data-subprod-product="Capital">
+                <td style="font-size:10px;color:var(--text-2);text-align:left;">Marketplace</td>
+                <td style="text-align:right;font-weight:700;font-size:11px;color:var(--text-1);white-space:nowrap;">$140K</td>
+                <td style="text-align:right;font-weight:600;font-size:10px;color:var(--text-3);white-space:nowrap;">$0.28M</td>
+              </tr>
+              <tr data-subprod-product="Workforce">
+                <td style="font-size:10px;color:var(--text-2);text-align:left;"><span style="font-size:9px;font-weight:700;color:var(--tbl-hdr-tx);display:block;">Workforce</span>EWA</td>
+                <td style="text-align:right;font-weight:700;font-size:11px;color:var(--text-1);white-space:nowrap;">$180K</td>
+                <td style="text-align:right;font-weight:600;font-size:10px;color:var(--text-3);white-space:nowrap;">$0.36M</td>
+              </tr>
+              <tr data-subprod-product="Workforce">
+                <td style="font-size:10px;color:var(--text-2);text-align:left;">All SKUs</td>
+                <td style="text-align:right;font-weight:700;font-size:11px;color:var(--text-1);white-space:nowrap;">$220K</td>
+                <td style="text-align:right;font-weight:600;font-size:10px;color:var(--text-3);white-space:nowrap;">$0.44M</td>
+              </tr>
+              <tr data-subprod-product="Workforce">
+                <td style="font-size:10px;color:var(--text-2);text-align:left;">Time</td>
+                <td style="text-align:right;font-weight:700;font-size:11px;color:var(--text-1);white-space:nowrap;">$120K</td>
+                <td style="text-align:right;font-weight:600;font-size:10px;color:var(--text-3);white-space:nowrap;">$0.24M</td>
+              </tr>
+              <tr data-subprod-product="Workforce">
+                <td style="font-size:10px;color:var(--text-2);text-align:left;">401k</td>
+                <td style="text-align:right;font-weight:700;font-size:11px;color:var(--text-1);white-space:nowrap;">$95K</td>
+                <td style="text-align:right;font-weight:600;font-size:10px;color:var(--text-3);white-space:nowrap;">$0.19M</td>
+              </tr>
+              <tr data-subprod-product="Workforce">
+                <td style="font-size:10px;color:var(--text-2);text-align:left;">HCM</td>
+                <td style="text-align:right;font-weight:700;font-size:11px;color:var(--text-1);white-space:nowrap;">$85K</td>
+                <td style="text-align:right;font-weight:600;font-size:10px;color:var(--text-3);white-space:nowrap;">$0.17M</td>
+              </tr>
+              <tr data-subprod-product="Workforce">
+                <td style="font-size:10px;color:var(--text-2);text-align:left;">Contractor Payments</td>
+                <td style="text-align:right;font-weight:700;font-size:11px;color:var(--text-1);white-space:nowrap;">$70K</td>
+                <td style="text-align:right;font-weight:600;font-size:10px;color:var(--text-3);white-space:nowrap;">$0.14M</td>
+              </tr>
+              <tr data-subprod-product="BillPay">
+                <td style="font-size:10px;color:var(--text-2);text-align:left;"><span style="font-size:9px;font-weight:700;color:var(--tbl-hdr-tx);display:block;">Bill Pay</span>Free</td>
+                <td style="text-align:right;font-weight:700;font-size:11px;color:var(--text-1);white-space:nowrap;">$160K</td>
+                <td style="text-align:right;font-weight:600;font-size:10px;color:var(--text-3);white-space:nowrap;">$0.32M</td>
+              </tr>
+              <tr data-subprod-product="BillPay">
+                <td style="font-size:10px;color:var(--text-2);text-align:left;">Subscription</td>
+                <td style="text-align:right;font-weight:700;font-size:11px;color:var(--text-1);white-space:nowrap;">$110K</td>
+                <td style="text-align:right;font-weight:600;font-size:10px;color:var(--text-3);white-space:nowrap;">$0.22M</td>
+              </tr>
+              <tr data-subprod-product="IES">
+                <td style="font-size:10px;color:var(--text-2);text-align:left;"><span style="font-size:9px;font-weight:700;color:var(--tbl-hdr-tx);display:block;">FMS</span>Core</td>
+                <td style="text-align:right;font-weight:700;font-size:11px;color:var(--text-1);white-space:nowrap;">$200K</td>
+                <td style="text-align:right;font-weight:600;font-size:10px;color:var(--text-3);white-space:nowrap;">$0.40M</td>
+              </tr>
+              <tr data-subprod-product="IES">
+                <td style="font-size:10px;color:var(--text-2);text-align:left;">Mobile</td>
+                <td style="text-align:right;font-weight:700;font-size:11px;color:var(--text-1);white-space:nowrap;">$130K</td>
+                <td style="text-align:right;font-weight:600;font-size:10px;color:var(--text-3);white-space:nowrap;">$0.26M</td>
+              </tr>
+              <tr data-subprod-product="IES">
+                <td style="font-size:10px;color:var(--text-2);text-align:left;">Freemium</td>
+                <td style="text-align:right;font-weight:700;font-size:11px;color:var(--text-1);white-space:nowrap;">$90K</td>
+                <td style="text-align:right;font-weight:600;font-size:10px;color:var(--text-3);white-space:nowrap;">$0.18M</td>
+              </tr>
+              <tr data-subprod-product="IES">
+                <td style="font-size:10px;color:var(--text-2);text-align:left;">Trial Conversion</td>
+                <td style="text-align:right;font-weight:700;font-size:11px;color:var(--text-1);white-space:nowrap;">$75K</td>
+                <td style="text-align:right;font-weight:600;font-size:10px;color:var(--text-3);white-space:nowrap;">$0.15M</td>
+              </tr>
+              </tbody>
+              <tfoot>
+                <tr style="border-top:2px solid var(--line);">
+                  <td style="font-size:10px;font-weight:700;color:var(--navy);">Total</td>
+                  <td style="text-align:right;font-weight:700;font-size:11px;color:var(--navy);">$4.2M</td>
+                  <td style="text-align:right;font-weight:700;font-size:10px;color:var(--navy);">$8.4M</td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
         </div>
       </div>
+        </div>
+        </div>
 
-      <div style="background:#fff;border-radius:8px;border:1px solid var(--line);overflow:hidden;margin:0 0 12px;">
-<div class="sec-hdr"><span class="sec-hdr-text" id="monthly-outcomes-hdr">Monthly Revenue Outcomes To Date</span></div>
-<div><div style="padding:8px 16px 4px;font-size:11px;font-weight:600;color:var(--text-2);">Incremental In Year Impact</div><div style="overflow-x:auto;padding:0 16px 12px;"><table class="tbl outcomes-tbl" style="width:100%;">
-          <thead>
-            <tr>
-              <th style="text-align:left;min-width:110px;">Metric</th>
-              <th style="text-align:center;width:70px;">YTD</th>
-              <th class="dvl" style="text-align:center;">Aug</th>
-              <th style="text-align:center;">Sep</th><th style="text-align:center;">Oct</th><th style="text-align:center;">Nov</th><th style="text-align:center;">Dec</th><th style="text-align:center;">Jan</th><th style="text-align:center;">Feb</th><th style="text-align:center;">Mar</th><th style="text-align:center;">Apr</th><th style="text-align:center;">May</th><th style="text-align:center;">Jun</th><th style="text-align:center;">Jul</th>
-            </tr>
-            <tr>
-              <th colspan="14" style="background:var(--sec-hdr-bg);color:#fff;text-align:left;font-size:9.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;padding:6px 12px;border-bottom:1px solid rgba(255,255,255,0.15);">Incremental Outcomes In Year</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td style="font-weight:600;">Actuals</td><td style="text-align:center;font-weight:700;">$1.0M</td><td style="text-align:center;font-weight:700;">$1.0M</td><td class="dvl" style="text-align:center;">$420K</td><td style="text-align:center;">$580K</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td></tr>
-            <tr><td style="font-weight:600;">Forecast</td><td style="text-align:center;font-weight:700;">$950K</td><td style="text-align:center;font-weight:700;">$1.24M</td><td class="dvl" style="text-align:center;">$400K</td><td style="text-align:center;">$550K</td><td style="text-align:center;">$650K</td><td style="text-align:center;">$780K</td><td style="text-align:center;">$870K</td><td style="text-align:center;">$950K</td><td style="text-align:center;">$1.1M</td><td style="text-align:center;">$1.1M</td><td style="text-align:center;">$1.3M</td><td style="text-align:center;">$1.4M</td><td style="text-align:center;">$1.5M</td><td style="text-align:center;">$1.7M</td></tr>
-            <tr><td style="color:var(--text-3);">Δ to Forecast</td><td style="text-align:center;"><span class="val-delta">+$50K</span></td><td class="dvl" style="text-align:center;"><span class="val-delta">+$20K</span></td><td style="text-align:center;"><span class="val-delta">+$30K</span></td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td></tr>
-            <tr><td style="color:var(--text-3);">ITF</td><td style="text-align:center;"><span class="val-g">105</span></td><td class="dvl" style="text-align:center;"><span class="val-g">105</span></td><td style="text-align:center;"><span class="val-g">105</span></td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td></tr>
-            <tr><td style="font-weight:600;">Target</td><td style="text-align:center;font-weight:700;">$1.34M</td><td style="text-align:center;font-weight:700;">$1.34M</td><td class="dvl" style="text-align:center;">$580K</td><td style="text-align:center;">$760K</td><td style="text-align:center;">$900K</td><td style="text-align:center;">$1.0M</td><td style="text-align:center;">$1.2M</td><td style="text-align:center;">$1.3M</td><td style="text-align:center;">$1.5M</td><td style="text-align:center;">$1.6M</td><td style="text-align:center;">$1.8M</td><td style="text-align:center;">$2.0M</td><td style="text-align:center;">$2.2M</td><td style="text-align:center;">$2.5M</td></tr>
-            <tr><td style="color:var(--text-3);">Δ to Target</td><td style="text-align:center;"><span class="val-delta">-$340K</span></td><td class="dvl" style="text-align:center;"><span class="val-delta">-$160K</span></td><td style="text-align:center;"><span class="val-delta">-$180K</span></td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td></tr>
-            <tr><td style="color:var(--text-3);">ITT</td><td style="text-align:center;"><span class="val-r">75</span></td><td class="dvl" style="text-align:center;"><span class="val-r">72</span></td><td style="text-align:center;"><span class="val-r">76</span></td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td></tr>
-          </tbody>
-        </table></div></div>
-<div style="border-top:1px solid var(--line);"><div style="padding:8px 16px 4px;font-size:11px;font-weight:600;color:var(--text-2);">Annualized Impact</div><div style="overflow-x:auto;padding:0 16px 12px;"><table class="tbl outcomes-tbl" style="width:100%;">
-          <thead>
-            <tr>
-              <th colspan="14" style="background:var(--sec-hdr-bg);color:#fff;text-align:left;font-size:9.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;padding:6px 12px;border-bottom:1px solid rgba(255,255,255,0.15);">Annualized Impact</th>
-            </tr>
-            <tr>
-              <th style="text-align:left;min-width:90px;">Metric</th>
-              <th style="text-align:center;width:65px;">YTD</th>
-              <th class="dvl" style="text-align:center;">Aug</th>
-              <th style="text-align:center;">Sep</th><th style="text-align:center;">Oct</th><th style="text-align:center;">Nov</th><th style="text-align:center;">Dec</th><th style="text-align:center;">Jan</th><th style="text-align:center;">Feb</th><th style="text-align:center;">Mar</th><th style="text-align:center;">Apr</th><th style="text-align:center;">May</th><th style="text-align:center;">Jun</th><th style="text-align:center;">Jul</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td style="font-weight:600;">Actuals</td><td style="text-align:center;font-weight:700;">$794K</td><td class="dvl" style="text-align:center;">$117K</td><td style="text-align:center;">$203K</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td></tr>
-          </tbody>
-        </table></div></div>
-</div>
+      
       </div>
 
 
@@ -483,47 +768,7 @@ body{font-family:var(--font);background:#f4f4f0 !important;color:var(--text-1);f
     <!-- GNA VIEW -->
     <div class="metric-panel" id="metric-gna">
 
-    <div class="tab-callouts" style="grid-template-columns:repeat(8,1fr);">
-      <div class="tab-callout co-rev">
-        <div class="tab-co-big">8.7k</div>
-        <div class="tab-co-label">Total Annualized GNA</div>
-      </div>
-      <div class="tab-callout co-rev">
-        <div class="tab-co-big">4.4k</div>
-        <div class="tab-co-label">In Year Incremental GNA</div>
-        <div class="tab-co-sub"><span class="val-g" style="font-size:10px;">106</span> <span style="font-size:8px;">ITF</span> &nbsp;|&nbsp; <span class="val-r" style="font-size:10px;">75</span> <span style="font-size:8px;">ITT</span></div>
-      </div>
-      <div class="tab-callout co-rev">
-        <div class="tab-co-big">30</div>
-        <div class="tab-co-label">Total Projects</div>
-        <div class="tab-co-sub" style="color:var(--payments);font-weight:600;font-size:10px;">FY'26 · Payments</div>
-      </div>
-            <div class="tab-callout co-pos">
-        <div class="tab-co-big pos co-stat-pos-n">20</div>
-        <div class="tab-co-label">Positive Outcomes</div>
-        <div class="tab-co-sub"><span class="tab-co-pct co-stat-pos-pct" style="color:var(--positive);">83%</span> of experiments</div>
-      </div>
-      <div class="tab-callout co-neg">
-        <div class="tab-co-big neg co-stat-neg-n">2</div>
-        <div class="tab-co-label">Negative Outcomes</div>
-        <div class="tab-co-sub"><span class="tab-co-pct co-stat-neg-pct" style="color:var(--negative);">8%</span> of experiments</div>
-      </div>
-      <div class="tab-callout co-flat">
-        <div class="tab-co-big flat co-stat-flat-n">2</div>
-        <div class="tab-co-label">Flat Outcomes</div>
-        <div class="tab-co-sub"><span class="tab-co-pct co-stat-flat-pct" style="color:#c8970a;">9%</span> of experiments</div>
-      </div>
-      <div class="tab-callout co-bake">
-        <div class="tab-co-big bake co-stat-bake-n">2</div>
-        <div class="tab-co-label">Still Baking</div>
-        <div class="tab-co-sub">Not yet measured</div>
-      </div>
-      <div class="tab-callout co-nox">
-        <div class="tab-co-big nox co-stat-nox-n">6</div>
-        <div class="tab-co-label">Non-Experiments</div>
-        <div class="tab-co-sub">No test design</div>
-      </div>
-    </div>
+    
 
       <div style="padding:0;margin-bottom:24px;">
         <div class="sec-hdr"><span class="sec-hdr-text">ELM · Incremental <span class="gna-metric">GNA</span> Outcomes YTD</span></div>
@@ -594,7 +839,7 @@ body{font-family:var(--font);background:#f4f4f0 !important;color:var(--text-1);f
     
 
 
-      <div style="margin-top:24px;">
+      <div id="project-detail-section" style="margin-top:24px;">
         <div class="sec-hdr"><span class="sec-hdr-text">ELM · Project Detail · FY'26 · Payments</span></div>
         <div class="proj-wrap">
           <table class="tbl">
@@ -657,14 +902,23 @@ body{font-family:var(--font);background:#f4f4f0 !important;color:var(--text-1);f
           </tbody>
         </table>
         </div>
-      </div></div></main>
+      </div>
+
+</div>
+
+  <!-- TAB 3: POD Incremental Outlook --></div></main>
 <footer class="dash-footer">
   <span>ELM · Global Business Solutions Group</span>
   <span>Last updated Sep 2026</span>
 </footer>
 <script>
 
+
 function switchTab(n){
+  // Explicitly hide project detail unless on tab-2
+  var pds=document.getElementById("project-detail-section");
+  if(pds) pds.style.display=(n===2)?"":"none";
+
   document.querySelectorAll('.tab').forEach((t,i)=>{
     t.classList.toggle('active',i===n);
     // Reset inline styles so only active tab gets product color
@@ -678,7 +932,10 @@ function switchTab(n){
     activeTab.style.background=pc;
     activeTab.style.borderBottomColor=pc;
   }
-  document.querySelectorAll('.tab-panel').forEach((p,i)=>p.classList.toggle('active',i===n));
+  document.querySelectorAll('.tab-panel').forEach(function(p,i){
+    p.classList.toggle('active',i===n);
+    p.style.display=(i===n)?'block':'none';
+  });
   var titles={0:'ELM Payments Total ELM Impact',1:'ELM Payments LCM Pod Incremental Outcomes Summary',2:'ELM Payments LCM Pod Incremental Outcomes Detail',3:'ELM Payments LCM Pod Incremental Future Outlook',4:'AURA & ELM Growth Payments Incremental Outcomes Summary',5:'AURA & ELM Growth Payments Incremental Outcomes Detail',6:'AURA & ELM Growth Payments Incremental Future Outlook',7:'Payments IPD Channel',8:'Payments Email Channel',9:'ELM Payments Velocity'};
   var s=document.getElementById('sticky-title');if(s)s.textContent=titles[n]||'';
   if(n===1&&!window._wrChart){(function(){var c=document.getElementById('winRateChart');if(!c||typeof Chart==='undefined')return;window._wrChart=new Chart(c,{type:'doughnut',data:{labels:['Positive','Negative','Flat'],datasets:[{data:[12,2,12],backgroundColor:['#0ba956','#E04126','#FFCA00'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:false,maintainAspectRatio:false,cutout:'65%',plugins:{legend:{display:false}}}});})();}
@@ -1029,7 +1286,20 @@ function updateProjectTable(metric) {
 
 let productDdOpen=false,leverDdOpen=false,subprodDdOpen=false;
 function toggleProductDd(){productDdOpen=!productDdOpen;document.getElementById('product-pill-dd').style.display=productDdOpen?'block':'none';var btn=document.getElementById('product-pill-btn');btn.style.borderColor=productDdOpen?'rgba(255,255,255,0.5)':'rgba(255,255,255,0.18)';btn.style.boxShadow=productDdOpen?'0 0 0 2px rgba(255,255,255,0.25)':'none';}
-function pickProduct(el){const val=el.dataset.val,color=el.dataset.color,tx=el.dataset.textcolor||'#fff',label=el.textContent.trim();document.getElementById('product-pill-label').textContent=label;const btn=document.getElementById('product-pill-btn');btn.style.background=color;btn.style.color=tx;document.getElementById('product-pill-dd').style.display='none';productDdOpen=false;document.documentElement.style.setProperty('--payments',color);var r=parseInt(color.slice(1,3),16),g=parseInt(color.slice(3,5),16),b=parseInt(color.slice(5,7),16);document.documentElement.style.setProperty('--payments-light','rgba('+r+','+g+','+b+',0.22)');var rL=Math.round(r+(255-r)*0.8),gL=Math.round(g+(255-g)*0.8),bL=Math.round(b+(255-b)*0.8);document.documentElement.style.setProperty('--payments-bg','rgb('+rL+','+gL+','+bL+')');document.documentElement.style.setProperty('--payments-mid','rgba('+r+','+g+','+b+',0.4)');document.documentElement.style.setProperty('--payments-faint','rgba('+r+','+g+','+b+',0.3)');document.querySelectorAll('.tab.active').forEach(function(t){t.style.background=color;t.style.borderBottomColor=color;});['_revChart','_revChart2','_gnaChart','_revChartAURA'].forEach(function(id){var ch=window[id];if(!ch)return;ch.data.datasets[0].backgroundColor=color;ch.data.datasets[1].backgroundColor='rgba('+r+','+g+','+b+',0.5)';ch.data.datasets[2].backgroundColor='rgba('+r+','+g+','+b+',0.12)';ch.update();});setGlobalProduct(val);updateGNAMetric(val);}
+function pickProduct(el){const val=el.dataset.val,color=el.dataset.color,tx=el.dataset.textcolor||'#fff',label=el.textContent.trim();document.getElementById('product-pill-label').textContent=label;const btn=document.getElementById('product-pill-btn');btn.style.background=color;btn.style.color=tx;document.getElementById('product-pill-dd').style.display='none';productDdOpen=false;document.documentElement.style.setProperty('--payments',color);var r=parseInt(color.slice(1,3),16),g=parseInt(color.slice(3,5),16),b=parseInt(color.slice(5,7),16);document.documentElement.style.setProperty('--payments-light','rgba('+r+','+g+','+b+',0.22)');var rL=Math.round(r+(255-r)*0.8),gL=Math.round(g+(255-g)*0.8),bL=Math.round(b+(255-b)*0.8);document.documentElement.style.setProperty('--payments-bg','rgb('+rL+','+gL+','+bL+')');document.documentElement.style.setProperty('--payments-mid','rgba('+r+','+g+','+b+',0.4)');document.documentElement.style.setProperty('--payments-faint','rgba('+r+','+g+','+b+',0.3)');document.querySelectorAll('.tab.active').forEach(function(t){t.style.background=color;t.style.borderBottomColor=color;});['_revChart','_revChart2','_gnaChart','_revChartAURA'].forEach(function(id){var ch=window[id];if(!ch)return;ch.data.datasets[0].backgroundColor=color;ch.data.datasets[1].backgroundColor='rgba('+r+','+g+','+b+',0.5)';ch.data.datasets[2].backgroundColor='rgba('+r+','+g+','+b+',0.12)';ch.update();});setGlobalProduct(val);updateGNAMetric(val);
+  // Filter Sub-Product table rows
+  document.querySelectorAll('[data-subprod-product]').forEach(function(tr){
+    tr.style.display=(val==='All'||tr.getAttribute('data-subprod-product')===val)?'':'none';
+  });
+  // Show group label only on first visible row of each group
+  var seen={};
+  document.querySelectorAll('[data-subprod-product]').forEach(function(tr){
+    if(tr.style.display==='none') return;
+    var p=tr.getAttribute('data-subprod-product');
+    var sp=tr.querySelector('span[style*="tbl-hdr-tx"]');
+    if(sp){ sp.style.display=seen[p]?'none':''; seen[p]=true; }
+  });
+}
 function toggleLeverDd(){leverDdOpen=!leverDdOpen;document.getElementById('dd-lever').style.display=leverDdOpen?'block':'none';}
 function updateLeverSel(){const c=[...document.querySelectorAll('#dd-lever input:checked')].map(i=>i.value);activeFilters.lever=c;document.getElementById('flt-lever-btn').textContent=c.length?c.length+' ▾':'All Levers ▾';applyFilters();}
 function toggleSubprodDd(){subprodDdOpen=!subprodDdOpen;document.getElementById('dd-subprod').style.display=subprodDdOpen?'block':'none';}
@@ -1049,7 +1319,137 @@ function updateLeverBox(m){const h1=document.getElementById('lev-hdr1');if(!h1)r
 
 var _pageSubtitleTpl='ELM {p} LCM Pod Incremental Outcomes Detail';
 function setGlobalProduct(val){var lmap={'All':'ELM','Ecosystem':'ELM Ecosystem','OnlineAcct':'ELM Online Accounting','Advanced':'ELM Advanced','AIHI':'ELM AI / HI','BizTax':'ELM Biz Tax','Workforce':'ELM Workforce','Payments':'ELM Payments','Capital':'ELM Capital','IBCC':'ELM IBCC','BillPay':'ELM Bill Pay','MailChimp':'ELM MailChimp','IES':'ELM IES'};var lbl=lmap[val]||'ELM '+val;var s=document.getElementById('sticky-title');if(s)s.textContent=_pageSubtitleTpl.replace('{p}',lbl.replace('ELM ',''));}
-document.addEventListener('DOMContentLoaded',function(){document.addEventListener('click',function(e){if(!e.target.closest('#product-dd-wrap')){var d=document.getElementById('product-pill-dd');if(d){d.style.display='none';productDdOpen=false;}}[['dd-lever','flt-lever-btn'],['dd-subprod','flt-subprod-btn'],['dd-audience','flt-audience-btn'],['dd-category','flt-category-btn']].forEach(function(p){if(!e.target.closest('#'+p[0])&&!e.target.closest('#'+p[1])){var dd=document.getElementById(p[0]);if(dd)dd.style.display='none';}});});});
+document.addEventListener('DOMContentLoaded',function(){var pds=document.getElementById('project-detail-section');if(pds)pds.style.display='none';
+  
+  // Init sub-product filter for default product (Payments)
+  (function(){
+    document.querySelectorAll('[data-subprod-product]').forEach(function(tr){
+      tr.style.display=tr.getAttribute('data-subprod-product')==='Payments'?'':'none';
+    });
+  })();
+  
+  // Set filter bar sticky offset to match header height
+  (function setStickyOffset(){
+    var hdr = document.querySelector('header');
+    var bar = document.getElementById('pod-filter-bar');
+    if(!hdr || !bar){ setTimeout(setStickyOffset, 50); return; }
+    bar.style.top = hdr.getBoundingClientRect().height + 'px';
+    // Re-check on resize
+    window.addEventListener('resize', function(){
+      bar.style.top = hdr.getBoundingClientRect().height + 'px';
+    });
+  })();
+  // POD Details revenue chart (init on load since tab-2 is active)
+  (function initRevPODDetail(){
+    var c=document.getElementById('revChartPODDetail');
+    if(!c||typeof Chart==='undefined'){setTimeout(initRevPODDetail,100);return;}
+    var pc=getComputedStyle(document.documentElement).getPropertyValue('--payments').trim()||'#07c4d9';
+    var hex=pc.replace(/[^0-9a-fA-F]/g,'').substr(0,6)||'07c4d9';
+    var r=parseInt(hex.substr(0,2),16),g=parseInt(hex.substr(2,2),16),b=parseInt(hex.substr(4,2),16);
+    window._revChartPODDetail=new Chart(c,{type:'bar',
+      data:{labels:['Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul'],
+      datasets:[
+        {label:'Achieved',data:[420,580,680,null,null,null,null,null,null,null,null,null],backgroundColor:pc,borderWidth:0,stack:'bars'},
+        {label:'High Conf',data:[null,null,null,350,450,560,680,780,920,1060,1210,1380],backgroundColor:'rgba('+r+','+g+','+b+',0.5)',borderWidth:0,stack:'bars'},
+        {label:'Low Conf',data:[null,null,null,130,170,200,230,260,300,340,390,440],backgroundColor:'rgba('+r+','+g+','+b+',0.12)',borderWidth:0,stack:'bars'},
+        {label:'Forecast',data:[500,620,700,780,870,950,1050,1130,1250,1380,1520,1700],type:'line',borderColor:'#000',borderWidth:2,pointRadius:3,pointBackgroundColor:'#000',fill:false,stack:undefined,order:1},
+        {label:'Target',data:[580,760,900,1020,1150,1300,1450,1600,1800,2000,2200,2450],type:'line',borderColor:'#aaa',borderWidth:1.5,borderDash:[5,4],pointRadius:0,fill:false,stack:undefined,order:2}
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false}},
+        scales:{x:{stacked:true,ticks:{font:{size:10},color:'#6a8aa0',autoSkip:false},grid:{display:false}},
+          y:{stacked:true,ticks:{font:{size:10},color:'#6a8aa0',callback:function(v){return '$'+v.toLocaleString();}},grid:{color:'rgba(0,0,0,0.04)'}}}}}
+    );
+  })();
+  // POD Details revenue chart
+  (function initRevPODDetail(){
+    var c=document.getElementById('revChartPODDetail');
+    if(!c||typeof Chart==='undefined'){setTimeout(initRevPODDetail,100);return;}
+    var pc=getComputedStyle(document.documentElement).getPropertyValue('--payments').trim()||'#07c4d9';
+    var hex=pc.replace('#','').trim();var r=parseInt(hex.substr(0,2),16)||7,g=parseInt(hex.substr(2,2),16)||196,b=parseInt(hex.substr(4,2),16)||217;
+    window._revChartPODDetail=new Chart(c,{type:'bar',data:{labels:['Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul'],datasets:[
+      {label:'Achieved',data:[420,580,680,null,null,null,null,null,null,null,null,null],backgroundColor:pc,borderWidth:0,stack:'bars'},
+      {label:'High Conf',data:[null,null,null,350,450,560,680,780,920,1060,1210,1380],backgroundColor:'rgba('+r+','+g+','+b+',0.5)',borderWidth:0,stack:'bars'},
+      {label:'Low Conf',data:[null,null,null,130,170,200,230,260,300,340,390,440],backgroundColor:'rgba('+r+','+g+','+b+',0.12)',borderWidth:0,stack:'bars'},
+      {label:'Forecast',data:[500,620,700,780,870,950,1050,1130,1250,1380,1520,1700],type:'line',borderColor:'#000',borderWidth:2,pointRadius:3,pointBackgroundColor:'#000',fill:false,stack:undefined,order:1},
+      {label:'Target',data:[580,760,900,1020,1150,1300,1450,1600,1800,2000,2200,2450],type:'line',borderColor:'#aaa',borderWidth:1.5,borderDash:[5,4],pointRadius:0,fill:false,stack:undefined,order:2}
+    ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false}},
+    scales:{x:{stacked:true,ticks:{font:{size:10},color:'#6a8aa0',autoSkip:false},grid:{display:false}},
+    y:{stacked:true,ticks:{font:{size:10},color:'#6a8aa0',callback:function(v){return '$'+v.toLocaleString();}},grid:{color:'rgba(0,0,0,0.04)'}}}}});
+  })();
+
+  document.addEventListener('click',function(e){if(!e.target.closest('#product-dd-wrap')){var d=document.getElementById('product-pill-dd');if(d){d.style.display='none';productDdOpen=false;}}[['dd-lever','flt-lever-btn'],['dd-subprod','flt-subprod-btn'],['dd-audience','flt-audience-btn'],['dd-category','flt-category-btn']].forEach(function(p){if(!e.target.closest('#'+p[0])&&!e.target.closest('#'+p[1])){var dd=document.getElementById(p[0]);if(dd)dd.style.display='none';}});});});
+
+document.addEventListener('DOMContentLoaded', function() {
+  // POD Details revenue chart (active on load)
+  (function initRevPODDetail(){
+    var c=document.getElementById('revChartPODDetail');
+    if(!c||typeof Chart==='undefined'){setTimeout(initRevPODDetail,100);return;}
+    var pc=getComputedStyle(document.documentElement).getPropertyValue('--payments').trim()||'#07c4d9';
+    var hex=pc.replace('#','').trim();var r=parseInt(hex.substr(0,2),16)||7,g=parseInt(hex.substr(2,2),16)||196,b=parseInt(hex.substr(4,2),16)||217;
+    window._revChartPODDetail=new Chart(c,{
+      type:'bar',data:{labels:['Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul'],
+      datasets:[
+        {label:'Achieved',data:[420,580,680,null,null,null,null,null,null,null,null,null],backgroundColor:pc,borderWidth:0,stack:'bars'},
+        {label:'High Conf',data:[null,null,null,350,450,560,680,780,920,1060,1210,1380],backgroundColor:'rgba('+r+','+g+','+b+',0.5)',borderWidth:0,stack:'bars'},
+        {label:'Low Conf',data:[null,null,null,130,170,200,230,260,300,340,390,440],backgroundColor:'rgba('+r+','+g+','+b+',0.12)',borderWidth:0,stack:'bars'},
+        {label:'Forecast',data:[500,620,700,780,870,950,1050,1130,1250,1380,1520,1700],type:'line',borderColor:'#000',borderWidth:2,pointRadius:3,pointBackgroundColor:'#000',fill:false,stack:undefined,order:1},
+        {label:'Target',data:[580,760,900,1020,1150,1300,1450,1600,1800,2000,2200,2450],type:'line',borderColor:'#aaa',borderWidth:1.5,borderDash:[5,4],pointRadius:0,fill:false,stack:undefined,order:2}
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false}},
+        scales:{x:{stacked:true,ticks:{font:{size:10},color:'#6a8aa0',autoSkip:false},grid:{display:false}},
+          y:{stacked:true,ticks:{font:{size:10},color:'#6a8aa0',callback:function(v){return '$'+v.toLocaleString();}},grid:{color:'rgba(0,0,0,0.04)'}}}}
+    });
+  })();
+  // Win rate donut chart
+  (function initWR() {
+    var c = document.getElementById('winRateChart');
+    if (!c) return;
+    if (typeof Chart === 'undefined') { setTimeout(initWR, 100); return; }
+    window._wrChart = new Chart(c, {
+      type: 'doughnut',
+      data: {
+        labels: ['Positive','Negative','Flat'],
+        datasets: [{ data: [12,2,12], backgroundColor: ['#0ba956','#E04126','#FFCA00'], borderWidth: 2, borderColor: '#fff' }]
+      },
+      options: { responsive: false, maintainAspectRatio: false, cutout: '65%', plugins: { legend: { display: false } } }
+    });
+  })();
+  // Close dropdowns on outside click
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('#product-dd-wrap')) {
+      var d = document.getElementById('product-pill-dd');
+      if (d) { d.style.display = 'none'; productDdOpen = false; }
+    }
+    [['dd-lever','flt-lever-btn'],['dd-subprod','flt-subprod-btn'],['dd-audience','flt-audience-btn'],['dd-category','flt-category-btn']].forEach(function(pair) {
+      if (!e.target.closest('#'+pair[0]) && !e.target.closest('#'+pair[1])) {
+        var dd = document.getElementById(pair[0]); if (dd) dd.style.display = 'none';
+      }
+    });
+  });
+});
+
+
+// Product-specific metric labels
+const gnaMetricMap = {
+  'Ecosystem':'Units', 'OnlineAcct':'GNS', 'Advanced':'Upgrades',
+  'AIHI':'GNS', 'BizTax':'GNS', 'Workforce':'GNS',
+  'Payments':'GNA', 'Capital':'Applications', 'IBCC':'Applications',
+  'BillPay':'GNA', 'MailChimp':'GNA', 'IES':'MQLs'
+};
+function updateGNAMetric(val) {
+  var label = gnaMetricMap[val] || 'GNA';
+  document.querySelectorAll('.gna-metric').forEach(function(el) {
+    el.textContent = label;
+  });
+  // Also update the GNA monthly outcomes header via updateLeverBox if active
+  var mh = document.getElementById('monthly-outcomes-hdr');
+  if (mh && mh.textContent.indexOf('GNA') > -1) {
+    mh.textContent = mh.textContent.replace('GNA', label);
+  }
+}
+
 </script>
 </body>
 </html>
