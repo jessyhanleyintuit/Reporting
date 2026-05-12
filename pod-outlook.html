@@ -22,7 +22,7 @@ html{scroll-behavior:smooth}
 body{font-family:var(--font);background:#f4f4f0 !important;color:var(--text-1);font-size:13px;min-height:100vh}
 
 /* HEADER */
-.dash-header{background:var(--navy);border-bottom:none;position:sticky;top:0;z-index:100}
+.dash-header{background:var(--navy);border-bottom:none;position:sticky;top:0;z-index:600}
 .header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:24px}
 .header-left{display:flex;flex-direction:column;align-items:flex-start;gap:3px}
 .eyebrow{font-size:10px;font-weight:500;letter-spacing:.1em;color:#fff;text-transform:uppercase}
@@ -241,10 +241,10 @@ body{font-family:var(--font);background:#f4f4f0 !important;color:var(--text-1);f
 .tp-btn:first-child{border-radius:0}
 .tp-btn:last-child{border-radius:0}
 .tp-btn.active{background:var(--sec-hdr-bg);color:#fff;border-color:var(--sec-hdr-bg);z-index:1;position:relative}
-.multi-dd{position:absolute;top:calc(100% + 4px);left:0;background:#fff;border:1.5px solid var(--line);z-index:200;min-width:160px;box-shadow:0 4px 12px rgba(0,0,0,0.08)}
+.multi-dd{position:absolute;top:calc(100% + 4px);left:0;background:#fff;border:1.5px solid var(--line);z-index:1000;min-width:160px;box-shadow:0 4px 12px rgba(0,0,0,0.08)}
 .multi-dd label{display:flex;align-items:center;gap:8px;padding:5px 12px;font-size:11px;cursor:pointer;white-space:nowrap;color:var(--text-1)}
 .multi-dd label:hover{background:var(--row-odd)}
-.multi-dd input[type=checkbox]{accent-color:var(--payments);cursor:pointer}
+.multi-dd input[type=checkbox],.multi-dd input[type=radio]{accent-color:var(--payments);cursor:pointer}
 /* FOOTER */
 .dash-footer{background:var(--navy);color:#fff;font-size:10px;padding:10px 32px;display:flex;justify-content:space-between;align-items:center;letter-spacing:.04em}
 
@@ -266,7 +266,7 @@ body{font-family:var(--font);background:#f4f4f0 !important;color:var(--text-1);f
         <span class="date-label" style="color:#fff;">Product</span>
         <button id="product-pill-btn" onclick="toggleProductDd()" style="display:flex;align-items:center;gap:6px;padding:5px 10px;border-radius:5px;border:1px solid rgba(255,255,255,0.18);cursor:pointer;font-size:11px;font-weight:500;font-family:var(--font);color:#fff;background:#07c4d9;border-radius:5px;padding:5px 10px;">
           <span id="product-pill-label">Payments</span><span style="font-size:10px;opacity:.8;">▾</span></button>
-        <div id="product-pill-dd" style="display:none;position:absolute;top:calc(100% + 6px);right:0;background:#fff;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,0.2);overflow:hidden;z-index:200;min-width:180px;">
+        <div id="product-pill-dd" style="display:none;position:absolute;top:calc(100% + 6px);right:0;background:#fff;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,0.2);overflow:hidden;z-index:1200;min-width:180px;">
           <div class="prod-opt" data-val="Ecosystem" data-color="#005993" data-textcolor="#fff" onclick="pickProduct(this)" style="padding:9px 16px;font-size:12px;font-weight:600;color:#fff;background:#005993;cursor:pointer;">Ecosystem</div>
           <div class="prod-opt" data-val="OnlineAcct" data-color="#16A847" data-textcolor="#fff" onclick="pickProduct(this)" style="padding:9px 16px;font-size:12px;font-weight:600;color:#fff;background:#16A847;cursor:pointer;">Online Accounting</div>
           <div class="prod-opt" data-val="Advanced" data-color="#00892E" data-textcolor="#fff" onclick="pickProduct(this)" style="padding:9px 16px;font-size:12px;font-weight:600;color:#fff;background:#00892E;cursor:pointer;">Advanced</div>
@@ -298,9 +298,7 @@ body{font-family:var(--font);background:#f4f4f0 !important;color:var(--text-1);f
   <div id="sticky-subtitle-bar" style="border-top:4px solid var(--payments);background:var(--payments-bg);padding:10px 32px;border-bottom:1px solid var(--payments-mid);width:100%;box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;gap:16px;">
     <div id="sticky-title" style="font-size:22px;font-weight:400;color:var(--navy);font-family:var(--font);letter-spacing:-.01em;white-space:nowrap;">ELM Payments LCM Pod Incremental Future Outlook</div>
     <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
-      <select id="view-by-month" style="font-size:11px;padding:5px 10px;background:var(--navy);color:#fff;border:1px solid rgba(255,255,255,0.25);border-radius:5px;font-family:var(--font);cursor:pointer;" onchange="setViewByMonth(this.value)">
-        <option value="all">All Months YTD</option><option value="Aug">August</option><option value="Sep" selected>September</option><option value="Oct">October</option><option value="Nov">November</option><option value="Dec">December</option><option value="Jan">January</option><option value="Feb">February</option><option value="Mar">March</option><option value="Apr">April</option><option value="May">May</option><option value="Jun">June</option><option value="Jul">July</option>
-      </select>
+      <span style="font-size:10px;font-weight:600;color:var(--navy);text-transform:uppercase;letter-spacing:.06em;font-family:var(--font);">View By</span><div style="display:flex;gap:0;margin-left:4px;"><button onclick="setViewByMonth('week')" id="vbm-week" style="font-size:11px;padding:4px 12px;border:none;font-weight:600;cursor:pointer;font-family:var(--font);background:var(--navy);color:rgba(255,255,255,0.65);border-radius:4px 0 0 4px;">Week</button><button onclick="setViewByMonth('month')" id="vbm-month" style="font-size:11px;padding:4px 12px;border:none;font-weight:600;cursor:pointer;font-family:var(--font);background:var(--navy-mid);color:#fff;font-weight:700;border-left:1px solid rgba(255,255,255,0.15);border-radius:0;">Month</button><button onclick="setViewByMonth('quarter')" id="vbm-quarter" style="font-size:11px;padding:4px 12px;border:none;font-weight:600;cursor:pointer;font-family:var(--font);background:var(--navy);color:rgba(255,255,255,0.65);border-left:1px solid rgba(255,255,255,0.15);border-radius:0;">Quarter</button><button onclick="setViewByMonth('ytd')" id="vbm-ytd" style="font-size:11px;padding:4px 12px;border:none;font-weight:600;cursor:pointer;font-family:var(--font);background:var(--navy);color:rgba(255,255,255,0.65);border-left:1px solid rgba(255,255,255,0.15);border-radius:0 4px 4px 0;">YTD</button></div><div style="width:1px;height:18px;background:var(--payments-mid);margin:0 2px;"></div><div style="position:relative;"><select id="current-month-sel" onchange="setCurrentMonth(this.value)" data-mode="month" style="appearance:none;background:var(--navy);color:#fff;border:none;border-radius:5px;font-size:12px;font-weight:600;padding:4px 28px 4px 10px;font-family:var(--font);cursor:pointer;background-image:url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'10\' height=\'6\' viewBox=\'0 0 10 6\'%3E%3Cpath d=\'M1 1l4 4 4-4\' stroke=\'%23ffffff\' stroke-width=\'1.5\' fill=\'none\' stroke-linecap=\'round\'/%3E%3C/svg%3E');background-repeat:no-repeat;background-position:right 8px center;"><option value="Aug" >August</option><option value="Sep" selected>September</option><option value="Oct" >October</option><option value="Nov" >November</option><option value="Dec" >December</option><option value="Jan" >January</option><option value="Feb" >February</option><option value="Mar" >March</option><option value="Apr" >April</option><option value="May" >May</option><option value="Jun" >June</option><option value="Jul" >July</option></select><div id="quarter-picker-wrap" style="display:none;position:relative;"><button id="quarter-picker-btn" onclick="toggleQuarterPicker()" style="background:var(--navy);color:#fff;border:none;border-radius:5px;font-size:12px;font-weight:600;padding:4px 28px 4px 10px;font-family:var(--font);cursor:pointer;min-width:160px;text-align:left;">Select Quarters ▾</button><div id="quarter-picker-dd" style="display:none;position:absolute;top:calc(100% + 4px);right:0;background:#fff;border:1.5px solid var(--line);border-radius:6px;box-shadow:0 4px 16px rgba(0,0,0,0.15);z-index:1200;min-width:220px;"><label style="display:flex;align-items:center;gap:6px;padding:5px 12px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="Q1" onchange="updateQuarterSel()" style="accent-color:var(--navy);"> Q1 FY'26 · Aug–Oct</label><label style="display:flex;align-items:center;gap:6px;padding:5px 12px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="Q2" onchange="updateQuarterSel()" style="accent-color:var(--navy);"> Q2 FY'26 · Nov–Jan</label><label style="display:flex;align-items:center;gap:6px;padding:5px 12px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="Q3" onchange="updateQuarterSel()" style="accent-color:var(--navy);"> Q3 FY'26 · Feb–Apr</label><label style="display:flex;align-items:center;gap:6px;padding:5px 12px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="Q4" onchange="updateQuarterSel()" style="accent-color:var(--navy);"> Q4 FY'26 · May–Jul</label></div></div><div id="week-picker-wrap" style="display:none;position:relative;"><button id="week-picker-btn" onclick="toggleWeekPicker()" style="background:var(--navy);color:#fff;border:none;border-radius:5px;font-size:12px;font-weight:600;padding:4px 28px 4px 10px;font-family:var(--font);cursor:pointer;min-width:160px;text-align:left;">Select Weeks ▾</button><div id="week-picker-dd" style="display:none;position:absolute;top:calc(100% + 4px);right:0;background:#fff;border:1.5px solid var(--line);border-radius:6px;box-shadow:0 4px 16px rgba(0,0,0,0.15);z-index:1200;max-height:280px;overflow-y:auto;min-width:200px;"><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W1" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W1 (Aug 4–Aug 10)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W2" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W2 (Aug 11–Aug 17)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W3" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W3 (Aug 18–Aug 24)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W4" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W4 (Aug 25–Aug 31)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W5" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W5 (Sep 1–Sep 7)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W6" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W6 (Sep 8–Sep 14)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W7" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W7 (Sep 15–Sep 21)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W8" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W8 (Sep 22–Sep 28)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W9" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W9 (Sep 29–Oct 5)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W10" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W10 (Oct 6–Oct 12)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W11" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W11 (Oct 13–Oct 19)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W12" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W12 (Oct 20–Oct 26)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W13" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W13 (Oct 27–Nov 2)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W14" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W14 (Nov 3–Nov 9)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W15" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W15 (Nov 10–Nov 16)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W16" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W16 (Nov 17–Nov 23)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W17" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W17 (Nov 24–Nov 30)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W18" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W18 (Dec 1–Dec 7)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W19" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W19 (Dec 8–Dec 14)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W20" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W20 (Dec 15–Dec 21)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W21" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W21 (Dec 22–Dec 28)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W22" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W22 (Dec 29–Jan 4)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W23" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W23 (Jan 5–Jan 11)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W24" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W24 (Jan 12–Jan 18)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W25" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W25 (Jan 19–Jan 25)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W26" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W26 (Jan 26–Feb 1)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W27" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W27 (Feb 2–Feb 8)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W28" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W28 (Feb 9–Feb 15)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W29" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W29 (Feb 16–Feb 22)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W30" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W30 (Feb 23–Mar 1)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W31" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W31 (Mar 2–Mar 8)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W32" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W32 (Mar 9–Mar 15)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W33" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W33 (Mar 16–Mar 22)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W34" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W34 (Mar 23–Mar 29)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W35" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W35 (Mar 30–Apr 5)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W36" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W36 (Apr 6–Apr 12)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W37" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W37 (Apr 13–Apr 19)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W38" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W38 (Apr 20–Apr 26)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W39" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W39 (Apr 27–May 3)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W40" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W40 (May 4–May 10)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W41" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W41 (May 11–May 17)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W42" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W42 (May 18–May 24)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W43" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W43 (May 25–May 31)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W44" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W44 (Jun 1–Jun 7)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W45" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W45 (Jun 8–Jun 14)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W46" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W46 (Jun 15–Jun 21)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W47" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W47 (Jun 22–Jun 28)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W48" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W48 (Jun 29–Jul 5)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W49" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W49 (Jul 6–Jul 12)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W50" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W50 (Jul 13–Jul 19)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W51" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W51 (Jul 20–Jul 26)</label><label style="display:flex;align-items:center;gap:6px;padding:4px 10px;font-size:11px;color:var(--text-1);cursor:pointer;white-space:nowrap;"><input type="checkbox" value="W52" onchange="updateWeekSel()" style="accent-color:var(--navy);"> W52 (Jul 27–Aug 2)</label></div></div></div>
       <div style="width:1px;height:18px;background:var(--payments-mid);"></div>
       <span style="font-size:10px;font-weight:600;color:var(--navy);text-transform:uppercase;letter-spacing:.07em;">Save for MBR</span>
       <button onclick="saveMBR()" style="display:inline-flex;align-items:center;gap:5px;padding:5px 14px;background:var(--navy);color:#fff;border:none;border-radius:5px;font-size:11px;font-weight:600;font-family:var(--font);cursor:pointer;">&#128190;&nbsp;SAVE</button>
@@ -388,9 +386,10 @@ body{font-family:var(--font);background:#f4f4f0 !important;color:var(--text-1);f
   <span>Last updated Sep 2026</span>
 </footer>
 <script>
-
 function switchTab(n){
   // Explicitly hide project detail unless on tab-2
+  var pds=document.getElementById("project-detail-section");
+  if(pds) pds.style.display=(n===2)?"":"none";
 
   document.querySelectorAll('.tab').forEach((t,i)=>{
     t.classList.toggle('active',i===n);
@@ -482,14 +481,7 @@ try{(function(){var _c=document.getElementById('revChart2');if(_c){window._revCh
   }
 });
 
-function switchMetric(m) {
-  document.querySelectorAll('.metric-panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.metric-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('metric-' + m).classList.add('active');
-  document.getElementById('btn-' + m.substring(0,3)).classList.add('active');
-  updateProjectTable(m);
-  applyFilters();
-}
+
 
 // GNA chart data
 const gnaForecast = [290,400,480,520,580,640,700,760,830,900,980,1060];
@@ -605,18 +597,20 @@ function resetFilters() {
 
 // ── ROW MATCHING ──────────────────────────────────────────────────────────
 function rowMatches(row) {
-  // New col order: 0=#, 1=ELM-ID, 2=Project, 3=Desc, 4=Product, 5=Sub-Product, 6=Lever, 7=Request, 8=LMM, 9=SWAG, 10=Launch, 11=Analyst, 12=Outcome, 13=ITC, 14=Scale, 15=Ann, 16=InYr, 17+=months
+  // Col order: 0=ELM-ID, 1=Project, 2=Desc, 3=Product, 4=Sub-Product, 5=Lever, 6=Request, 7=LMM, 8=SWAG, 9=Launch, 10=Analyst, 11=Outcome, 12=ITC, 13=Scale, 14=Ann, 15=InYr, 16+=months
   if (activeFilters.outcomeType !== 'all') {
-    const tag = row.cells[12]?.querySelector('.tag');
+    const tag = row.cells[11]?.querySelector('.tag');
     const cls = tag ? [...tag.classList].find(c => c.startsWith('t-')) : null;
-    if (cls !== activeFilters.outcomeType) return false;
+    var otf = activeFilters.outcomeType;
+    var otfArr = Array.isArray(otf) ? otf : [otf];
+    if (!otfArr.includes(cls)) return false;
   }
   if (activeFilters.requestorTeam !== 'all') {
-    const req = row.cells[7]?.textContent.trim();
+    const req = row.cells[6]?.textContent.trim();
     if (!req || req !== activeFilters.requestorTeam) return false;
   }
   if (activeFilters.timePeriod !== 'year') {
-    const launch = row.cells[10]?.textContent.trim() || '';
+    const launch = row.cells[9]?.textContent.trim() || '';
     const month = launch.split('-')[0];
     const allowed = activeFilters.timePeriodMonths || (activeFilters.timePeriod === 'quarter' ? quarterMonths : currentMonth);
     if (!allowed.includes(month)) return false;
@@ -744,7 +738,30 @@ function updateProjectTable(metric) {
 
 let productDdOpen=false,leverDdOpen=false,subprodDdOpen=false;
 function toggleProductDd(){productDdOpen=!productDdOpen;document.getElementById('product-pill-dd').style.display=productDdOpen?'block':'none';var btn=document.getElementById('product-pill-btn');btn.style.borderColor=productDdOpen?'rgba(255,255,255,0.5)':'rgba(255,255,255,0.18)';btn.style.boxShadow=productDdOpen?'0 0 0 2px rgba(255,255,255,0.25)':'none';}
-function pickProduct(el){const val=el.dataset.val,color=el.dataset.color,tx=el.dataset.textcolor||'#fff',label=el.textContent.trim();document.getElementById('product-pill-label').textContent=label;const btn=document.getElementById('product-pill-btn');btn.style.background=color;btn.style.color=tx;document.getElementById('product-pill-dd').style.display='none';productDdOpen=false;document.documentElement.style.setProperty('--payments',color);var r=parseInt(color.slice(1,3),16),g=parseInt(color.slice(3,5),16),b=parseInt(color.slice(5,7),16);document.documentElement.style.setProperty('--payments-light','rgba('+r+','+g+','+b+',0.22)');var rL=Math.round(r+(255-r)*0.8),gL=Math.round(g+(255-g)*0.8),bL=Math.round(b+(255-b)*0.8);document.documentElement.style.setProperty('--payments-bg','rgb('+rL+','+gL+','+bL+')');document.documentElement.style.setProperty('--payments-mid','rgba('+r+','+g+','+b+',0.4)');document.documentElement.style.setProperty('--payments-faint','rgba('+r+','+g+','+b+',0.3)');document.querySelectorAll('.tab.active').forEach(function(t){t.style.background=color;t.style.borderBottomColor=color;});['_revChart','_revChart2','_gnaChart','_revChartAURA'].forEach(function(id){var ch=window[id];if(!ch)return;ch.data.datasets[0].backgroundColor=color;ch.data.datasets[1].backgroundColor='rgba('+r+','+g+','+b+',0.5)';ch.data.datasets[2].backgroundColor='rgba('+r+','+g+','+b+',0.12)';ch.update();});setGlobalProduct(val);updateGNAMetric(val);
+var SUBPROD_OPTIONS = {
+  'Payments': ['Get Paid Upfront','Payment Links','Instant Deposit'],
+  'Capital': ['TL','LOC','Marketplace'],
+  'Workforce': ['EWA','All SKUs','Time','401k','HCM','Contractor Payments'],
+  'BillPay': ['Free','Subscription'],
+  'IES': ['Core','Mobile','Freemium','Trial Conversion'],
+  'default': []
+};
+
+function updateSubprodDropdown(product) {
+  var dd = document.getElementById('dd-subprod');
+  if (!dd) return;
+  var opts = SUBPROD_OPTIONS[product] || SUBPROD_OPTIONS['default'];
+  dd.innerHTML = opts.map(function(o) {
+    return '<label><input type="checkbox" value="' + o + '" onchange="updateSubprodSel()"> ' + o + '</label>';
+  }).join('');
+  // Reset active filter
+  activeFilters.subprod = [];
+  var btn = document.getElementById('flt-subprod-btn');
+  if (btn) btn.textContent = 'All Sub-Products ▾';
+  applyFilters();
+}
+
+function pickProduct(el){const val=el.dataset.val,color=el.dataset.color,tx=el.dataset.textcolor||'#fff',label=el.textContent.trim();document.getElementById('product-pill-label').textContent=label;const btn=document.getElementById('product-pill-btn');btn.style.background=color;btn.style.color=tx;document.getElementById('product-pill-dd').style.display='none';productDdOpen=false;document.documentElement.style.setProperty('--payments',color);var r=parseInt(color.slice(1,3),16),g=parseInt(color.slice(3,5),16),b=parseInt(color.slice(5,7),16);document.documentElement.style.setProperty('--payments-light','rgba('+r+','+g+','+b+',0.22)');var rL=Math.round(r+(255-r)*0.8),gL=Math.round(g+(255-g)*0.8),bL=Math.round(b+(255-b)*0.8);document.documentElement.style.setProperty('--payments-bg','rgb('+rL+','+gL+','+bL+')');document.documentElement.style.setProperty('--payments-mid','rgba('+r+','+g+','+b+',0.4)');document.documentElement.style.setProperty('--payments-faint','rgba('+r+','+g+','+b+',0.3)');document.querySelectorAll('.tab.active').forEach(function(t){t.style.background=color;t.style.borderBottomColor=color;});['_revChart','_revChart2','_gnaChart','_revChartAURA','_revChartPODDetail'].forEach(function(id){var ch=window[id];if(!ch)return;ch.data.datasets[0].backgroundColor=color;ch.data.datasets[1].backgroundColor='rgba('+r+','+g+','+b+',0.5)';ch.data.datasets[2].backgroundColor='rgba('+r+','+g+','+b+',0.12)';ch.update();});['_wrChart','_wrChartAURA'].forEach(function(id){var ch=window[id];if(!ch)return;ch.update();});setGlobalProduct(val);updateGNAMetric(val);updateSubprodDropdown(val);
   // Filter Sub-Product table rows
   document.querySelectorAll('[data-subprod-product]').forEach(function(tr){
     tr.style.display=(val==='All'||tr.getAttribute('data-subprod-product')===val)?'':'none';
@@ -767,7 +784,107 @@ function updateAudienceSel(){const c=[...document.querySelectorAll('#dd-audience
 function toggleCategoryDd(){const d=document.getElementById('dd-category');if(d)d.style.display=d.style.display==='none'?'block':'none';}
 function updateCategorySel(){const c=[...document.querySelectorAll('#dd-category input:checked')].map(i=>i.value);activeFilters.category=c;document.getElementById('flt-category-btn').textContent=c.length?c.length+' ▾':'All Categories ▾';applyFilters();}
 function setGlobalProduct(val){const lbl={'All':'ELM','Ecosystem':'ELM Ecosystem','OnlineAcct':'ELM Online Accounting','Advanced':'ELM Advanced','AIHI':'ELM AI / HI','BizTax':'ELM Biz Tax','Workforce':'ELM Workforce','Payments':'ELM Payments','Capital':'ELM Capital','IBCC':'ELM IBCC','BillPay':'ELM Bill Pay','MailChimp':'ELM MailChimp','IES':'ELM IES'}[val]||'ELM '+val;const idx=[...document.querySelectorAll('.tab-panel')].findIndex(p=>p.classList.contains('active'));const tpl={0:'ELM {p} Total ELM Impact',1:'ELM {p} LCM Pod Incremental Outcomes Summary',2:'ELM {p} LCM Pod Incremental Outcomes Detail',3:'ELM {p} LCM Pod Incremental Future Outlook',4:'AURA & ELM Growth {p} Incremental Outcomes Summary',5:'AURA & ELM Growth {p} Incremental Outcomes Detail',6:'AURA & ELM Growth {p} Incremental Future Outlook',7:'{p} IPD Channel',8:'{p} Email Channel',9:'ELM {p} Velocity'}[idx]||'ELM {p}';const subtitle=tpl.replace('{p}',lbl.replace('ELM ',''));const sst=document.getElementById('sticky-title');if(sst)sst.textContent=subtitle;}
-function setViewByMonth(v){}
+function setCurrentMonth(v){
+  var monthNames = {Aug:'August',Sep:'September',Oct:'October',Nov:'November',Dec:'December',
+    Jan:'January',Feb:'February',Mar:'March',Apr:'April',May:'May',Jun:'June',Jul:'July'};
+  document.querySelectorAll('.current-month-label').forEach(function(el){
+    el.textContent = monthNames[v]||v;
+  });
+  updateOutcomeTableHeaders();
+}
+
+var MONTH_NAMES_MAP = {Aug:'August',Sep:'September',Oct:'October',Nov:'November',Dec:'December',Jan:'January',Feb:'February',Mar:'March',Apr:'April',May:'May',Jun:'June',Jul:'July'};
+var QTR_MAP = {Aug:'Q1',Sep:'Q1',Oct:'Q1',Nov:'Q2',Dec:'Q2',Jan:'Q2',Feb:'Q3',Mar:'Q3',Apr:'Q3',May:'Q4',Jun:'Q4',Jul:'Q4'};
+
+var OUTCOME_TABLE_BASES = {
+  'hdr-lever':       'ELM LCM Pod \u00b7 Outcomes By Lever',
+  'hdr-audience':    'ELM LCM Pod \u00b7 Outcomes By Audience',
+  'hdr-requester':   'ELM LCM Pod \u00b7 Outcomes By Requester',
+  'hdr-subprod':     'ELM LCM Pod \u00b7 Outcomes By Sub-Product',
+  'hdr-rev-outcomes':'ELM LCM Pod \u00b7 Incremental Revenue Outcomes',
+};
+
+function updateOutcomeTableHeaders() {
+  var period = window._currentViewBy || 'ytd';
+  var suffix;
+  if (period === 'week') {
+    var btn = document.getElementById('week-picker-btn');
+    var weeks = (btn ? btn.textContent.replace('▾','').trim() : '') || 'Week';
+    suffix = weeks === 'Select Weeks' ? ' · Week' : ' · ' + weeks;
+  } else if (period === 'month') {
+    var month = (document.getElementById('current-month-sel') || {}).value || 'Sep';
+    suffix = ' · ' + (MONTH_NAMES_MAP[month] || month);
+  } else if (period === 'quarter') {
+    var qBtn = document.getElementById('quarter-picker-btn');
+    var qVal = (qBtn ? qBtn.textContent.replace('▾','').trim() : '') || 'Quarter';
+    suffix = qVal === 'Select Quarters' ? ' · Quarter' : ' · ' + qVal;
+  } else {
+    suffix = ' · YTD';
+  }
+  Object.keys(OUTCOME_TABLE_BASES).forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = OUTCOME_TABLE_BASES[id] + suffix;
+  });
+}
+
+function setViewByMonth(v){
+  var all = ['week','month','quarter','ytd'];
+  all.forEach(function(k){
+    var b=document.getElementById('vbm-'+k); if(!b) return;
+    var on=k===v;
+    b.style.background = on ? 'var(--navy-mid)' : 'var(--navy)';
+    b.style.color      = on ? '#fff' : 'rgba(255,255,255,0.65)';
+    b.style.fontWeight = on ? '700' : '600';
+  });
+  // Show/hide period selectors
+  var mSel=document.getElementById('current-month-sel');
+  var qSel=document.getElementById('current-quarter-sel');
+  var wWrap=document.getElementById('week-picker-wrap');
+  if(mSel)  mSel.style.display   = v==='month'   ? '' : 'none';
+  if(qSel)  qSel.style.display   = 'none'; // replaced by picker
+  var qWrap=document.getElementById('quarter-picker-wrap'); if(qWrap) qWrap.style.display=v==='quarter'?'':'none';
+  if(wWrap) wWrap.style.display  = v==='week'    ? '' : 'none';
+  window._currentViewBy = v;
+  updateOutcomeTableHeaders();
+}
+
+function setCurrentQuarter(v){
+  window._currentQuarter = v;
+  updateOutcomeTableHeaders();
+}
+
+function toggleWeekPicker(){
+  var dd=document.getElementById('week-picker-dd');
+  if(dd) dd.style.display=dd.style.display==='none'?'block':'none';
+}
+function updateWeekSel(){
+  var checked=Array.from(document.querySelectorAll('#week-picker-dd input:checked')).map(function(b){return b.value;});
+  var btn=document.getElementById('week-picker-btn');
+  if(checked.length===0){
+    if(btn) btn.textContent='Select Weeks ▾';
+  } else {
+    if(btn) btn.textContent=checked.slice(0,3).join(', ')+(checked.length>3?' +more':'')+' ▾';
+  }
+  updateOutcomeTableHeaders();
+}
+
+function toggleQuarterPicker(){
+  var dd=document.getElementById('quarter-picker-dd');
+  if(dd) dd.style.display=dd.style.display==='none'?'block':'none';
+}
+
+function updateQuarterSel(){
+  var checked=Array.from(document.querySelectorAll('#quarter-picker-dd input:checked')).map(function(b){return b.value;});
+  var btn=document.getElementById('quarter-picker-btn');
+  if(checked.length===0){
+    if(btn) btn.textContent='Select Quarters ▾';
+    window._currentQuarter=null;
+  } else {
+    if(btn) btn.textContent=checked.join(', ')+' ▾';
+    window._currentQuarter=checked.join(', ');
+  }
+  updateOutcomeTableHeaders();
+}
 function setGlobalMonth(v){}
 function saveMBR(){alert('Saved for MBR');}
 function loadMBR(v){if(v)alert('Loading: '+v);}
@@ -784,38 +901,17 @@ document.addEventListener('DOMContentLoaded',function(){// project-detail-sectio
   })();
   
   // Set filter bar sticky offset to match header height
-  (function setStickyOffset(){
-    var hdr = document.querySelector('header');
-    var bar = document.getElementById('pod-filter-bar');
-    if(!hdr || !bar){ setTimeout(setStickyOffset, 50); return; }
-    bar.style.top = hdr.getBoundingClientRect().height + 'px';
-    // Re-check on resize
-    window.addEventListener('resize', function(){
-      bar.style.top = hdr.getBoundingClientRect().height + 'px';
-    });
-  })();
-  // POD Details revenue chart (init on load since tab-2 is active)
-  (function initRevPODDetail(){
-    var c=document.getElementById('revChartPODDetail');
-    if(!c||typeof Chart==='undefined'){setTimeout(initRevPODDetail,100);return;}
-    var pc=getComputedStyle(document.documentElement).getPropertyValue('--payments').trim()||'#07c4d9';
-    var hex=pc.replace(/[^0-9a-fA-F]/g,'').substr(0,6)||'07c4d9';
-    var r=parseInt(hex.substr(0,2),16),g=parseInt(hex.substr(2,2),16),b=parseInt(hex.substr(4,2),16);
-    window._revChartPODDetail=new Chart(c,{type:'bar',
-      data:{labels:['Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul'],
-      datasets:[
-        {label:'Achieved',data:[420,580,680,null,null,null,null,null,null,null,null,null],backgroundColor:pc,borderWidth:0,stack:'bars'},
-        {label:'High Conf',data:[null,null,null,350,450,560,680,780,920,1060,1210,1380],backgroundColor:'rgba('+r+','+g+','+b+',0.5)',borderWidth:0,stack:'bars'},
-        {label:'Low Conf',data:[null,null,null,130,170,200,230,260,300,340,390,440],backgroundColor:'rgba('+r+','+g+','+b+',0.12)',borderWidth:0,stack:'bars'},
-        {label:'Forecast',data:[500,620,700,780,870,950,1050,1130,1250,1380,1520,1700],type:'line',borderColor:'#000',borderWidth:2,pointRadius:3,pointBackgroundColor:'#000',fill:false,stack:undefined,order:1},
-        {label:'Target',data:[580,760,900,1020,1150,1300,1450,1600,1800,2000,2200,2450],type:'line',borderColor:'#aaa',borderWidth:1.5,borderDash:[5,4],pointRadius:0,fill:false,stack:undefined,order:2}
-      ]},
-      options:{responsive:true,maintainAspectRatio:false,
-        plugins:{legend:{display:false},tooltip:{mode:'index',intersect:false}},
-        scales:{x:{stacked:true,ticks:{font:{size:10},color:'#6a8aa0',autoSkip:false},grid:{display:false}},
-          y:{stacked:true,ticks:{font:{size:10},color:'#6a8aa0',callback:function(v){return '$'+v.toLocaleString();}},grid:{color:'rgba(0,0,0,0.04)'}}}}}
-    );
-  })();
+  // Set filter bar top = header height so it sticks below the header
+  function setStickyOffset(){
+    var hdr = document.querySelector('.dash-header');
+    var fb  = document.getElementById('pod-filter-bar');
+    if(hdr && fb){
+      var h = hdr.getBoundingClientRect().height;
+      fb.style.top = h + 'px';
+    }
+  }
+  setStickyOffset();
+  window.addEventListener('resize', setStickyOffset);
   // POD Details revenue chart
   (function initRevPODDetail(){
     var c=document.getElementById('revChartPODDetail');
@@ -833,7 +929,7 @@ document.addEventListener('DOMContentLoaded',function(){// project-detail-sectio
     y:{stacked:true,ticks:{font:{size:10},color:'#6a8aa0',callback:function(v){return '$'+v.toLocaleString();}},grid:{color:'rgba(0,0,0,0.04)'}}}}});
   })();
 
-  document.addEventListener('click',function(e){if(!e.target.closest('#product-dd-wrap')){var d=document.getElementById('product-pill-dd');if(d){d.style.display='none';productDdOpen=false;}}[['dd-lever','flt-lever-btn'],['dd-subprod','flt-subprod-btn'],['dd-audience','flt-audience-btn'],['dd-category','flt-category-btn']].forEach(function(p){if(!e.target.closest('#'+p[0])&&!e.target.closest('#'+p[1])){var dd=document.getElementById(p[0]);if(dd)dd.style.display='none';}});});});
+  document.addEventListener('click',function(e){if(!e.target.closest('#product-dd-wrap')){var d=document.getElementById('product-pill-dd');if(d){d.style.display='none';productDdOpen=false;}}[['dd-lever','flt-lever-btn'],['dd-subprod','flt-subprod-btn'],['dd-audience','flt-audience-btn'],['dd-category','flt-category-btn'],['dd-outcome','flt-outcome-btn'],['week-picker-dd','week-picker-btn'],['quarter-picker-dd','quarter-picker-btn']].forEach(function(p){if(!e.target.closest('#'+p[0])&&!e.target.closest('#'+p[1])){var dd=document.getElementById(p[0]);if(dd)dd.style.display='none';}});});});
 
 document.addEventListener('DOMContentLoaded', function() {
   // Init sub-product filter on load (default: Payments)
@@ -890,6 +986,15 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   });
+
+  switchProjView('all');
+
+  updateSubprodDropdown('Payments');
+
+  stickyProjViewBar();
+  window.addEventListener('resize', stickyProjViewBar);
+
+  window._currentViewBy='month'; setViewByMonth('month'); window._currentQuarter='Q1'; updateOutcomeTableHeaders();
 });
 
 
@@ -913,89 +1018,340 @@ function updateGNAMetric(val) {
 }
 
 function switchProjView(view) {
-  // Update button styles
-  var btns = {
-    date:  document.getElementById('proj-view-date'),
-    month: document.getElementById('proj-view-month'),
-    lever: document.getElementById('proj-view-lever')
-  };
+  var btns = {all:'proj-view-all', month:'proj-view-month', quarter:'proj-view-quarter', lever:'proj-view-lever'};
   Object.keys(btns).forEach(function(k) {
-    var b = btns[k];
+    var b = document.getElementById(btns[k]);
     if (!b) return;
-    var active = k === view;
-    b.style.background = active ? 'var(--navy)' : 'rgba(255,255,255,0.25)';
-    b.style.color      = active ? '#fff' : 'var(--navy)';
-    b.style.fontWeight = active ? '700' : '600';
-    b.style.border     = active ? 'none' : '1px solid rgba(20,50,79,0.25)';
-    b.style.borderLeft = (k === 'month' || k === 'lever') ? 'none' : b.style.border;
+    var on = k === view;
+    b.style.background = on ? 'var(--navy)' : 'var(--payments-bg)';
+    b.style.color      = on ? '#fff' : 'var(--navy)';
+    b.style.fontWeight = on ? '700' : '600';
+    b.style.border     = on ? 'none' : '1px solid rgba(20,50,79,0.25)';
+    if (k !== 'month') b.style.borderLeft = 'none';
   });
 
-  var rows = Array.from(document.querySelectorAll('.proj-wrap .tbl tbody tr[data-elm]'));
-  var dividers = document.querySelectorAll('.proj-group-divider');
-  dividers.forEach(function(d) { d.remove(); });
+  var MO_NAMES  = {'Aug':'August','Sep':'September','Oct':'October','Nov':'November','Dec':'December','Jan':'January','Feb':'February','Mar':'March','Apr':'April','May':'May','Jun':'June','Jul':'July'};
+  var FY_MONTHS = ['Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul'];
+  var FY_QTR    = {'Q1':['Aug','Sep','Oct'],'Q2':['Nov','Dec','Jan'],'Q3':['Feb','Mar','Apr'],'Q4':['May','Jun','Jul']};
+  var CURRENT   = 'Oct';
+  var curIdx    = FY_MONTHS.indexOf(CURRENT);
 
-  if (view === 'date' || view === 'month') {
-    // Sort all rows by launch date (col 10)
-    var tbody = rows[0]?.parentElement;
-    if (!tbody) return;
-    rows.sort(function(a, b) {
-      var ad = a.cells[10]?.textContent.trim() || '';
-      var bd = b.cells[10]?.textContent.trim() || '';
-      var months = ['Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul'];
-      var ai = months.indexOf(ad.split('-')[0]), bi = months.indexOf(bd.split('-')[0]);
-      if (ai !== bi) return ai - bi;
-      return parseInt(ad.split('-')[1]||0) - parseInt(bd.split('-')[1]||0);
+  // Remove old dividers
+  document.querySelectorAll('.proj-group-divider').forEach(function(d){ d.remove(); });
+
+  var tbody = document.querySelector('.proj-wrap .tbl tbody');
+  if (!tbody) return;
+  var rows = Array.from(tbody.querySelectorAll('tr[data-elm]'));
+  if (!rows.length) return;
+
+  function parseVal(v) {
+    if (!v || v === '—') return null;
+    var neg = v.trim().startsWith('-');
+    var n = parseFloat(v.replace(/[^0-9.]/g,''));
+    if (isNaN(n)) return null;
+    if (/[Kk]/.test(v)) n *= 1000;
+    if (/[Mm]/.test(v)) n *= 1000000;
+    return neg ? -n : n;
+  }
+  function fmtVal(n) {
+    if (n === null || n === undefined) return '—';
+    var neg = n < 0; var abs = Math.abs(n);
+    var s = abs >= 1000000 ? '$'+(abs/1000000).toFixed(1)+'M'
+          : abs >= 1000    ? '$'+Math.round(abs/1000)+'K'
+          : abs > 0        ? '$'+Math.round(abs) : '—';
+    return neg ? '-'+s : s;
+  }
+
+  // Sort order: current month first, back to start of FY, then future months
+  var sortOrder = [];
+  for (var s = curIdx; s >= 0; s--) sortOrder.push(FY_MONTHS[s]);
+  for (var s = FY_MONTHS.length-1; s > curIdx; s--) sortOrder.push(FY_MONTHS[s]);
+
+  function sortByMonth(a, b) {
+    var ad = a.cells[9]?.textContent.trim() || '';
+    var bd = b.cells[9]?.textContent.trim() || '';
+    var ai = sortOrder.indexOf(ad.split('-')[0]); if (ai<0) ai=999;
+    var bi = sortOrder.indexOf(bd.split('-')[0]); if (bi<0) bi=999;
+    if (ai !== bi) return ai - bi;
+    return parseInt(bd.split('-')[1]||0) - parseInt(ad.split('-')[1]||0);
+  }
+
+  function buildGroupRow(groupLabel, moRows, collapsed) {
+    var pc  = getComputedStyle(document.documentElement).getPropertyValue('--payments-bg').trim() || '#e0f9fb';
+    var mid = getComputedStyle(document.documentElement).getPropertyValue('--payments-mid').trim() || 'rgba(7,196,217,0.4)';
+    var borderStyle = 'border-top:2px solid '+mid+';border-bottom:1px solid '+mid+';';
+    var cellBase  = 'background:'+pc+';'+borderStyle;
+    var labelStyle = cellBase+'color:var(--navy);font-size:12px;font-weight:700;padding:7px 12px;white-space:nowrap;cursor:pointer;user-select:none;';
+    var dimStyle   = cellBase+'color:var(--navy);padding:7px 7px;text-align:center;';
+    var numStyle   = cellBase+'color:var(--navy);font-size:11px;font-weight:700;padding:7px 7px;text-align:center;';
+
+    // Win rate
+    var pos=0, neg=0, flat=0;
+    moRows.forEach(function(r) {
+      var tag = r.cells[11]?.querySelector('.tag');
+      if (!tag) return;
+      if (tag.classList.contains('t-pos')) pos++;
+      else if (tag.classList.contains('t-neg')) neg++;
+      else if (tag.classList.contains('t-flat')) flat++;
     });
-    rows.forEach(function(r) { tbody.appendChild(r); });
+    var decided = pos+neg+flat;
+    var wrText  = decided > 0 ? pos+'/'+decided+' ('+Math.round(pos/decided*100)+'%)' : '—';
+    var wrColor = decided>0 && pos/decided>=0.3 ? 'var(--positive)' : decided>0 ? 'var(--negative)' : 'var(--text-3)';
 
-    if (view === 'month') {
-      // Re-read rows in new order and insert month group headers
-      var orderedRows = Array.from(tbody.querySelectorAll('tr[data-elm]'));
-      var lastMonth = null;
-      orderedRows.forEach(function(row) {
-        var launch = row.cells[10]?.textContent.trim() || '';
-        var mo = launch.split('-')[0] || '—';
-        if (mo !== lastMonth) {
-          var div = document.createElement('tr');
-          div.className = 'proj-group-divider';
-          var colCount = row.cells.length;
-          div.innerHTML = '<td colspan="' + colCount + '" style="background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:5px 10px;border-bottom:1px solid var(--line);">' + (mo === '—' ? 'No Launch Date' : mo) + '</td>';
-          tbody.insertBefore(div, row);
-          lastMonth = mo;
-        }
-      });
-    }
-  } else if (view === 'lever') {
-    var leverOrder = ['L1','L2','L3','L4','L5','L6'];
-    var tbody = rows[0]?.parentElement;
-    if (!tbody) return;
-    rows.sort(function(a, b) {
-      var al = (a.cells[6]?.textContent.trim()||'').substring(0,2);
-      var bl = (b.cells[6]?.textContent.trim()||'').substring(0,2);
-      return leverOrder.indexOf(al) - leverOrder.indexOf(bl);
-    });
-    rows.forEach(function(r) { tbody.appendChild(r); });
-
-    // Insert lever group headers
-    var orderedRows = Array.from(tbody.querySelectorAll('tr[data-elm]'));
-    var leverNames = {
-      L1:'L1 · Bring Innovation to Life', L2:'L2 · Personalize Every Experience',
-      L3:'L3 · Drive Purchase with the Right Offers', L4:'L4 · Accelerate Revenue-Driving Consumption',
-      L5:'L5 · Drive Active Use and Re-Engagement', L6:'L6 · Turn Demand into Pipeline'
-    };
-    var lastLever = null;
-    orderedRows.forEach(function(row) {
-      var lev = (row.cells[6]?.textContent.trim()||'').substring(0,2);
-      if (lev !== lastLever) {
-        var div = document.createElement('tr');
-        div.className = 'proj-group-divider';
-        var colCount = row.cells.length;
-        div.innerHTML = '<td colspan="' + colCount + '" style="background:var(--tbl-hdr-bg);color:var(--navy);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:5px 10px;border-bottom:1px solid var(--line);">' + (leverNames[lev]||lev) + '</td>';
-        tbody.insertBefore(div, row);
-        lastLever = lev;
+    // Financial sums: 14=Ann, 15=InYr, 16-27=months
+    var sums = {};
+    for (var ci=14; ci<=27; ci++) sums[ci]=null;
+    moRows.forEach(function(r) {
+      for (var ci=14; ci<=27; ci++) {
+        var cell=r.cells[ci]; if(!cell) continue;
+        var v=parseVal(cell.dataset?(cell.dataset.rev||cell.textContent.trim()):cell.textContent.trim());
+        if(v!==null) sums[ci]=(sums[ci]||0)+v;
       }
     });
+
+    var chevron = collapsed ? '▶' : '▼';
+    var count   = moRows.length+' project'+(moRows.length!==1?'s':'');
+    var tr = document.createElement('tr');
+    tr.className = 'proj-group-divider';
+    tr.dataset.group = groupLabel;
+    tr.dataset.collapsed = collapsed ? '1' : '0';
+
+    // Col layout: 0(sc1)=ELM-ID, 1(sc2)=Project, 2=Desc, 3=Product, 4=SubProd,
+    // 5=Lever, 6=Req, 7=LMM, 8=SWAG, 9=Launch, 10=Analyst, 11=Outcome,
+    // 12=ITC, 13=Scale, 14=Ann, 15=InYr, 16-27=months
+    // Label spans cols 0-4 (colspan=5), rest fills across
+    var html =
+      // Label: colspan 5 (covers ELM-ID through SubProd), no sc1 constraint
+      '<td colspan="5" style="'+labelStyle+'" onclick="toggleProjGroup(this.parentElement)">' +
+        '<span class="grp-chevron" style="font-size:9px;margin-right:7px;opacity:0.6;">'+chevron+'</span>' +
+        groupLabel +
+        '<span style="font-weight:500;font-size:10px;opacity:0.7;margin-left:12px;border-left:1px solid '+mid+';padding-left:10px;">'+count+'</span>' +
+      '</td>' +
+      '<td colspan="5" style="'+dimStyle+'"></td>' +  // Lever, Req, LMM, SWAG, Launch
+      '<td style="'+dimStyle+'"></td>' +              // Analyst
+      '<td style="'+dimStyle+'font-weight:700;color:'+wrColor+';">'+wrText+'</td>' +  // Outcome
+      '<td colspan="2" style="'+dimStyle+'"></td>' +  // ITC, Scale
+      '<td style="'+numStyle+'border-left:2px solid '+mid+';">'+fmtVal(sums[14])+'</td>' +  // Ann
+      '<td style="'+numStyle+'">'+fmtVal(sums[15])+'</td>';  // InYr
+    for (var ci=16; ci<=27; ci++) {
+      var bl = ci===16 ? 'border-left:2px solid '+mid+';' : '';
+      html += '<td style="'+numStyle+bl+'">'+fmtVal(sums[ci])+'</td>';
+    }
+    tr.innerHTML = html;
+    return tr;
   }
+
+  function renderGroups(groups, groupOrder) {
+    groupOrder.forEach(function(key) {
+      var grpRows = groups[key];
+      var summaryRow = buildGroupRow(key, grpRows, false);
+      tbody.appendChild(summaryRow);
+      grpRows.forEach(function(r) {
+        r.style.display = '';
+        tbody.appendChild(r);
+      });
+    });
+  }
+
+  if (view === 'all') {
+    // Show all rows sorted reverse-chronological by launch date, no grouping
+    rows.sort(sortByMonth);
+    rows.forEach(function(r) { r.style.display=''; tbody.appendChild(r); });
+
+  } else if (view === 'month') {
+    rows.sort(sortByMonth);
+    var groups = {}, groupOrder = [];
+    rows.forEach(function(r) {
+      var launch = r.cells[9]?.textContent.trim() || '';
+      var mo = launch.split('-')[0] || '—';
+      var label = MO_NAMES[mo] || mo;
+      if (!groups[label]) { groups[label]=[]; groupOrder.push(label); }
+      groups[label].push(r);
+    });
+    renderGroups(groups, groupOrder);
+
+  } else if (view === 'quarter') {
+    rows.sort(sortByMonth);
+    // Map each row to a quarter label
+    var qOrder = ["Q1 · Aug–Oct","Q2 · Nov–Jan","Q3 · Feb–Apr","Q4 · May–Jul"];
+    var qMap = {};
+    FY_MONTHS.forEach(function(m,i) {
+      var qi = i < 3 ? 0 : i < 6 ? 1 : i < 9 ? 2 : 3;
+      qMap[m] = qOrder[qi];
+    });
+    var groups = {}, groupOrder = [];
+    rows.forEach(function(r) {
+      var launch = r.cells[9]?.textContent.trim() || '';
+      var mo = launch.split('-')[0] || '—';
+      var label = qMap[mo] || '—';
+      if (!groups[label]) { groups[label]=[]; groupOrder.push(label); }
+      groups[label].push(r);
+    });
+    // Sort groups in reverse quarter order (most recent first)
+    groupOrder.sort(function(a,b){ return qOrder.indexOf(b)-qOrder.indexOf(a); });
+    renderGroups(groups, groupOrder);
+
+  } else if (view === 'lever') {
+    var leverNames = {L1:'Lever 1 · Bring Innovation to Life',L2:'Lever 2 · Personalize Every Experience',L3:'Lever 3 · Drive Purchase with the Right Offers',L4:'Lever 4 · Accelerate Revenue-Driving Consumption',L5:'Lever 5 · Drive Active Use and Re-Engagement',L6:'Lever 6 · Turn Demand into Pipeline'};
+    rows.sort(function(a,b){ var al=(a.cells[5]?.textContent||'').substring(0,2),bl=(b.cells[5]?.textContent||'').substring(0,2); return ['L1','L2','L3','L4','L5','L6'].indexOf(al)-['L1','L2','L3','L4','L5','L6'].indexOf(bl); });
+    var groups={},groupOrder=[];
+    rows.forEach(function(r){ var lev=(r.cells[5]?.textContent||'').substring(0,2); var label=leverNames[lev]||lev; if(!groups[label]){groups[label]=[];groupOrder.push(label);} groups[label].push(r);
+});
+    renderGroups(groups, groupOrder);
+  }
+}
+
+function toggleProjGroup(summaryRow) {
+  var collapsed = summaryRow.dataset.collapsed === '1';
+  var newCollapsed = !collapsed;
+  summaryRow.dataset.collapsed = newCollapsed ? '1' : '0';
+  var chevron = summaryRow.querySelector('.grp-chevron');
+  if (chevron) chevron.textContent = newCollapsed ? '▶' : '▼';
+  var next = summaryRow.nextElementSibling;
+  while (next && !next.classList.contains('proj-group-divider')) {
+    next.style.display = newCollapsed ? 'none' : '';
+    next = next.nextElementSibling;
+  }
+}
+
+function toggleOutcomeDd(){
+  var d=document.getElementById('dd-outcome');
+  if(d) d.style.display=d.style.display==='none'?'block':'none';
+}
+function updateOutcomeSel(checkbox){
+  // Handle "All Outcomes" toggling all off
+  var allBox = document.querySelector('#dd-outcome input[value="all"]');
+  var otherBoxes = Array.from(document.querySelectorAll('#dd-outcome input[type="checkbox"]:not([value="all"])'));
+  if (checkbox.value === 'all') {
+    if (checkbox.checked) otherBoxes.forEach(function(b){ b.checked=false; });
+  } else {
+    if (allBox) allBox.checked = false;
+  }
+  var checked = otherBoxes.filter(function(b){ return b.checked; }).map(function(b){ return b.value; });
+  var btn = document.getElementById('flt-outcome-btn');
+  if (checked.length === 0) {
+    if (btn) { btn.textContent='All Experiment Outcomes ▾'; btn.style.background='var(--navy)'; }
+    activeFilters.outcomeType = 'all';
+  } else {
+    var labels={'t-pos':'Positive','t-neg':'Negative','t-flat':'Flat','t-bake':'Still Baking','t-nox':'No Experiment'};
+    var txt = checked.map(function(v){ return labels[v]||v; }).join(', ');
+    if (btn) { btn.textContent=txt+' ▾'; btn.style.background='var(--payments)'; }
+    activeFilters.outcomeType = checked; // array for multi-select
+  }
+  document.getElementById('dd-outcome').style.display='none';
+  applyFilters();
+}
+
+function toggleProjGroup(summaryRow) {
+  var collapsed = summaryRow.dataset.collapsed === '1';
+  var newCollapsed = !collapsed;
+  summaryRow.dataset.collapsed = newCollapsed ? '1' : '0';
+  var chevron = summaryRow.querySelector('.grp-chevron');
+  if (chevron) chevron.textContent = newCollapsed ? '▶' : '▼';
+  var next = summaryRow.nextElementSibling;
+  while (next && !next.classList.contains('proj-group-divider')) {
+    next.style.display = newCollapsed ? 'none' : '';
+    next = next.nextElementSibling;
+  }
+}
+
+function stickyProjViewBar() {
+  var hdr = document.querySelector('.dash-header');
+  var filterBar = document.getElementById('pod-filter-bar');
+  var vpBar = document.getElementById('proj-view-bar');
+  if (!vpBar) return;
+  var offset = 0;
+  if (hdr) offset += hdr.getBoundingClientRect().height;
+  // The filter bar height is included when it's visible
+  // Set proj-view-bar to static — it should NOT scroll under filter bar
+  // Instead remove it from normal flow and pin it
+  var outerPad = vpBar.closest('#project-detail-section');
+  if (outerPad) outerPad.style.paddingTop = '0';
+  vpBar.style.position = 'sticky';
+  vpBar.style.top = (filterBar ? filterBar.getBoundingClientRect().height : 0) + 'px';
+  vpBar.style.background = '#f4f4f0';
+  vpBar.style.zIndex = '490';
+  vpBar.style.marginLeft = '-16px';
+  vpBar.style.paddingLeft = '16px';
+  vpBar.style.marginRight = '-16px';
+  vpBar.style.paddingRight = '16px';
+}
+
+function switchMetric(m) {
+  var isGna = m === 'gna';
+
+  // Swap all metric-aware value spans (callouts + breakdown tables)
+  document.querySelectorAll('.metric-val[data-rev]').forEach(function(el) {
+    el.textContent = isGna ? (el.dataset.gna || el.dataset.rev) : el.dataset.rev;
+  });
+
+  // Update POD Details revenue chart data
+  var podChart = window._revChartPODDetail;
+  if (podChart) {
+    var gnaAchieved = [186, 264, 300, null, null, null, null, null, null, null, null, null];
+    var revAchieved = [420, 580, 680, null, null, null, null, null, null, null, null, null];
+    podChart.data.datasets[0].data = isGna ? gnaAchieved : revAchieved;
+    var gnaFcst = [290,400,480,520,580,640,700,760,830,900,980,1060];
+    var revFcst = [500,620,700,780,870,950,1050,1130,1250,1380,1520,1700];
+    podChart.data.datasets[3].data = isGna ? gnaFcst : revFcst;
+    var gnaTgt  = [420,560,660,750,860,980,1080,1200,1350,1500,1650,1800];
+    var revTgt  = [580,760,900,1020,1150,1300,1450,1600,1800,2000,2200,2450];
+    podChart.data.datasets[4].data = isGna ? gnaTgt : revTgt;
+    podChart.options.scales.y.ticks.callback = isGna
+      ? function(v){ return v.toLocaleString(); }
+      : function(v){ return '$'+v.toLocaleString(); };
+    podChart.update();
+  }
+
+  // Update breakdown table column headers
+  document.querySelectorAll('.metric-col-ytd').forEach(function(th) {
+    th.textContent = isGna ? 'GNA' : 'Rev';
+  });
+  document.querySelectorAll('.metric-col-arr').forEach(function(th) {
+    th.textContent = isGna ? 'Ann. GNA' : 'ARR';
+  });
+
+  // Update project table headers + totals row
+  var annHdr  = document.getElementById('proj-arr-hdr');
+  var inyrHdr = document.getElementById('proj-inyr-hdr');
+  var totArr  = document.getElementById('proj-tot-arr');
+  var totInyr = document.getElementById('proj-tot-inyr');
+  if (annHdr)  annHdr.textContent  = isGna ? 'Annualized Units' : 'Annualized';
+  if (inyrHdr) inyrHdr.textContent = isGna ? 'Units YTD'        : 'In-Year';
+  if (totArr)  totArr.textContent  = isGna ? '8.4k'  : '$794K';
+  if (totInyr) totInyr.textContent = isGna ? '4.4k'  : '$561K';
+
+  // Update project row data cells
+  document.querySelectorAll('.proj-wrap .tbl tbody tr[data-elm] td[data-rev]').forEach(function(td) {
+    td.textContent = isGna ? (td.dataset.gna || '—') : (td.dataset.rev || '—');
+  });
+
+  // Update section header label
+  var revHdr = document.getElementById('hdr-rev-outcomes');
+  if (revHdr) {
+    var base = 'ELM LCM Pod · Incremental ' + (isGna ? 'GNA' : 'Revenue') + ' Outcomes';
+    var period = window._currentViewBy || 'month';
+    var month  = (document.getElementById('current-month-sel')||{}).value || 'Sep';
+    var MN = {Aug:'August',Sep:'September',Oct:'October',Nov:'November',Dec:'December',Jan:'January',Feb:'February',Mar:'March',Apr:'April',May:'May',Jun:'June',Jul:'July'};
+    var QM = {Aug:'Q1',Sep:'Q1',Oct:'Q1',Nov:'Q2',Dec:'Q2',Jan:'Q2',Feb:'Q3',Mar:'Q3',Apr:'Q3',May:'Q4',Jun:'Q4',Jul:'Q4'};
+    var sfx = period==='month'   ? ' · '+(MN[month]||month)
+            : period==='quarter' ? ' · '+(QM[month]||'Q1')+" FY'26"
+            : ' · YTD';
+    revHdr.textContent = base + sfx;
+  }
+
+  // Update Revenue/Units button styles
+  var revBtn = document.getElementById('btn-rev');
+  var gnaBtn = document.getElementById('btn-gna');
+  if (revBtn) { revBtn.style.background = isGna ? 'var(--payments-bg)' : 'var(--navy)'; revBtn.style.color = isGna ? 'var(--navy)' : '#fff'; revBtn.style.fontWeight = isGna ? '600' : '700'; }
+  if (gnaBtn) { gnaBtn.style.background = isGna ? 'var(--navy)' : 'var(--payments-bg)'; gnaBtn.style.color = isGna ? '#fff' : 'var(--navy)'; gnaBtn.style.fontWeight = isGna ? '700' : '600'; }
+
+  // Keep metric panels in sync (metric-revenue stays visible, metric-gna hidden)
+  var mpRev = document.getElementById('metric-revenue');
+  if (mpRev) mpRev.style.display = 'block';
+
+  updateProjectTable(m);
+  applyFilters();
 }
 </script>
 </body>
