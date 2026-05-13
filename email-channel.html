@@ -309,111 +309,126 @@ body{font-family:var(--font);background:#f4f4f0 !important;color:var(--text-1);f
     </div>
   </div>
 </header>
-<main class="dash-body"><div class="tab-panel active" id="tab-8"><!-- Email Sub-nav -->
-  <div id="email-subnav" style="background:var(--navy);padding:0 24px;display:flex;align-items:center;gap:2px;border-bottom:3px solid var(--payments);">
-    <button class="email-nav-btn active" onclick="switchEmailPage('overall')" style="font-size:12px;font-weight:700;padding:10px 18px;background:var(--payments);color:#fff;border:none;cursor:pointer;font-family:var(--font);border-radius:0;letter-spacing:.01em;transition:all .15s;">Email Overall</button>
-    <button class="email-nav-btn" onclick="switchEmailPage('by-campaign')" style="font-size:12px;font-weight:600;padding:10px 18px;background:transparent;color:rgba(255,255,255,0.7);border:none;cursor:pointer;font-family:var(--font);border-radius:0;letter-spacing:.01em;transition:all .15s;">Email By Campaign</button>
-    <button class="email-nav-btn" onclick="switchEmailPage('by-asset')" style="font-size:12px;font-weight:600;padding:10px 18px;background:transparent;color:rgba(255,255,255,0.7);border:none;cursor:pointer;font-family:var(--font);border-radius:0;letter-spacing:.01em;transition:all .15s;">Email By Individual Asset</button>
+<main class="dash-body">
+  <div class="tab-panel active" id="tab-8">
+
+  <!-- FILTER BAR -->
+  <div id="email-filter-bar" style="background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:550;">
+    <div style="display:flex;align-items:center;gap:8px;padding:8px 24px;overflow:visible;">
+      <span style="font-size:10px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.07em;font-family:var(--font);white-space:nowrap;">Filter By</span>
+      <div style="position:relative;">
+        <button id="eflt-kpi-btn" onclick="etoggle('edd-kpi','eflt-kpi-btn','All Outcome KPIs')" style="font-size:11px;padding:5px 10px;background:var(--navy);color:#fff;border:1px solid rgba(255,255,255,0.25);border-radius:5px;font-family:var(--font);cursor:pointer;font-weight:500;">All Outcome KPIs ▾</button>
+        <div class="multi-dd" id="edd-kpi" style="display:none;">
+          <label><input type="checkbox" onchange="eupdate('edd-kpi','eflt-kpi-btn','All Outcome KPIs')"> Revenue</label>
+          <label><input type="checkbox" onchange="eupdate('edd-kpi','eflt-kpi-btn','All Outcome KPIs')"> GNA</label>
+          <label><input type="checkbox" onchange="eupdate('edd-kpi','eflt-kpi-btn','All Outcome KPIs')"> Opens</label>
+          <label><input type="checkbox" onchange="eupdate('edd-kpi','eflt-kpi-btn','All Outcome KPIs')"> Clicks</label>
+          <label><input type="checkbox" onchange="eupdate('edd-kpi','eflt-kpi-btn','All Outcome KPIs')"> CTR</label>
+          <label><input type="checkbox" onchange="eupdate('edd-kpi','eflt-kpi-btn','All Outcome KPIs')"> Unsubscribes</label>
+        </div>
+      </div>
+      <div style="position:relative;">
+        <button id="eflt-subprod-btn" onclick="etoggle('edd-subprod','eflt-subprod-btn','All Sub-Products')" style="font-size:11px;padding:5px 10px;background:var(--navy);color:#fff;border:1px solid rgba(255,255,255,0.25);border-radius:5px;font-family:var(--font);cursor:pointer;font-weight:500;">All Sub-Products ▾</button>
+        <div class="multi-dd" id="edd-subprod" style="display:none;">
+          <label><input type="checkbox" onchange="eupdate('edd-subprod','eflt-subprod-btn','All Sub-Products')"> Get Paid Upfront</label>
+          <label><input type="checkbox" onchange="eupdate('edd-subprod','eflt-subprod-btn','All Sub-Products')"> Payment Links</label>
+          <label><input type="checkbox" onchange="eupdate('edd-subprod','eflt-subprod-btn','All Sub-Products')"> Instant Deposit</label>
+        </div>
+      </div>
+      <div style="position:relative;">
+        <button id="eflt-aud-btn" onclick="etoggle('edd-aud','eflt-aud-btn','All Audiences')" style="font-size:11px;padding:5px 10px;background:var(--navy);color:#fff;border:1px solid rgba(255,255,255,0.25);border-radius:5px;font-family:var(--font);cursor:pointer;font-weight:500;">All Audiences ▾</button>
+        <div class="multi-dd" id="edd-aud" style="display:none;">
+          <label><input type="checkbox" onchange="eupdate('edd-aud','eflt-aud-btn','All Audiences')"> New</label>
+          <label><input type="checkbox" onchange="eupdate('edd-aud','eflt-aud-btn','All Audiences')"> Existing</label>
+          <label><input type="checkbox" onchange="eupdate('edd-aud','eflt-aud-btn','All Audiences')"> At Risk</label>
+          <label><input type="checkbox" onchange="eupdate('edd-aud','eflt-aud-btn','All Audiences')"> HVB</label>
+        </div>
+      </div>
+      <button onclick="eresetFilters()" style="font-size:11px;padding:5px 12px;background:var(--payments-bg);color:var(--navy);border:1px solid rgba(20,50,79,0.2);border-radius:5px;font-family:var(--font);cursor:pointer;font-weight:500;">✕ Clear</button>
+    </div>
   </div>
 
-  <!-- Email Overall -->
-  <div id="email-overall" class="email-page" style="display:block;">
-    <div style="padding:12px 24px 4px;">
-      <div style="font-size:9px;font-weight:700;color:var(--payments);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;">Email Channel</div>
-      <div style="font-size:22px;font-weight:300;color:var(--navy);">Email Channel Performance</div>
-    </div>
+  <!-- EMAIL SUB-NAV -->
+  <div id="email-subnav" style="background:var(--navy);padding:0 24px;display:flex;align-items:center;gap:2px;border-bottom:3px solid var(--payments);">
+    <button class="email-nav-btn" id="email-nav-overall"  onclick="switchEmailPage('overall')"  style="font-size:12px;font-weight:700;padding:10px 18px;background:var(--payments);color:#fff;border:none;cursor:pointer;font-family:var(--font);border-radius:0;transition:all .15s;">Email Overall</button>
+    <button class="email-nav-btn" id="email-nav-campaign" onclick="switchEmailPage('campaign')" style="font-size:12px;font-weight:600;padding:10px 18px;background:transparent;color:rgba(255,255,255,0.7);border:none;cursor:pointer;font-family:var(--font);border-radius:0;transition:all .15s;">Email By Campaign</button>
+    <button class="email-nav-btn" id="email-nav-asset"    onclick="switchEmailPage('asset')"    style="font-size:12px;font-weight:600;padding:10px 18px;background:transparent;color:rgba(255,255,255,0.7);border:none;cursor:pointer;font-family:var(--font);border-radius:0;transition:all .15s;">Email By Individual Asset</button>
+  </div>
 
-    <!-- Callout row -->
-    <div style="padding:12px 24px;">
-      <div style="display:flex;gap:12px;flex-wrap:nowrap;">
-        <div class="callout" style="flex:1;min-width:140px;">
-              <div style="height:10px;background:var(--payments);width:100%;flex-shrink:0;border-radius:3px 3px 0 0;"></div>
-              <div class="co-body">
-                <div class="co-label" style="font-size:10px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;">Send Volume</div>
-                <div class="co-big" style="font-size:22px;font-weight:700;color:var(--navy);line-height:1;">2.4M</div>
-                <div style="font-size:11px;color:var(--positive);font-weight:600;margin-top:2px;">+142K</div>
-                <div style="display:flex;align-items:center;gap:6px;margin-top:6px;">
-                  <span style="font-size:10px;color:var(--text-3);">ITPM</span>
-                  <span style="font-size:14px;font-weight:700;color:var(--positive);">108</span>
-                </div>
-                <div style="font-size:9px;color:var(--text-3);margin-top:2px;">vs prior month</div>
-              </div>
+  <!-- EMAIL OVERALL -->
+  <div id="email-page-overall" class="email-page" style="display:block;">
+    <div class="callout-groups" style="padding:14px 24px;">
+      <div class="callout-group">
+        <div class="callout-group-hdr">Email · Total Sends · September</div>
+        <div class="callout-group-tiles">
+          <div class="callout">
+              <div class="co-big">2.4M</div>
+              <div class="co-label">Total Sends</div>
+              <div class="co-idx"><span class="val-g">108</span> <span style="font-size:9px;color:var(--text-3);">ITPM</span> &nbsp;|&nbsp; <span class="val-g">+142K</span> <span style="font-size:9px;color:var(--text-3);">Δ</span></div>
+            </div><div class="callout">
+              <div class="co-big">98.2%</div>
+              <div class="co-label">Delivery Rate</div>
+              <div class="co-idx"><span class="val-g">103</span> <span style="font-size:9px;color:var(--text-3);">ITPM</span> &nbsp;|&nbsp; <span class="val-g">+0.2pp</span> <span style="font-size:9px;color:var(--text-3);">Δ</span></div>
             </div>
-        <div class="callout" style="flex:1;min-width:140px;">
-              <div style="height:10px;background:var(--payments);width:100%;flex-shrink:0;border-radius:3px 3px 0 0;"></div>
-              <div class="co-body">
-                <div class="co-label" style="font-size:10px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;">Opens</div>
-                <div class="co-big" style="font-size:22px;font-weight:700;color:var(--navy);line-height:1;">680K</div>
-                <div style="font-size:11px;color:var(--negative);font-weight:600;margin-top:2px;">-12K</div>
-                <div style="display:flex;align-items:center;gap:6px;margin-top:6px;">
-                  <span style="font-size:10px;color:var(--text-3);">ITPM</span>
-                  <span style="font-size:14px;font-weight:700;color:var(--flat);">94</span>
-                </div>
-                <div style="font-size:9px;color:var(--text-3);margin-top:2px;">vs prior month</div>
-              </div>
+        </div>
+      </div>
+      <div class="callout-group">
+        <div class="callout-group-hdr">Email · Opens · September</div>
+        <div class="callout-group-tiles">
+          <div class="callout">
+              <div class="co-big">680K</div>
+              <div class="co-label">Total Opens</div>
+              <div class="co-idx"><span class="val-a">94</span> <span style="font-size:9px;color:var(--text-3);">ITPM</span> &nbsp;|&nbsp; <span class="val-r">-12K</span> <span style="font-size:9px;color:var(--text-3);">Δ</span></div>
+            </div><div class="callout">
+              <div class="co-big">28.3%</div>
+              <div class="co-label">Open Rate</div>
+              <div class="co-idx"><span class="val-a">97</span> <span style="font-size:9px;color:var(--text-3);">ITPM</span> &nbsp;|&nbsp; <span class="val-g">+0.4pp</span> <span style="font-size:9px;color:var(--text-3);">Δ</span></div>
             </div>
-        <div class="callout" style="flex:1;min-width:140px;">
-              <div style="height:10px;background:var(--payments);width:100%;flex-shrink:0;border-radius:3px 3px 0 0;"></div>
-              <div class="co-body">
-                <div class="co-label" style="font-size:10px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;">Open Rate</div>
-                <div class="co-big" style="font-size:22px;font-weight:700;color:var(--navy);line-height:1;">28.3%</div>
-                <div style="font-size:11px;color:var(--positive);font-weight:600;margin-top:2px;">+0.4pp</div>
-                <div style="display:flex;align-items:center;gap:6px;margin-top:6px;">
-                  <span style="font-size:10px;color:var(--text-3);">ITPM</span>
-                  <span style="font-size:14px;font-weight:700;color:var(--flat);">97</span>
-                </div>
-                <div style="font-size:9px;color:var(--text-3);margin-top:2px;">vs prior month</div>
-              </div>
+        </div>
+      </div>
+      <div class="callout-group">
+        <div class="callout-group-hdr">Email · Clicks · September</div>
+        <div class="callout-group-tiles">
+          <div class="callout">
+              <div class="co-big">94K</div>
+              <div class="co-label">Total Clicks</div>
+              <div class="co-idx"><span class="val-g">112</span> <span style="font-size:9px;color:var(--text-3);">ITPM</span> &nbsp;|&nbsp; <span class="val-g">+8.2K</span> <span style="font-size:9px;color:var(--text-3);">Δ</span></div>
+            </div><div class="callout">
+              <div class="co-big">3.9%</div>
+              <div class="co-label">CTR</div>
+              <div class="co-idx"><span class="val-g">118</span> <span style="font-size:9px;color:var(--text-3);">ITPM</span> &nbsp;|&nbsp; <span class="val-g">+0.3pp</span> <span style="font-size:9px;color:var(--text-3);">Δ</span></div>
             </div>
-        <div class="callout" style="flex:1;min-width:140px;">
-              <div style="height:10px;background:var(--payments);width:100%;flex-shrink:0;border-radius:3px 3px 0 0;"></div>
-              <div class="co-body">
-                <div class="co-label" style="font-size:10px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;">Clicks</div>
-                <div class="co-big" style="font-size:22px;font-weight:700;color:var(--navy);line-height:1;">94K</div>
-                <div style="font-size:11px;color:var(--positive);font-weight:600;margin-top:2px;">+8.2K</div>
-                <div style="display:flex;align-items:center;gap:6px;margin-top:6px;">
-                  <span style="font-size:10px;color:var(--text-3);">ITPM</span>
-                  <span style="font-size:14px;font-weight:700;color:var(--positive);">112</span>
-                </div>
-                <div style="font-size:9px;color:var(--text-3);margin-top:2px;">vs prior month</div>
-              </div>
+        </div>
+      </div>
+      <div class="callout-group">
+        <div class="callout-group-hdr">Email · Unsubscribes · September</div>
+        <div class="callout-group-tiles">
+          <div class="callout">
+              <div class="co-big">1.2K</div>
+              <div class="co-label">Total Unsubs</div>
+              <div class="co-idx"><span class="val-a">88</span> <span style="font-size:9px;color:var(--text-3);">ITPM</span> &nbsp;|&nbsp; <span class="val-r">+42</span> <span style="font-size:9px;color:var(--text-3);">Δ</span></div>
+            </div><div class="callout">
+              <div class="co-big">0.05%</div>
+              <div class="co-label">Unsub Rate</div>
+              <div class="co-idx"><span class="val-a">91</span> <span style="font-size:9px;color:var(--text-3);">ITPM</span> &nbsp;|&nbsp; <span class="val-r">+0.002pp</span> <span style="font-size:9px;color:var(--text-3);">Δ</span></div>
             </div>
-        <div class="callout" style="flex:1;min-width:140px;">
-              <div style="height:10px;background:var(--payments);width:100%;flex-shrink:0;border-radius:3px 3px 0 0;"></div>
-              <div class="co-body">
-                <div class="co-label" style="font-size:10px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;">CTR</div>
-                <div class="co-big" style="font-size:22px;font-weight:700;color:var(--navy);line-height:1;">3.9%</div>
-                <div style="font-size:11px;color:var(--positive);font-weight:600;margin-top:2px;">+0.3pp</div>
-                <div style="display:flex;align-items:center;gap:6px;margin-top:6px;">
-                  <span style="font-size:10px;color:var(--text-3);">ITPM</span>
-                  <span style="font-size:14px;font-weight:700;color:var(--positive);">118</span>
-                </div>
-                <div style="font-size:9px;color:var(--text-3);margin-top:2px;">vs prior month</div>
-              </div>
-            </div>
+        </div>
       </div>
     </div>
-
-    <!-- Commentary placeholder -->
-    <div style="padding:0 24px 24px;color:var(--text-3);font-size:13px;">
-      Build content here — coming soon.
-    </div>
   </div>
 
-  <!-- Email By Campaign -->
-  <div id="email-by-campaign" class="email-page" style="display:none;">
-    <div style="padding:32px 24px;color:var(--text-3);font-family:var(--font);">
-      <div style="font-size:18px;font-weight:600;color:var(--navy);margin-bottom:8px;">Email By Campaign</div>
-      <div style="font-size:13px;">Coming soon — build content here.</div>
-    </div>
+  <!-- EMAIL BY CAMPAIGN -->
+  <div id="email-page-campaign" class="email-page" style="display:none;">
+    <div style="padding:32px 24px;color:var(--text-3);font-size:13px;">Email By Campaign — coming soon.</div>
   </div>
 
-  <!-- Email By Individual Asset -->
-  <div id="email-by-asset" class="email-page" style="display:none;">
-    <div style="padding:32px 24px;color:var(--text-3);font-family:var(--font);">
-      <div style="font-size:18px;font-weight:600;color:var(--navy);margin-bottom:8px;">Email By Individual Asset</div>
-      <div style="font-size:13px;">Coming soon — build content here.</div>
-    </div></div></main>
+  <!-- EMAIL BY INDIVIDUAL ASSET -->
+  <div id="email-page-asset" class="email-page" style="display:none;">
+    <div style="padding:32px 24px;color:var(--text-3);font-size:13px;">Email By Individual Asset — coming soon.</div>
+  </div>
+
+  </div>
+</main>
 <footer class="dash-footer">
   <span>ELM · Global Business Solutions Group</span>
   <span>Last updated Sep 2026</span>
@@ -1419,6 +1434,37 @@ function switchEmailPage(page) {
   var t = document.getElementById('email-' + page);
   if(t) t.style.display = 'block';
 }
+
+function switchEmailPage(page) {
+  ['overall','campaign','asset'].forEach(function(p) {
+    var btn = document.getElementById('email-nav-' + p);
+    var panel = document.getElementById('email-page-' + p);
+    var on = p === page;
+    if (btn) { btn.style.background=on?'var(--payments)':'transparent'; btn.style.color=on?'#fff':'rgba(255,255,255,0.7)'; btn.style.fontWeight=on?'700':'600'; }
+    if (panel) panel.style.display = on ? 'block' : 'none';
+  });
+}
+function etoggle(ddId, btnId, label) {
+  ['edd-kpi','edd-subprod','edd-aud'].forEach(function(id){ if(id!==ddId){ var d=document.getElementById(id); if(d)d.style.display='none'; } });
+  var dd=document.getElementById(ddId); if(dd) dd.style.display=dd.style.display==='none'?'block':'none';
+}
+function eupdate(ddId, btnId, defaultLabel) {
+  var checked=Array.from(document.querySelectorAll('#'+ddId+' input:checked')).map(function(b){return b.parentElement.textContent.trim();});
+  var btn=document.getElementById(btnId); if(!btn) return;
+  btn.textContent=(checked.length?checked.join(', '):defaultLabel)+' ▾';
+  btn.style.background=checked.length?'var(--payments)':'var(--navy)';
+}
+function eresetFilters() {
+  [['edd-kpi','eflt-kpi-btn','All Outcome KPIs'],['edd-subprod','eflt-subprod-btn','All Sub-Products'],['edd-aud','eflt-aud-btn','All Audiences']].forEach(function(a){
+    document.querySelectorAll('#'+a[0]+' input').forEach(function(cb){cb.checked=false;});
+    var btn=document.getElementById(a[1]); if(btn){btn.textContent=a[2]+' ▾';btn.style.background='var(--navy)';}
+  });
+}
+document.addEventListener('click',function(e){
+  [['edd-kpi','eflt-kpi-btn'],['edd-subprod','eflt-subprod-btn'],['edd-aud','eflt-aud-btn']].forEach(function(p){
+    if(!e.target.closest('#'+p[0])&&!e.target.closest('#'+p[1])){var dd=document.getElementById(p[0]);if(dd)dd.style.display='none';}
+  });
+});
 </script>
 </body>
 </html>
