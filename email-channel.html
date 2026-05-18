@@ -313,14 +313,14 @@ body{font-family:var(--font);background:#f4f4f0 !important;color:var(--text-1);f
   <div class="tab-panel active" id="tab-8">
 
   <!-- Sub-nav -->
-  <div style="background:var(--navy);padding:0 24px;display:flex;align-items:center;gap:2px;border-bottom:3px solid var(--payments);">
+  <div style="background:var(--navy);padding:0 24px;display:flex;align-items:center;gap:2px;border-bottom:3px solid var(--payments);position:relative;z-index:200;overflow:visible;">
     <button id="etab-btn-summary" onclick="switchEmailTab('summary')" style="font-size:12px;font-weight:700;padding:10px 18px;background:var(--payments);color:#fff;border:none;cursor:pointer;font-family:var(--font);border-radius:0;transition:all .15s;">Email Summary</button>
     <button id="etab-btn-details" onclick="switchEmailTab('details')" style="font-size:12px;font-weight:600;padding:10px 18px;background:transparent;color:rgba(255,255,255,0.7);border:none;cursor:pointer;font-family:var(--font);border-radius:0;transition:all .15s;">Email Details</button>
-  <div id="email-inline-filters" style="display:none;align-items:center;gap:6px;padding:0 12px 0 6px;flex-wrap:wrap;justify-content:flex-start;">
+  <div id="email-inline-filters" style="display:none;align-items:center;gap:6px;padding:0 12px 0 6px;flex-wrap:wrap;justify-content:flex-start;position:relative;overflow:visible;">
     <!-- Campaigns -->
     <div style="position:relative;" id="ei-camp-wrap">
       <button id="ei-camp-btn" onclick="eCampToggle()" style="font-size:11px;padding:5px 10px;background:var(--navy-light);color:#fff;border:1px solid rgba(255,255,255,0.2);border-radius:5px;font-family:var(--font);cursor:pointer;font-weight:500;">All Campaigns &#x25be;</button>
-      <div id="edd-camp" style="display:none;position:absolute;top:calc(100% + 4px);right:0;min-width:320px;background:#fff;border:1px solid var(--line);border-radius:6px;box-shadow:0 4px 16px rgba(0,0,0,.12);z-index:600;">
+      <div id="edd-camp" style="display:none;position:fixed;top:auto;left:auto;min-width:320px;background:#fff;border:1px solid var(--line);border-radius:6px;box-shadow:0 4px 16px rgba(0,0,0,.12);z-index:600;">
         <div style="padding:8px 10px;border-bottom:1px solid var(--line);"><input id="camp-search" type="text" placeholder="Search campaigns..." oninput="eCampSearch()" style="width:100%;box-sizing:border-box;font-size:11px;padding:5px 8px;border:1px solid var(--line);border-radius:4px;font-family:var(--font);outline:none;"></div>
         <div style="display:flex;justify-content:space-between;padding:4px 10px;border-bottom:1px solid var(--line);">
           <button onclick="eCampSelectAll(true)"  style="font-size:10px;color:var(--payments);background:none;border:none;cursor:pointer;font-family:var(--font);">Select all</button>
@@ -332,7 +332,7 @@ body{font-family:var(--font);background:#f4f4f0 !important;color:var(--text-1);f
     <!-- Emails -->
     <div style="position:relative;" id="ei-email-wrap">
       <button id="eflt-email-btn" onclick="eEmailToggle()" style="font-size:11px;padding:5px 10px;background:var(--navy-light);color:#fff;border:1px solid rgba(255,255,255,0.2);border-radius:5px;font-family:var(--font);cursor:pointer;font-weight:500;">All Emails &#x25be;</button>
-      <div id="edd-email" style="display:none;position:absolute;top:calc(100% + 4px);right:0;min-width:340px;background:#fff;border:1px solid var(--line);border-radius:6px;box-shadow:0 4px 16px rgba(0,0,0,.12);z-index:600;">
+      <div id="edd-email" style="display:none;position:fixed;min-width:340px;background:#fff;border:1px solid var(--line);border-radius:6px;box-shadow:0 4px 16px rgba(0,0,0,.12);z-index:600;">
         <div style="padding:8px 10px;border-bottom:1px solid var(--line);"><input id="email-name-search" type="text" placeholder="Search emails..." oninput="eEmailSearch()" style="width:100%;box-sizing:border-box;font-size:11px;padding:5px 8px;border:1px solid var(--line);border-radius:4px;font-family:var(--font);outline:none;"></div>
         <div style="display:flex;justify-content:space-between;padding:4px 10px;border-bottom:1px solid var(--line);">
           <button onclick="eEmailSelectAll(true)"  style="font-size:10px;color:var(--payments);background:none;border:none;cursor:pointer;font-family:var(--font);">Select all</button>
@@ -344,7 +344,7 @@ body{font-family:var(--font);background:#f4f4f0 !important;color:var(--text-1);f
     <!-- Sub-Products -->
     <div style="position:relative;" id="ei-subprod-wrap">
       <button id="ei-subprod-btn" onclick="eSubProdToggle()" style="font-size:11px;padding:5px 10px;background:var(--navy-light);color:#fff;border:1px solid rgba(255,255,255,0.2);border-radius:5px;font-family:var(--font);cursor:pointer;font-weight:500;">Sub-Products &#x25be;</button>
-      <div id="edd-esubprod" style="display:none;position:absolute;top:calc(100% + 4px);right:0;min-width:240px;background:#fff;border:1px solid var(--line);border-radius:6px;box-shadow:0 4px 16px rgba(0,0,0,.12);z-index:600;">
+      <div id="edd-esubprod" style="display:none;position:fixed;"min-width:240px;background:#fff;border:1px solid var(--line);border-radius:6px;box-shadow:0 4px 16px rgba(0,0,0,.12);z-index:600;">
         <div style="display:flex;justify-content:space-between;padding:4px 10px;border-bottom:1px solid var(--line);">
           <button onclick="eSubProdSelectAll(true)"  style="font-size:10px;color:var(--payments);background:none;border:none;cursor:pointer;font-family:var(--font);">Select all</button>
           <button onclick="eSubProdSelectAll(false)" style="font-size:10px;color:var(--text-3);background:none;border:none;cursor:pointer;font-family:var(--font);">Clear</button>
@@ -1789,10 +1789,21 @@ function eUpdateUnitsTable(d){
   if(el){var pl=vk==='month'?'September':vk==='quarter'?"Q3 FY'27":'W13';el.textContent='Units From Email \u00b7 '+pl;}
 }
 function eCampToggle(){
-  var dd=document.getElementById('edd-camp');
-  ['edd-kpi','edd-subprod','edd-aud'].forEach(function(id){var d=document.getElementById(id);if(d)d.style.display='none';});
-  if(dd)dd.style.display=dd.style.display==='none'?'block':'none';
-  if(dd&&dd.style.display==='block'){var s=document.getElementById('camp-search');if(s)s.focus();}
+  var dd  = document.getElementById('edd-camp');
+  var btn = document.getElementById('ei-camp-btn') || document.getElementById('eflt-camp-btn');
+  // Close other dropdowns
+  ['edd-email','edd-esubprod','edd-kpi','edd-aud'].forEach(function(id){
+    var d=document.getElementById(id); if(d) d.style.display='none';
+  });
+  if (!dd) return;
+  if (dd.style.display==='block') { dd.style.display='none'; return; }
+  // Position below the button using fixed coords
+  if (btn) {
+    var rect = btn.getBoundingClientRect();
+    dd.style.top  = (rect.bottom + 4) + 'px';
+    dd.style.left = rect.left + 'px';
+  }
+  dd.style.display = 'block';
 }
 function eCampSearch(){
   var q=(document.getElementById('camp-search').value||'').toLowerCase();
@@ -1892,10 +1903,20 @@ function eEmailUpdate(){
 }
 
 function eEmailToggle() {
-  var dd = document.getElementById('edd-email');
-  ['edd-kpi','edd-subprod','edd-aud','edd-camp'].forEach(function(id){ var d=document.getElementById(id); if(d)d.style.display='none'; });
-  if (dd) dd.style.display = dd.style.display === 'none' ? 'block' : 'none';
-  if (dd && dd.style.display === 'block') { var s = document.getElementById('email-name-search'); if(s) s.focus(); }
+  var dd  = document.getElementById('edd-email');
+  var btn = document.getElementById('eflt-email-btn');
+  ['edd-camp','edd-esubprod','edd-kpi','edd-aud'].forEach(function(id){
+    var d=document.getElementById(id); if(d) d.style.display='none';
+  });
+  if (!dd) return;
+  if (dd.style.display==='block') { dd.style.display='none'; return; }
+  if (btn) {
+    var rect = btn.getBoundingClientRect();
+    dd.style.position = 'fixed';
+    dd.style.top  = (rect.bottom + 4) + 'px';
+    dd.style.left = rect.left + 'px';
+  }
+  dd.style.display = 'block';
 }
 
 // ── Funnel chart ────────────────────────────────────────────────────────
@@ -2482,9 +2503,20 @@ function eGetFilterLabel() {
 
 
 function eSubProdToggle() {
-  ['edd-camp','edd-email','edd-esubprod'].forEach(function(id){ var d=document.getElementById(id); if(d && id!=='edd-esubprod') d.style.display='none'; });
-  var dd=document.getElementById('edd-esubprod');
-  if(dd) dd.style.display = dd.style.display==='none'?'block':'none';
+  var dd  = document.getElementById('edd-esubprod');
+  var btn = document.getElementById('ei-subprod-btn');
+  ['edd-camp','edd-email','edd-kpi','edd-aud'].forEach(function(id){
+    var d=document.getElementById(id); if(d) d.style.display='none';
+  });
+  if (!dd) return;
+  if (dd.style.display==='block') { dd.style.display='none'; return; }
+  if (btn) {
+    var rect = btn.getBoundingClientRect();
+    dd.style.position = 'fixed';
+    dd.style.top  = (rect.bottom + 4) + 'px';
+    dd.style.left = rect.left + 'px';
+  }
+  dd.style.display = 'block';
 }
 function eSubProdSelectAll(val) {
   document.querySelectorAll('#esp-list input').forEach(function(cb){ cb.checked=val; });
@@ -2542,6 +2574,19 @@ function eUpdateStatsBox() {
   if (efl) efl.textContent = 'Emails / Contactable Customer \u00b7 ' + pl;
 }
 
+
+// Close dropdowns when clicking outside
+document.addEventListener('click', function(e) {
+  var dropdowns = ['edd-camp','edd-email','edd-esubprod'];
+  var triggers  = ['ei-camp-btn','eflt-email-btn','ei-subprod-btn','eflt-camp-btn'];
+  var clickedInside = dropdowns.concat(triggers).some(function(id) {
+    var el = document.getElementById(id);
+    return el && el.contains(e.target);
+  });
+  if (!clickedInside) {
+    dropdowns.forEach(function(id){ var d=document.getElementById(id); if(d) d.style.display='none'; });
+  }
+});
 </script>
 </body>
 </html>
