@@ -314,15 +314,38 @@ body{font-family:var(--font);background:#f4f4f0 !important;color:var(--text-1);f
   </div>
 </header>
 <main class="dash-body">
-  <div class="tab-panel active" id="tab-8">
+  <div class="tab-panel active" id="tab-8" style="overflow:visible;">
 
   <!-- Sub-nav -->
-  <div id="email-subnav" style="background:#fff;padding:8px 16px 0;display:flex;align-items:flex-end;gap:4px;position:sticky;top:0;z-index:500;overflow:visible;box-shadow:0 2px 6px rgba(0,0,0,0.06);">
+  <div id="email-subnav" style="background:#fff;padding:8px 16px 4px;display:flex;align-items:flex-end;gap:4px;position:sticky;top:0;z-index:500;overflow:visible;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
     <!-- Thick product-color line at bottom — z-index 8, sits OVER inactive tab (z-5) but UNDER active tab (z-10) -->
     <div aria-hidden="true" style="position:absolute;bottom:0;left:0;right:0;height:4px;background:var(--payments);z-index:8;pointer-events:none;"></div>
     <button id="etab-btn-summary" onclick="switchEmailTab('summary')" style="font-size:12px;font-weight:700;padding:8px 20px 10px;background:var(--payments);color:#fff;border:none;cursor:pointer;font-family:var(--font);border-radius:6px 6px 0 0;transition:all .15s;position:relative;z-index:10;margin-bottom:-4px;">Email Summary</button>
-    <button id="etab-btn-details" onclick="switchEmailTab('details')" style="font-size:12px;font-weight:600;padding:8px 20px 10px;background:var(--payments-bg);color:var(--navy);border:1px solid var(--payments-mid);border-bottom:none;cursor:pointer;font-family:var(--font);border-radius:6px 6px 0 0;transition:all .15s;position:relative;z-index:5;margin-bottom:-4px;">Email Details</button>
-  <div id="email-inline-filters" style="display:none;align-items:center;gap:6px;padding:0 12px 4px 6px;flex-wrap:wrap;justify-content:flex-start;position:relative;z-index:9;overflow:visible;">
+    <button id="etab-btn-details" onclick="switchEmailTab('details')" style="font-size:12px;font-weight:600;padding:8px 20px 10px;background:var(--payments-bg);color:var(--navy);border:1px solid var(--payments-mid);border-bottom:none;cursor:pointer;font-family:var(--font);border-radius:6px 6px 0 0;transition:all .15s;position:relative;z-index:5;margin-bottom:-4px;">Email Campaign Performance</button>
+  <div id="email-inline-filters" style="display:flex;align-items:center;gap:6px;padding:0 12px 10px 6px;flex-wrap:wrap;justify-content:flex-start;position:relative;z-index:9;overflow:visible;">
+    <div id="esf-summ-group" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+      <span style="font-size:10px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;">Filter by</span>
+      <div style="position:relative;">
+        <button id="esf-aud-btn" onclick="esfToggle('aud')" style="font-size:11px;font-weight:600;padding:5px 24px 5px 10px;background:var(--navy);color:#fff;border:1.5px solid var(--navy);border-radius:5px;cursor:pointer;font-family:var(--font);position:relative;">All Audiences <span style="position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:9px;opacity:.7;">&#9660;</span></button>
+        <div id="esf-aud-dd" style="display:none;position:absolute;top:calc(100% + 4px);left:0;background:#fff;border:1.5px solid var(--line);border-radius:6px;box-shadow:0 4px 16px rgba(0,0,0,0.15);z-index:1200;min-width:180px;padding:4px 0;">
+          <label style="display:flex;align-items:center;gap:8px;padding:5px 12px;font-size:11px;color:var(--text-1);cursor:pointer;"><input type="checkbox" checked onchange="esfUpdate('aud')" value="all" style="accent-color:var(--navy);"> All Customers</label>
+          <label style="display:flex;align-items:center;gap:8px;padding:5px 12px;font-size:11px;color:var(--text-1);cursor:pointer;"><input type="checkbox" onchange="esfUpdate('aud')" value="new" style="accent-color:var(--navy);"> New Customers</label>
+          <label style="display:flex;align-items:center;gap:8px;padding:5px 12px;font-size:11px;color:var(--text-1);cursor:pointer;"><input type="checkbox" onchange="esfUpdate('aud')" value="existing" style="accent-color:var(--navy);"> Existing Customers</label>
+          <label style="display:flex;align-items:center;gap:8px;padding:5px 12px;font-size:11px;color:var(--text-1);cursor:pointer;"><input type="checkbox" onchange="esfUpdate('aud')" value="engaged" style="accent-color:var(--navy);"> Highly Engaged</label>
+        </div>
+      </div>
+      <div style="position:relative;">
+        <button id="esf-goal-btn" onclick="esfToggle('goal')" style="font-size:11px;font-weight:600;padding:5px 24px 5px 10px;background:var(--navy);color:#fff;border:1.5px solid var(--navy);border-radius:5px;cursor:pointer;font-family:var(--font);position:relative;">All Goals <span style="position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:9px;opacity:.7;">&#9660;</span></button>
+        <div id="esf-goal-dd" style="display:none;position:absolute;top:calc(100% + 4px);left:0;background:#fff;border:1.5px solid var(--line);border-radius:6px;box-shadow:0 4px 16px rgba(0,0,0,0.15);z-index:1200;min-width:180px;padding:4px 0;">
+          <label style="display:flex;align-items:center;gap:8px;padding:5px 12px;font-size:11px;color:var(--text-1);cursor:pointer;"><input type="checkbox" checked onchange="esfUpdate('goal')" value="attach" style="accent-color:var(--navy);"> Attach</label>
+          <label style="display:flex;align-items:center;gap:8px;padding:5px 12px;font-size:11px;color:var(--text-1);cursor:pointer;"><input type="checkbox" checked onchange="esfUpdate('goal')" value="upsell" style="accent-color:var(--navy);"> Upsell</label>
+          <label style="display:flex;align-items:center;gap:8px;padding:5px 12px;font-size:11px;color:var(--text-1);cursor:pointer;"><input type="checkbox" checked onchange="esfUpdate('goal')" value="ftu" style="accent-color:var(--navy);"> FTU</label>
+          <label style="display:flex;align-items:center;gap:8px;padding:5px 12px;font-size:11px;color:var(--text-1);cursor:pointer;"><input type="checkbox" checked onchange="esfUpdate('goal')" value="retention" style="accent-color:var(--navy);"> Retention</label>
+          <label style="display:flex;align-items:center;gap:8px;padding:5px 12px;font-size:11px;color:var(--text-1);cursor:pointer;"><input type="checkbox" checked onchange="esfUpdate('goal')" value="other" style="accent-color:var(--navy);"> Other</label>
+        </div>
+      </div>
+    </div>
+    <div id="esf-camp-group" style="display:none;align-items:center;gap:6px;flex-wrap:wrap;">
     <!-- View By: Totals | Uniques — FIRST -->
     <div style="display:flex;align-items:center;gap:8px;padding-right:10px;border-right:1px solid var(--line);">
       <span style="font-size:10px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap;">View By</span>
@@ -386,13 +409,14 @@ body{font-family:var(--font);background:#f4f4f0 !important;color:var(--text-1);f
       </div>
     </div>
     <button onclick="eresetAllFilters()" style="font-size:11px;padding:5px 10px;background:var(--payments-bg);color:var(--navy);border:1.5px solid var(--payments-mid);border-radius:5px;font-family:var(--font);cursor:pointer;">&#x2715; Clear</button>
+    </div>
   </div>
   </div>
 
   <!-- ═══ EMAIL SUMMARY ═══════════════════════════════════════════════ -->
   <div id="etab-summary" style="display:block;">
     <!-- Callout row -->
-    <div style="display:flex;gap:16px;padding:20px 24px 16px;overflow-x:auto;"><div class="callout-group" style="flex:1;min-width:150px;"><div class="callout-group-hdr" id="ecg-hdr-sends">All Email Campaigns · Total Sends · September</div><div class="callout-group-tiles" style="gap:10px;padding:8px;"><div class="callout"><div class="co-big" style="margin-bottom:4px;">2.4M</div><div class="co-label">Total Sends</div><div class="co-idx"><span class="val-g">108</span> <span style="font-size:9px;color:var(--text-3);">ITPM</span>&nbsp;|&nbsp;<span class="val-g">+142K</span> <span style="font-size:9px;color:var(--text-3);">Δ</span></div></div><div class="callout"><div class="co-big" style="margin-bottom:4px;">98.2%</div><div class="co-label">Delivery Rate</div><div class="co-idx"><span class="val-g">103</span> <span style="font-size:9px;color:var(--text-3);">ITPM</span>&nbsp;|&nbsp;<span class="val-g">+0.2pp</span> <span style="font-size:9px;color:var(--text-3);">Δ</span></div></div></div></div><div class="callout-group" style="flex:1;min-width:150px;"><div class="callout-group-hdr" id="ecg-hdr-opens">All Email Campaigns · Opens · September</div><div class="callout-group-tiles" style="gap:10px;padding:8px;"><div class="callout"><div class="co-big" style="margin-bottom:4px;">680K</div><div class="co-label">Total Opens</div><div class="co-idx"><span class="val-a">94</span> <span style="font-size:9px;color:var(--text-3);">ITPM</span>&nbsp;|&nbsp;<span class="val-r">-12K</span> <span style="font-size:9px;color:var(--text-3);">Δ</span></div></div><div class="callout"><div class="co-big" style="margin-bottom:4px;">28.3%</div><div class="co-label">Open Rate</div><div class="co-idx"><span class="val-a">97</span> <span style="font-size:9px;color:var(--text-3);">ITPM</span>&nbsp;|&nbsp;<span class="val-g">+0.4pp</span> <span style="font-size:9px;color:var(--text-3);">Δ</span></div></div></div></div><div class="callout-group" style="flex:1;min-width:150px;"><div class="callout-group-hdr" id="ecg-hdr-clicks">All Email Campaigns · Clicks · September</div><div class="callout-group-tiles" style="gap:10px;padding:8px;"><div class="callout"><div class="co-big" style="margin-bottom:4px;">94K</div><div class="co-label">Total Clicks</div><div class="co-idx"><span class="val-g">112</span> <span style="font-size:9px;color:var(--text-3);">ITPM</span>&nbsp;|&nbsp;<span class="val-g">+8.2K</span> <span style="font-size:9px;color:var(--text-3);">Δ</span></div></div><div class="callout"><div class="co-big" style="margin-bottom:4px;">3.9%</div><div class="co-label">CTR</div><div class="co-idx"><span class="val-g">118</span> <span style="font-size:9px;color:var(--text-3);">ITPM</span>&nbsp;|&nbsp;<span class="val-g">+0.3pp</span> <span style="font-size:9px;color:var(--text-3);">Δ</span></div></div></div></div><div class="callout-group" style="flex:1;min-width:150px;"><div class="callout-group-hdr" id="ecg-hdr-unsubs">All Email Campaigns · Unsubscribes · September</div><div class="callout-group-tiles" style="gap:10px;padding:8px;"><div class="callout"><div class="co-big" style="margin-bottom:4px;">1.2K</div><div class="co-label">Total Unsubs</div><div class="co-idx"><span class="val-a">88</span> <span style="font-size:9px;color:var(--text-3);">ITPM</span>&nbsp;|&nbsp;<span class="val-r">+42</span> <span style="font-size:9px;color:var(--text-3);">Δ</span></div></div><div class="callout"><div class="co-big" style="margin-bottom:4px;">0.05%</div><div class="co-label">Unsub Rate</div><div class="co-idx"><span class="val-a">91</span> <span style="font-size:9px;color:var(--text-3);">ITPM</span>&nbsp;|&nbsp;<span class="val-r">+0.002pp</span> <span style="font-size:9px;color:var(--text-3);">Δ</span></div></div></div></div></div>
+    <div style="display:flex;gap:16px;padding:20px 24px 16px;overflow-x:auto;"><div class="callout-group" style="flex:1;min-width:150px;"><div class="callout-group-hdr" id="ecg-hdr-sends">All Email Campaigns · Total Sends · September</div><div class="callout-group-tiles" style="gap:10px;padding:8px;"><div class="callout"><div class="co-big" id="det-big-sends" style="margin-bottom:4px;">2.4M</div><div class="co-label">Total Sends</div><div class="co-idx"><span class="val-g">108</span> <span style="font-size:9px;color:var(--text-3);">ITPM</span>&nbsp;|&nbsp;<span class="val-g">+142K</span> <span style="font-size:9px;color:var(--text-3);">Δ</span></div></div><div class="callout"><div class="co-big" id="det-big-dlvd" style="margin-bottom:4px;">98.2%</div><div class="co-label">Delivery Rate</div><div class="co-idx"><span class="val-g">103</span> <span style="font-size:9px;color:var(--text-3);">ITPM</span>&nbsp;|&nbsp;<span class="val-g">+0.2pp</span> <span style="font-size:9px;color:var(--text-3);">Δ</span></div></div></div></div><div class="callout-group" style="flex:1;min-width:150px;"><div class="callout-group-hdr" id="ecg-hdr-opens">All Email Campaigns · Opens · September</div><div class="callout-group-tiles" style="gap:10px;padding:8px;"><div class="callout"><div class="co-big" id="det-big-opens" style="margin-bottom:4px;">680K</div><div class="co-label">Total Opens</div><div class="co-idx"><span class="val-a">94</span> <span style="font-size:9px;color:var(--text-3);">ITPM</span>&nbsp;|&nbsp;<span class="val-r">-12K</span> <span style="font-size:9px;color:var(--text-3);">Δ</span></div></div><div class="callout"><div class="co-big" id="det-big-open-pct" style="margin-bottom:4px;">28.3%</div><div class="co-label">Open Rate</div><div class="co-idx"><span class="val-a">97</span> <span style="font-size:9px;color:var(--text-3);">ITPM</span>&nbsp;|&nbsp;<span class="val-g">+0.4pp</span> <span style="font-size:9px;color:var(--text-3);">Δ</span></div></div></div></div><div class="callout-group" style="flex:1;min-width:150px;"><div class="callout-group-hdr" id="ecg-hdr-clicks">All Email Campaigns · Clicks · September</div><div class="callout-group-tiles" style="gap:10px;padding:8px;"><div class="callout"><div class="co-big" id="det-big-clicks" style="margin-bottom:4px;">94K</div><div class="co-label">Total Clicks</div><div class="co-idx"><span class="val-g">112</span> <span style="font-size:9px;color:var(--text-3);">ITPM</span>&nbsp;|&nbsp;<span class="val-g">+8.2K</span> <span style="font-size:9px;color:var(--text-3);">Δ</span></div></div><div class="callout"><div class="co-big" id="det-big-ctr" style="margin-bottom:4px;">3.9%</div><div class="co-label">CTR</div><div class="co-idx"><span class="val-g">118</span> <span style="font-size:9px;color:var(--text-3);">ITPM</span>&nbsp;|&nbsp;<span class="val-g">+0.3pp</span> <span style="font-size:9px;color:var(--text-3);">Δ</span></div></div></div></div><div class="callout-group" style="flex:1;min-width:150px;"><div class="callout-group-hdr" id="ecg-hdr-unsubs">All Email Campaigns · Unsubscribes · September</div><div class="callout-group-tiles" style="gap:10px;padding:8px;"><div class="callout"><div class="co-big" id="det-big-unsubs" style="margin-bottom:4px;">1.2K</div><div class="co-label">Total Unsubs</div><div class="co-idx"><span class="val-a">88</span> <span style="font-size:9px;color:var(--text-3);">ITPM</span>&nbsp;|&nbsp;<span class="val-r">+42</span> <span style="font-size:9px;color:var(--text-3);">Δ</span></div></div><div class="callout"><div class="co-big" id="det-big-unsub-pct" style="margin-bottom:4px;">0.05%</div><div class="co-label">Unsub Rate</div><div class="co-idx"><span class="val-a">91</span> <span style="font-size:9px;color:var(--text-3);">ITPM</span>&nbsp;|&nbsp;<span class="val-r">+0.002pp</span> <span style="font-size:9px;color:var(--text-3);">Δ</span></div></div></div></div></div>
     <!-- Units chart + metric cards -->
     <div style="padding:0 24px 32px;">
       <div style="display:flex;gap:16px;margin-bottom:20px;align-items:stretch;">
@@ -402,16 +426,21 @@ body{font-family:var(--font);background:#f4f4f0 !important;color:var(--text-1);f
             <div style="padding:18px;">
               <div style="display:flex;gap:16px;font-size:11px;color:var(--text-2);margin-bottom:8px;align-items:center;">
                 <span><span class="leg-box" style="background:#07c4d9;"></span>Actuals</span>
-                <span><span class="leg-ln" style="background:#000;"></span>Forecast</span>
-                <span><span class="leg-dash" style="border-color:#aaaaaa;"></span>Target</span>
+                <span><span class="leg-ln" style="background:#000;"></span>ITPM</span>
+                <span><span class="leg-dash" style="border-color:#aaaaaa;"></span>Prior Year</span>
               </div>
               <div style="position:relative;height:240px;"><canvas id="echart-units"></canvas></div>
               <div style="overflow-x:auto;margin-top:10px;">
                 <table class="tbl" id="etbl-units" style="width:100%;margin:0;">
                   <thead id="etbl-units-head"><tr>
-                    <th style="width:10%;">Month</th><th>Actuals</th>
-                    <th class="dvl">Forecast</th><th>Δ Fcst</th><th>ITF</th>
-                    <th class="dv">Target</th><th>Δ Target</th><th>ITT</th>
+                    <th style="width:10%;">Month</th>
+                    <th>In Year Rev</th>
+                    <th>ARR</th>
+                    <th>Units</th>
+                    <th style="color:var(--text-3);">Prior Month Units</th>
+                    <th style="color:var(--text-3);">ITPM</th>
+                    <th style="color:var(--text-3);">Prior Year Units</th>
+                    <th style="color:var(--text-3);">ITPY</th>
                   </tr></thead>
                   <tbody id="etbl-units-body"></tbody>
                 </table>
@@ -421,16 +450,16 @@ body{font-family:var(--font);background:#f4f4f0 !important;color:var(--text-1);f
         </div>
         <div style="flex:1;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff;">
           <div class="sec-hdr" style="margin:0;border-radius:0;"><span class="sec-hdr-text" id="units-commentary-hdr">All Email Campaigns · September</span></div>
-          <div style="padding:12px 16px 0;background:var(--payments-light);">
+          <div style="padding:12px 16px 16px;background:var(--payments-light);">
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:0;">
               <div style="border:1px solid var(--line);border-radius:6px;overflow:hidden;background:#fff;">
                 <div style="font-size:12px;font-weight:700;color:var(--tbl-hdr-tx);text-transform:uppercase;letter-spacing:.08em;padding:8px 14px;font-family:var(--font);">Units From Email</div>
                 <div style="padding:10px 12px;display:flex;gap:8px;flex-wrap:wrap;align-items:baseline;">
                   <div><div style="font-size:13px;font-weight:500;color:var(--text-3);">Actuals</div><div style="font-size:30px;font-weight:300;color:var(--text-1);">195K</div></div>
                   <div class="units-forecast-col" style="width:1px;background:var(--line);align-self:stretch;"></div>
-                  <div class="units-forecast-col"><div style="font-size:13px;font-weight:500;color:var(--text-3);">Forecast</div><div style="font-size:30px;font-weight:300;color:var(--text-1);">190K</div><div style="font-size:13px;margin-top:4px;"><span class="val-g">103</span> <span style="color:var(--text-3);font-size:11px;">ITF</span> Δ <span class="val-delta">+5K</span></div></div>
+                  <div class="units-forecast-col"><div style="font-size:13px;font-weight:500;color:var(--text-3);">ITPM</div><div style="font-size:30px;font-weight:300;color:var(--text-1);">103</div><div style="font-size:13px;margin-top:4px;"><span class="val-g">Δ +5K</span> <span style="color:var(--text-3);font-size:11px;">vs PM</span></div></div>
                   <div class="units-forecast-col" style="width:1px;background:var(--line);align-self:stretch;"></div>
-                  <div class="units-forecast-col"><div style="font-size:13px;font-weight:500;color:var(--text-3);">Target</div><div style="font-size:30px;font-weight:300;color:var(--text-1);">198K</div><div style="font-size:13px;margin-top:4px;"><span class="val-r">98</span> <span style="color:var(--text-3);font-size:11px;">ITT</span> Δ <span class="val-delta">-3K</span></div></div>
+                  <div class="units-forecast-col"><div style="font-size:13px;font-weight:500;color:var(--text-3);">Prior Year</div><div style="font-size:30px;font-weight:300;color:var(--text-1);">182K</div><div style="font-size:13px;margin-top:4px;"><span class="val-g">107</span> <span style="color:var(--text-3);font-size:11px;">ITPY</span></div></div>
                 </div>
               </div>
               <div style="border:1px solid var(--line);border-radius:6px;overflow:hidden;background:#fff;">
@@ -438,30 +467,32 @@ body{font-family:var(--font);background:#f4f4f0 !important;color:var(--text-1);f
                 <div style="padding:10px 12px;display:flex;gap:8px;flex-wrap:wrap;align-items:baseline;">
                   <div><div style="font-size:13px;font-weight:500;color:var(--text-3);">Actuals</div><div style="font-size:30px;font-weight:300;color:var(--text-1);">$580K</div></div>
                   <div class="units-forecast-col" style="width:1px;background:var(--line);align-self:stretch;"></div>
-                  <div class="units-forecast-col"><div style="font-size:13px;font-weight:500;color:var(--text-3);">Forecast</div><div style="font-size:30px;font-weight:300;color:var(--text-1);">$550K</div><div style="font-size:13px;margin-top:4px;"><span class="val-g">105</span> <span style="color:var(--text-3);font-size:11px;">ITF</span> Δ <span class="val-delta">+$30K</span></div></div>
+                  <div class="units-forecast-col"><div style="font-size:13px;font-weight:500;color:var(--text-3);">ITPM</div><div style="font-size:30px;font-weight:300;color:var(--text-1);">105</div><div style="font-size:13px;margin-top:4px;"><span class="val-g">Δ +$30K</span> <span style="color:var(--text-3);font-size:11px;">vs PM</span></div></div>
                   <div class="units-forecast-col" style="width:1px;background:var(--line);align-self:stretch;"></div>
-                  <div class="units-forecast-col"><div style="font-size:13px;font-weight:500;color:var(--text-3);">Target</div><div style="font-size:30px;font-weight:300;color:var(--text-1);">$760K</div><div style="font-size:13px;margin-top:4px;"><span class="val-r">76</span> <span style="color:var(--text-3);font-size:11px;">ITT</span> Δ <span class="val-delta">-$180K</span></div></div>
+                  <div class="units-forecast-col"><div style="font-size:13px;font-weight:500;color:var(--text-3);">Prior Year</div><div style="font-size:30px;font-weight:300;color:var(--text-1);">$543K</div><div style="font-size:13px;margin-top:4px;"><span class="val-g">107</span> <span style="color:var(--text-3);font-size:11px;">ITPY</span></div></div>
                 </div>
               </div>
             </div>
           </div>
         
           <div class="commentary" style="padding:0 4px;background:#fff;"><ul id="email-summary-commentary">
-            <li><div class="c-dot-wrap"><div class="c-dot"></div></div><div class="c-text" contenteditable="true"><strong>Units ahead of forecast</strong> by 5K (103 ITF), trailing target by 3K.</div></li>
-            <li><div class="c-dot-wrap"><div class="c-dot"></div></div><div class="c-text" contenteditable="true"><strong>Revenue at $580K</strong> — 105 ITF, 76 ITT vs $760K target.</div></li>
+            <li><div class="c-dot-wrap"><div class="c-dot"></div></div><div class="c-text" contenteditable="true"><strong>Units at 195K</strong>, 103 ITPM (+5K vs prior month), 107 ITPY vs prior year.</div></li>
+            <li><div class="c-dot-wrap"><div class="c-dot"></div></div><div class="c-text" contenteditable="true"><strong>Revenue at $580K</strong>, 105 ITPM (+$30K vs prior month), 107 ITPY vs prior year.</div></li>
             <li><div class="c-dot-wrap"><div class="c-dot"></div></div><div class="c-text" contenteditable="true">Add performance commentary here.</div></li>
           </ul><div class="add-btn" onclick="eAddInsight('email-summary-commentary')"><div class="add-icon">+</div><span>Add point</span></div></div>
         </div>
       </div>
-      <div style="display:flex;gap:16px;margin-bottom:20px;"><div style="flex:1;min-width:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff;"><div class="sec-hdr"><span class="sec-hdr-text" id="ecard-hdr-sends">All Email Campaigns · Total Sends · September</span></div><div style="display:flex;"><div style="width:50%;padding:18px;border-right:1px solid var(--line);box-sizing:border-box;"><div style="font-size:11px;font-weight:600;color:var(--navy);margin-bottom:8px;" id="echart-title-sends">Email · Total Sends</div><div style="position:relative;height:300px;"><canvas id="echart-sends"></canvas></div></div><div style="width:50%;padding:18px;box-sizing:border-box;"><table class="tbl" style="width:100%;font-size:10px;"><thead><tr><th style="text-align:left;font-size:9px;padding:4px 5px;">Period</th><th style="text-align:right;font-size:9px;padding:4px 5px;" id="etbl-sends-h1">Sends</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPM</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITB</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">PY</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPY</th><th style="text-align:right;font-size:9px;padding:4px 5px;" id="etbl-sends-h2">Delivery Rate %</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPM</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITB</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">PY</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPY</th></tr></thead><tbody id="etbl-sends-body"></tbody></table></div></div></div><div style="flex:1;min-width:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff;"><div class="sec-hdr"><span class="sec-hdr-text" id="ecard-hdr-opens">All Email Campaigns · Opens · September</span></div><div style="display:flex;"><div style="width:50%;padding:18px;border-right:1px solid var(--line);box-sizing:border-box;"><div style="font-size:11px;font-weight:600;color:var(--navy);margin-bottom:8px;" id="echart-title-opens">Email · Opens</div><div style="position:relative;height:300px;"><canvas id="echart-opens"></canvas></div></div><div style="width:50%;padding:18px;box-sizing:border-box;"><table class="tbl" style="width:100%;font-size:10px;"><thead><tr><th style="text-align:left;font-size:9px;padding:4px 5px;">Period</th><th style="text-align:right;font-size:9px;padding:4px 5px;" id="etbl-opens-h1">Opens</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPM</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITB</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">PY</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPY</th><th style="text-align:right;font-size:9px;padding:4px 5px;" id="etbl-opens-h2">Open Rate %</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPM</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITB</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">PY</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPY</th></tr></thead><tbody id="etbl-opens-body"></tbody></table></div></div></div></div><div style="display:flex;gap:16px;margin-bottom:20px;"><div style="flex:1;min-width:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff;"><div class="sec-hdr"><span class="sec-hdr-text" id="ecard-hdr-clicks">All Email Campaigns · Clicks · September</span></div><div style="display:flex;"><div style="width:50%;padding:18px;border-right:1px solid var(--line);box-sizing:border-box;"><div style="font-size:11px;font-weight:600;color:var(--navy);margin-bottom:8px;" id="echart-title-clicks">Email · Clicks</div><div style="position:relative;height:300px;"><canvas id="echart-clicks"></canvas></div></div><div style="width:50%;padding:18px;box-sizing:border-box;"><table class="tbl" style="width:100%;font-size:10px;"><thead><tr><th style="text-align:left;font-size:9px;padding:4px 5px;">Period</th><th style="text-align:right;font-size:9px;padding:4px 5px;" id="etbl-clicks-h1">Clicks</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPM</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITB</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">PY</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPY</th><th style="text-align:right;font-size:9px;padding:4px 5px;" id="etbl-clicks-h2">CTR %</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPM</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITB</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">PY</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPY</th></tr></thead><tbody id="etbl-clicks-body"></tbody></table></div></div></div><div style="flex:1;min-width:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff;"><div class="sec-hdr"><span class="sec-hdr-text" id="ecard-hdr-frequency">All Email Campaigns · Frequency · September</span></div><div style="display:flex;"><div style="width:50%;padding:18px;border-right:1px solid var(--line);box-sizing:border-box;"><div style="font-size:11px;font-weight:600;color:var(--navy);margin-bottom:8px;" id="echart-title-frequency">Email · Frequency</div><div style="position:relative;height:300px;"><canvas id="echart-frequency"></canvas></div></div><div style="width:50%;padding:18px;box-sizing:border-box;"><table class="tbl" style="width:100%;font-size:10px;"><thead><tr><th style="text-align:left;font-size:9px;padding:4px 5px;">Period</th><th style="text-align:right;font-size:9px;padding:4px 5px;" id="etbl-frequency-h1">Emails / Customer</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPM</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITB</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">PY</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPY</th><th style="text-align:right;font-size:9px;padding:4px 5px;" id="etbl-frequency-h2">Journeys</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPM</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITB</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">PY</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPY</th></tr></thead><tbody id="etbl-frequency-body"></tbody></table></div></div></div></div><div style="display:flex;gap:16px;margin-bottom:20px;"><div style="flex:1;min-width:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff;"><div class="sec-hdr"><span class="sec-hdr-text" id="ecard-hdr-unsubs">All Email Campaigns · Unsubscribes · September</span></div><div style="display:flex;"><div style="width:50%;padding:18px;border-right:1px solid var(--line);box-sizing:border-box;"><div style="font-size:11px;font-weight:600;color:var(--navy);margin-bottom:8px;" id="echart-title-unsubs">Email · Unsubscribes</div><div style="position:relative;height:300px;"><canvas id="echart-unsubs"></canvas></div></div><div style="width:50%;padding:18px;box-sizing:border-box;"><table class="tbl" style="width:100%;font-size:10px;"><thead><tr><th style="text-align:left;font-size:9px;padding:4px 5px;">Period</th><th style="text-align:right;font-size:9px;padding:4px 5px;" id="etbl-unsubs-h1">Unsubscribes</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPM</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITB</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">PY</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPY</th><th style="text-align:right;font-size:9px;padding:4px 5px;" id="etbl-unsubs-h2">Unsub Rate %</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPM</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITB</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">PY</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPY</th></tr></thead><tbody id="etbl-unsubs-body"></tbody></table></div></div></div><div style="flex:1;min-width:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff;"><div class="sec-hdr"><span class="sec-hdr-text" id="ecard-hdr-audience">All Email Campaigns · Email-able Audience · September</span></div><div style="display:flex;"><div style="width:50%;padding:18px;border-right:1px solid var(--line);box-sizing:border-box;"><div style="font-size:11px;font-weight:600;color:var(--navy);margin-bottom:8px;" id="echart-title-audience">Email · Email-able Audience</div><div style="position:relative;height:300px;"><canvas id="echart-audience"></canvas></div></div><div style="width:50%;padding:18px;box-sizing:border-box;"><table class="tbl" style="width:100%;font-size:10px;"><thead><tr><th style="text-align:left;font-size:9px;padding:4px 5px;">Period</th><th style="text-align:right;font-size:9px;padding:4px 5px;" id="etbl-audience-h1">Email-able</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPM</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITB</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">PY</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPY</th><th style="text-align:right;font-size:9px;padding:4px 5px;" id="etbl-audience-h2">% of Customers</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPM</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITB</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">PY</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPY</th></tr></thead><tbody id="etbl-audience-body"></tbody></table></div></div></div></div>
+
+      <div style="display:flex;gap:16px;margin-bottom:20px;"><div style="flex:1;min-width:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff;"><div class="sec-hdr"><span class="sec-hdr-text" id="ecard-hdr-units_det">All Email Campaigns · Units · September</span></div><div style="display:flex;"><div style="width:50%;padding:18px;border-right:1px solid var(--line);box-sizing:border-box;"><div style="font-size:11px;font-weight:600;color:var(--navy);margin-bottom:8px;" id="echart-title-units_det">Email · Units from Email</div><div style="position:relative;height:300px;"><canvas id="echart-units_det"></canvas></div></div><div style="width:50%;padding:18px;box-sizing:border-box;"><table class="tbl" style="width:100%;font-size:10px;"><thead><tr><th style="text-align:left;font-size:9px;padding:4px 5px;">Period</th><th style="text-align:right;font-size:9px;padding:4px 5px;" id="etbl-units_det-h1">Units</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPM</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITB</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">PY</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPY</th><th style="text-align:right;font-size:9px;padding:4px 5px;" id="etbl-units_det-h2">Click-to-Conv Rate %</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPM</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITB</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">PY</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPY</th></tr></thead><tbody id="etbl-units_det-body"></tbody></table></div></div></div><div style="flex:1;min-width:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff;"><div class="sec-hdr"><span class="sec-hdr-text" id="ecard-hdr-sends">All Email Campaigns · Total Sends · September</span></div><div style="display:flex;"><div style="width:50%;padding:18px;border-right:1px solid var(--line);box-sizing:border-box;"><div style="font-size:11px;font-weight:600;color:var(--navy);margin-bottom:8px;" id="echart-title-sends">Email · Total Sends</div><div style="position:relative;height:300px;"><canvas id="echart-sends"></canvas></div></div><div style="width:50%;padding:18px;box-sizing:border-box;"><table class="tbl" style="width:100%;font-size:10px;"><thead><tr><th style="text-align:left;font-size:9px;padding:4px 5px;">Period</th><th style="text-align:right;font-size:9px;padding:4px 5px;" id="etbl-sends-h1">Sends</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPM</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITB</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">PY</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPY</th><th style="text-align:right;font-size:9px;padding:4px 5px;" id="etbl-sends-h2">Delivery Rate %</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPM</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITB</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">PY</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPY</th></tr></thead><tbody id="etbl-sends-body"></tbody></table></div></div></div></div><div style="display:flex;gap:16px;margin-bottom:20px;"><div style="flex:1;min-width:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff;"><div class="sec-hdr"><span class="sec-hdr-text" id="ecard-hdr-opens">All Email Campaigns · Opens · September</span></div><div style="display:flex;"><div style="width:50%;padding:18px;border-right:1px solid var(--line);box-sizing:border-box;"><div style="font-size:11px;font-weight:600;color:var(--navy);margin-bottom:8px;" id="echart-title-opens">Email · Opens</div><div style="position:relative;height:300px;"><canvas id="echart-opens"></canvas></div></div><div style="width:50%;padding:18px;box-sizing:border-box;"><table class="tbl" style="width:100%;font-size:10px;"><thead><tr><th style="text-align:left;font-size:9px;padding:4px 5px;">Period</th><th style="text-align:right;font-size:9px;padding:4px 5px;" id="etbl-opens-h1">Opens</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPM</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITB</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">PY</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPY</th><th style="text-align:right;font-size:9px;padding:4px 5px;" id="etbl-opens-h2">Open Rate %</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPM</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITB</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">PY</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPY</th></tr></thead><tbody id="etbl-opens-body"></tbody></table></div></div></div><div style="flex:1;min-width:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff;"><div class="sec-hdr"><span class="sec-hdr-text" id="ecard-hdr-clicks">All Email Campaigns · Clicks · September</span></div><div style="display:flex;"><div style="width:50%;padding:18px;border-right:1px solid var(--line);box-sizing:border-box;"><div style="font-size:11px;font-weight:600;color:var(--navy);margin-bottom:8px;" id="echart-title-clicks">Email · Clicks</div><div style="position:relative;height:300px;"><canvas id="echart-clicks"></canvas></div></div><div style="width:50%;padding:18px;box-sizing:border-box;"><table class="tbl" style="width:100%;font-size:10px;"><thead><tr><th style="text-align:left;font-size:9px;padding:4px 5px;">Period</th><th style="text-align:right;font-size:9px;padding:4px 5px;" id="etbl-clicks-h1">Clicks</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPM</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITB</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">PY</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPY</th><th style="text-align:right;font-size:9px;padding:4px 5px;" id="etbl-clicks-h2">CTR %</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPM</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITB</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">PY</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPY</th></tr></thead><tbody id="etbl-clicks-body"></tbody></table></div></div></div></div></div><div style="display:flex;gap:16px;margin-bottom:20px;"><div style="flex:1;min-width:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff;"><div class="sec-hdr"><span class="sec-hdr-text" id="ecard-hdr-unsubs">All Email Campaigns · Unsubscribes · September</span></div><div style="display:flex;"><div style="width:50%;padding:18px;border-right:1px solid var(--line);box-sizing:border-box;"><div style="font-size:11px;font-weight:600;color:var(--navy);margin-bottom:8px;" id="echart-title-unsubs">Email · Unsubscribes</div><div style="position:relative;height:300px;"><canvas id="echart-unsubs"></canvas></div></div><div style="width:50%;padding:18px;box-sizing:border-box;"><table class="tbl" style="width:100%;font-size:10px;"><thead><tr><th style="text-align:left;font-size:9px;padding:4px 5px;">Period</th><th style="text-align:right;font-size:9px;padding:4px 5px;" id="etbl-unsubs-h1">Unsubscribes</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPM</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITB</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">PY</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPY</th><th style="text-align:right;font-size:9px;padding:4px 5px;" id="etbl-unsubs-h2">Unsub Rate %</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPM</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITB</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">PY</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPY</th></tr></thead><tbody id="etbl-unsubs-body"></tbody></table></div></div></div><div style="flex:1;min-width:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff;"><div class="sec-hdr"><span class="sec-hdr-text" id="ecard-hdr-audience">All Email Campaigns · Email-able Audience · September</span></div><div style="display:flex;"><div style="width:50%;padding:18px;border-right:1px solid var(--line);box-sizing:border-box;"><div style="font-size:11px;font-weight:600;color:var(--navy);margin-bottom:8px;" id="echart-title-audience">Email · Email-able Audience</div><div style="position:relative;height:300px;"><canvas id="echart-audience"></canvas></div></div><div style="width:50%;padding:18px;box-sizing:border-box;"><table class="tbl" style="width:100%;font-size:10px;"><thead><tr><th style="text-align:left;font-size:9px;padding:4px 5px;">Period</th><th style="text-align:right;font-size:9px;padding:4px 5px;" id="etbl-audience-h1">Email-able</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPM</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITB</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">PY</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPY</th><th style="text-align:right;font-size:9px;padding:4px 5px;" id="etbl-audience-h2">% of Customers</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPM</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITB</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">PY</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPY</th></tr></thead><tbody id="etbl-audience-body"></tbody></table></div></div></div></div>
     </div>
   </div>
 
   <!-- ═══ EMAIL DETAILS ══════════════════════════════════════════════ -->
   <div id="etab-details" style="display:none;">
+    <div id="det-subtitle" style="padding:10px 24px 4px;font-size:20px;font-weight:700;color:var(--navy);letter-spacing:-.01em;line-height:1.2;">All Email Campaigns · September</div>
     <!-- Callout row in Details -->
     <div style="display:flex;gap:16px;padding:20px 24px 10px;overflow-x:auto;" id="det-callout-row">
-      <div class="callout-group" style="flex:1;min-width:150px;"><div class="callout-group-hdr" id="ecg-hdr-sends-det">All Email Campaigns · Total Sends · September</div><div class="callout-group-tiles" style="gap:10px;padding:8px;"><div class="callout"><div class="co-big" style="margin-bottom:4px;">2.4M</div><div class="co-label">Total Sends</div><div class="co-idx"><span class="val-g">108</span> <span style="font-size:9px;color:var(--text-3);">ITPM</span>&nbsp;|&nbsp;<span class="val-g">+142K</span> <span style="font-size:9px;color:var(--text-3);">Δ</span></div></div><div class="callout"><div class="co-big" style="margin-bottom:4px;">98.2%</div><div class="co-label">Delivery Rate</div><div class="co-idx"><span class="val-g">103</span> <span style="font-size:9px;color:var(--text-3);">ITPM</span>&nbsp;|&nbsp;<span class="val-g">+0.2pp</span> <span style="font-size:9px;color:var(--text-3);">Δ</span></div></div></div></div><div class="callout-group" style="flex:1;min-width:150px;"><div class="callout-group-hdr" id="ecg-hdr-opens-det">All Email Campaigns · Opens · September</div><div class="callout-group-tiles" style="gap:10px;padding:8px;"><div class="callout"><div class="co-big" style="margin-bottom:4px;">680K</div><div class="co-label">Total Opens</div><div class="co-idx"><span class="val-a">94</span> <span style="font-size:9px;color:var(--text-3);">ITPM</span>&nbsp;|&nbsp;<span class="val-r">-12K</span> <span style="font-size:9px;color:var(--text-3);">Δ</span></div></div><div class="callout"><div class="co-big" style="margin-bottom:4px;">28.3%</div><div class="co-label">Open Rate</div><div class="co-idx"><span class="val-a">97</span> <span style="font-size:9px;color:var(--text-3);">ITPM</span>&nbsp;|&nbsp;<span class="val-g">+0.4pp</span> <span style="font-size:9px;color:var(--text-3);">Δ</span></div></div></div></div><div class="callout-group" style="flex:1;min-width:150px;"><div class="callout-group-hdr" id="ecg-hdr-clicks-det">All Email Campaigns · Clicks · September</div><div class="callout-group-tiles" style="gap:10px;padding:8px;"><div class="callout"><div class="co-big" style="margin-bottom:4px;">94K</div><div class="co-label">Total Clicks</div><div class="co-idx"><span class="val-g">112</span> <span style="font-size:9px;color:var(--text-3);">ITPM</span>&nbsp;|&nbsp;<span class="val-g">+8.2K</span> <span style="font-size:9px;color:var(--text-3);">Δ</span></div></div><div class="callout"><div class="co-big" style="margin-bottom:4px;">3.9%</div><div class="co-label">CTR</div><div class="co-idx"><span class="val-g">118</span> <span style="font-size:9px;color:var(--text-3);">ITPM</span>&nbsp;|&nbsp;<span class="val-g">+0.3pp</span> <span style="font-size:9px;color:var(--text-3);">Δ</span></div></div></div></div><div class="callout-group" style="flex:1;min-width:150px;"><div class="callout-group-hdr" id="ecg-hdr-unsubs-det">All Email Campaigns · Unsubscribes · September</div><div class="callout-group-tiles" style="gap:10px;padding:8px;"><div class="callout"><div class="co-big" style="margin-bottom:4px;">1.2K</div><div class="co-label">Total Unsubs</div><div class="co-idx"><span class="val-a">88</span> <span style="font-size:9px;color:var(--text-3);">ITPM</span>&nbsp;|&nbsp;<span class="val-r">+42</span> <span style="font-size:9px;color:var(--text-3);">Δ</span></div></div><div class="callout"><div class="co-big" style="margin-bottom:4px;">0.05%</div><div class="co-label">Unsub Rate</div><div class="co-idx"><span class="val-a">91</span> <span style="font-size:9px;color:var(--text-3);">ITPM</span>&nbsp;|&nbsp;<span class="val-r">+0.002pp</span> <span style="font-size:9px;color:var(--text-3);">Δ</span></div></div></div></div>
+      <div class="callout-group" style="flex:1;min-width:150px;"><div class="callout-group-hdr" id="ecg-hdr-sends-det">All Email Campaigns · Total Sends · September</div><div class="callout-group-tiles" style="gap:10px;padding:8px;"><div class="callout"><div class="co-big" id="det-big-sends" style="margin-bottom:4px;">2.4M</div><div class="co-label">Total Sends</div><div class="co-idx"><span class="val-g">108</span> <span style="font-size:9px;color:var(--text-3);">ITPM</span>&nbsp;|&nbsp;<span class="val-g">+142K</span> <span style="font-size:9px;color:var(--text-3);">Δ</span></div></div><div class="callout"><div class="co-big" id="det-big-dlvd" style="margin-bottom:4px;">98.2%</div><div class="co-label">Delivery Rate</div><div class="co-idx"><span class="val-g">103</span> <span style="font-size:9px;color:var(--text-3);">ITPM</span>&nbsp;|&nbsp;<span class="val-g">+0.2pp</span> <span style="font-size:9px;color:var(--text-3);">Δ</span></div></div></div></div><div class="callout-group" style="flex:1;min-width:150px;"><div class="callout-group-hdr" id="ecg-hdr-opens-det">All Email Campaigns · Opens · September</div><div class="callout-group-tiles" style="gap:10px;padding:8px;"><div class="callout"><div class="co-big" id="det-big-opens" style="margin-bottom:4px;">680K</div><div class="co-label">Total Opens</div><div class="co-idx"><span class="val-a">94</span> <span style="font-size:9px;color:var(--text-3);">ITPM</span>&nbsp;|&nbsp;<span class="val-r">-12K</span> <span style="font-size:9px;color:var(--text-3);">Δ</span></div></div><div class="callout"><div class="co-big" id="det-big-open-pct" style="margin-bottom:4px;">28.3%</div><div class="co-label">Open Rate</div><div class="co-idx"><span class="val-a">97</span> <span style="font-size:9px;color:var(--text-3);">ITPM</span>&nbsp;|&nbsp;<span class="val-g">+0.4pp</span> <span style="font-size:9px;color:var(--text-3);">Δ</span></div></div></div></div><div class="callout-group" style="flex:1;min-width:150px;"><div class="callout-group-hdr" id="ecg-hdr-clicks-det">All Email Campaigns · Clicks · September</div><div class="callout-group-tiles" style="gap:10px;padding:8px;"><div class="callout"><div class="co-big" id="det-big-clicks" style="margin-bottom:4px;">94K</div><div class="co-label">Total Clicks</div><div class="co-idx"><span class="val-g">112</span> <span style="font-size:9px;color:var(--text-3);">ITPM</span>&nbsp;|&nbsp;<span class="val-g">+8.2K</span> <span style="font-size:9px;color:var(--text-3);">Δ</span></div></div><div class="callout"><div class="co-big" id="det-big-ctr" style="margin-bottom:4px;">3.9%</div><div class="co-label">CTR</div><div class="co-idx"><span class="val-g">118</span> <span style="font-size:9px;color:var(--text-3);">ITPM</span>&nbsp;|&nbsp;<span class="val-g">+0.3pp</span> <span style="font-size:9px;color:var(--text-3);">Δ</span></div></div></div></div><div class="callout-group" style="flex:1;min-width:150px;"><div class="callout-group-hdr" id="ecg-hdr-unsubs-det">All Email Campaigns · Unsubscribes · September</div><div class="callout-group-tiles" style="gap:10px;padding:8px;"><div class="callout"><div class="co-big" id="det-big-unsubs" style="margin-bottom:4px;">1.2K</div><div class="co-label">Total Unsubs</div><div class="co-idx"><span class="val-a">88</span> <span style="font-size:9px;color:var(--text-3);">ITPM</span>&nbsp;|&nbsp;<span class="val-r">+42</span> <span style="font-size:9px;color:var(--text-3);">Δ</span></div></div><div class="callout"><div class="co-big" id="det-big-unsub-pct" style="margin-bottom:4px;">0.05%</div><div class="co-label">Unsub Rate</div><div class="co-idx"><span class="val-a">91</span> <span style="font-size:9px;color:var(--text-3);">ITPM</span>&nbsp;|&nbsp;<span class="val-r">+0.002pp</span> <span style="font-size:9px;color:var(--text-3);">Δ</span></div></div></div></div>
     </div>
     <div style="padding:14px 24px 0;">
       <div style="display:flex;gap:16px;align-items:stretch;">
@@ -478,7 +509,6 @@ body{font-family:var(--font);background:#f4f4f0 !important;color:var(--text-1);f
                     <th style="text-align:right;font-size:13px;padding:7px 10px;">Count</th>
                     <th style="text-align:right;font-size:13px;padding:7px 10px;color:var(--text-3);">Conv %</th>
                     <th style="text-align:right;font-size:13px;padding:7px 10px;color:var(--text-3);">ITPM</th>
-                    <th style="text-align:right;font-size:13px;padding:7px 10px;color:var(--text-3);">ITB</th>
                     <th style="text-align:right;font-size:13px;padding:7px 10px;color:var(--text-3);">vs PY</th>
                   </tr></thead>
                   <tbody id="etbl-funnel-body"></tbody>
@@ -488,51 +518,50 @@ body{font-family:var(--font);background:#f4f4f0 !important;color:var(--text-1);f
           </div>
         </div>
       </div>
-      <div style="width:260px;flex-shrink:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff;">
-          <div class="sec-hdr" style="margin:0;border-radius:0;"><span class="sec-hdr-text" id="units-det-hdr">All Email Campaigns · September</span></div>
-          <div style="padding:12px 16px;background:var(--payments-light);display:flex;flex-direction:column;gap:8px;">
-
-            <div style="border:1px solid var(--line);border-radius:6px;overflow:hidden;background:#fff;">
-              <div style="font-size:12px;font-weight:700;color:var(--tbl-hdr-tx);text-transform:uppercase;letter-spacing:.08em;padding:8px 14px;font-family:var(--font);">Units From Email</div>
-              <div style="padding:10px 12px;display:flex;gap:8px;flex-wrap:wrap;align-items:baseline;">
-                <div><div style="font-size:13px;font-weight:500;color:var(--text-3);">Actuals</div><div style="font-size:30px;font-weight:300;color:var(--text-1);">195K</div></div>
-                
-                
-              </div>
+      <div style="width:230px;flex-shrink:0;border:1px solid var(--payments-mid);border-radius:8px;overflow:hidden;background:var(--payments-light);">
+          <div class="sec-hdr" style="margin:0;border-radius:0;"><span class="sec-hdr-text" id="units-det-hdr">All Campaigns · Outcomes · September</span></div>
+          <div style="padding:12px;display:flex;flex-direction:column;gap:10px;">
+            <div style="background:#fff;border:1px solid var(--line);border-radius:6px;padding:10px 12px;">
+              <div style="font-size:10px;font-weight:700;color:var(--tbl-hdr-tx);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px;line-height:1.3;">In Year Units from Email</div>
+              <div id="det-iy-units" style="font-size:24px;font-weight:300;color:var(--text-1);">195K</div>
             </div>
-
-            <div style="border:1px solid var(--line);border-radius:6px;overflow:hidden;background:#fff;">
-              <div style="font-size:12px;font-weight:700;color:var(--tbl-hdr-tx);text-transform:uppercase;letter-spacing:.08em;padding:8px 14px;font-family:var(--font);">Revenue From Email</div>
-              <div style="padding:10px 12px;display:flex;gap:8px;flex-wrap:wrap;align-items:baseline;">
-                <div><div style="font-size:13px;font-weight:500;color:var(--text-3);">Actuals</div><div style="font-size:30px;font-weight:300;color:var(--text-1);">$580K</div></div>
-                
-                
-              </div>
+            <div style="background:#fff;border:1px solid var(--line);border-radius:6px;padding:10px 12px;">
+              <div style="font-size:10px;font-weight:700;color:var(--tbl-hdr-tx);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px;line-height:1.3;">Annualized Units from Email</div>
+              <div id="det-arr-units" style="font-size:24px;font-weight:300;color:var(--text-1);">2.3M</div>
             </div>
-
+            <div style="background:#fff;border:1px solid var(--line);border-radius:6px;padding:10px 12px;">
+              <div style="font-size:10px;font-weight:700;color:var(--tbl-hdr-tx);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px;line-height:1.3;">In Year Revenue from Email</div>
+              <div id="det-iy-rev" style="font-size:24px;font-weight:300;color:var(--text-1);">$580K</div>
+            </div>
+            <div style="background:#fff;border:1px solid var(--line);border-radius:6px;padding:10px 12px;">
+              <div style="font-size:10px;font-weight:700;color:var(--tbl-hdr-tx);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px;line-height:1.3;">ARR from Email</div>
+              <div id="det-arr-rev" style="font-size:24px;font-weight:300;color:var(--text-1);">$7.0M</div>
+            </div>
           </div>
         </div>
       
-      <div id="email-stats-box" style="width:230px;flex-shrink:0;border:1px solid var(--payments-mid);border-radius:8px;overflow:hidden;background:var(--payments-light);">
-        <div class="sec-hdr" style="margin:0;border-radius:0;"><span class="sec-hdr-text" id="estats-hdr">All Email Campaigns · September</span></div>
-        <div style="padding:16px;display:flex;flex-direction:column;gap:14px;">
+      <div id="email-stats-box" style="flex-shrink:0;display:flex;flex-direction:row;gap:12px;align-items:flex-start;">
 
-          <div style="background:#fff;border:1px solid var(--line);border-radius:6px;padding:12px 14px;">
-            <div style="font-size:11px;font-weight:700;color:var(--tbl-hdr-tx);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px;">Total Campaigns</div>
-            <div id="estats-camps" style="font-size:30px;font-weight:300;color:var(--text-1);">12</div>
+        <!-- Campaigns box -->
+        <div style="width:200px;flex-shrink:0;border:1px solid var(--payments-mid);border-radius:8px;overflow:hidden;background:var(--payments-light);">
+          <div class="sec-hdr" style="margin:0;border-radius:0;"><span class="sec-hdr-text" id="estats-hdr">All Email Campaigns · September</span></div>
+          <div style="padding:12px;display:flex;flex-direction:column;gap:10px;">
+            <div style="background:#fff;border:1px solid var(--line);border-radius:6px;padding:10px 12px;">
+              <div style="font-size:10px;font-weight:700;color:var(--tbl-hdr-tx);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px;">Total Campaigns</div>
+              <div id="estats-camps" style="font-size:24px;font-weight:300;color:var(--text-1);">12</div>
+            </div>
+            <div style="background:#fff;border:1px solid var(--line);border-radius:6px;padding:10px 12px;">
+              <div style="font-size:10px;font-weight:700;color:var(--tbl-hdr-tx);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px;">Total Emails</div>
+              <div id="estats-emails" style="font-size:24px;font-weight:300;color:var(--text-1);">37</div>
+            </div>
+            <div style="background:#fff;border:1px solid var(--line);border-radius:6px;padding:10px 12px;">
+              <div style="font-size:10px;font-weight:700;color:var(--tbl-hdr-tx);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px;" id="estats-freq-label">Email Frequency</div>
+              <div id="estats-freq" style="font-size:24px;font-weight:300;color:var(--text-1);">3.8</div>
+            </div>
           </div>
-
-          <div style="background:#fff;border:1px solid var(--line);border-radius:6px;padding:12px 14px;">
-            <div style="font-size:11px;font-weight:700;color:var(--tbl-hdr-tx);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px;">Total Emails</div>
-            <div id="estats-emails" style="font-size:30px;font-weight:300;color:var(--text-1);">37</div>
-          </div>
-
-          <div style="background:#fff;border:1px solid var(--line);border-radius:6px;padding:12px 14px;">
-            <div style="font-size:11px;font-weight:700;color:var(--tbl-hdr-tx);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px;line-height:1.3;" id="estats-freq-label">Email Frequency · September</div>
-            <div id="estats-freq" style="font-size:30px;font-weight:300;color:var(--text-1);">3.8</div>
-          </div>
-
         </div>
+
+
       </div>
     </div>
     </div>
@@ -542,28 +571,11 @@ body{font-family:var(--font);background:#f4f4f0 !important;color:var(--text-1);f
       <div id="campaign-asset-table-wrap" style="display:block;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff;">
         <div class="sec-hdr"><span class="sec-hdr-text" id="campaigns-section-hdr">EMAIL: Campaigns · September</span></div>
         <div class="proj-wrap" style="max-height:480px;overflow:auto;">
-          <table class="tbl" id="etbl-campaign-assets" style="width:100%;margin:0;border-collapse:collapse;font-size:14px;min-width:900px;">
-            <thead><tr style="position:sticky;top:0;z-index:10;">
-              <th class="sc1" style="background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:12px;padding:8px 10px;text-align:left;border-bottom:1px solid var(--line);">Campaign</th>
-              <th class="sc2" style="background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:12px;padding:8px 10px;text-align:left;border-bottom:1px solid var(--line);">Asset</th>
-              <th style="background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:12px;padding:8px 10px;text-align:left;border-bottom:1px solid var(--line);">Goal</th>
-              <th style="background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:12px;padding:8px 10px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap;">Product</th>
-              <th style="background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:12px;padding:8px 10px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap;">Sub-Product</th>
-              <th style="background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:12px;padding:8px 10px;text-align:center;border-bottom:1px solid var(--line);">Preview</th>
-              <th style="background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:12px;padding:8px 10px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap;">Eligible</th>
-              <th style="background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:12px;padding:8px 10px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap;">Contactable</th>
-              <th style="background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:12px;padding:8px 10px;text-align:right;border-bottom:1px solid var(--line);">Sent</th>
-              <th style="background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:12px;padding:8px 10px;text-align:right;border-bottom:1px solid var(--line);">Delivered</th>
-              <th style="background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:12px;padding:8px 10px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap;color:var(--text-3);">Del %</th>
-              <th style="background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:12px;padding:8px 10px;text-align:right;border-bottom:1px solid var(--line);">Opened</th>
-              <th style="background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:12px;padding:8px 10px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap;color:var(--text-3);">Open %</th>
-              <th style="background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:12px;padding:8px 10px;text-align:right;border-bottom:1px solid var(--line);">Clicked</th>
-              <th style="background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:12px;padding:8px 10px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap;color:var(--text-3);">CTR %</th>
-              <th style="background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:12px;padding:8px 10px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap;">Started Signup</th>
-              <th style="background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:12px;padding:8px 10px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap;color:var(--text-3);">SS %</th>
-              <th style="background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:12px;padding:8px 10px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap;">Completed Signup</th>
-              <th style="background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:12px;padding:8px 10px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap;color:var(--text-3);">CS %</th>
-              <th style="background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:12px;padding:8px 10px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap;">Unsubscribed</th>
+          <table class="tbl" id="etbl-campaign-assets" style="width:100%;margin:0;border-collapse:collapse;font-size:13px;min-width:900px;">
+            <thead>
+              <tr id="etbl-camp-totals-row" style="position:sticky;top:0;z-index:11;"><td class="sc1" style="background:var(--payments);color:#fff;font-size:13px;font-weight:700;padding:8px 10px;white-space:nowrap;"></td><td class="sc2" style="background:var(--payments);color:#fff;font-size:13px;font-weight:700;padding:8px 10px;white-space:nowrap;"></td><td style="background:var(--payments);color:#fff;font-size:13px;font-weight:700;padding:8px 10px;white-space:nowrap;"></td><td style="background:var(--payments);color:#fff;font-size:13px;font-weight:700;padding:8px 10px;white-space:nowrap;"></td><td style="background:var(--payments);color:#fff;font-size:13px;font-weight:700;padding:8px 10px;white-space:nowrap;"></td><td style="background:var(--payments);color:#fff;font-size:13px;font-weight:700;padding:8px 10px;white-space:nowrap;"></td><td style="background:var(--payments);color:#fff;font-size:13px;font-weight:700;padding:8px 10px;white-space:nowrap;"></td><td style="background:var(--payments);color:#fff;font-size:13px;font-weight:700;padding:8px 10px;white-space:nowrap;"></td><td style="background:var(--payments);color:#fff;font-size:13px;font-weight:700;padding:8px 10px;white-space:nowrap;"></td><td style="background:var(--payments);color:#fff;font-size:13px;font-weight:700;padding:8px 10px;white-space:nowrap;"></td><td style="background:var(--payments);color:#fff;font-size:13px;font-weight:700;padding:8px 10px;white-space:nowrap;"></td><td style="background:var(--payments);color:#fff;font-size:13px;font-weight:700;padding:8px 10px;white-space:nowrap;"></td><td style="background:var(--payments);color:#fff;font-size:13px;font-weight:700;padding:8px 10px;white-space:nowrap;"></td><td style="background:var(--payments);color:#fff;font-size:13px;font-weight:700;padding:8px 10px;white-space:nowrap;"></td><td style="background:var(--payments);color:#fff;font-size:13px;font-weight:700;padding:8px 10px;white-space:nowrap;"></td><td style="background:var(--payments);color:#fff;font-size:13px;font-weight:700;padding:8px 10px;white-space:nowrap;"></td><td style="background:var(--payments);color:#fff;font-size:13px;font-weight:700;padding:8px 10px;white-space:nowrap;"></td><td style="background:var(--payments);color:#fff;font-size:13px;font-weight:700;padding:8px 10px;white-space:nowrap;"></td><td style="background:var(--payments);color:#fff;font-size:13px;font-weight:700;padding:8px 10px;white-space:nowrap;"></td><td style="background:var(--payments);color:#fff;font-size:13px;font-weight:700;padding:8px 10px;white-space:nowrap;"></td><td style="background:var(--payments);color:#fff;font-size:13px;font-weight:700;padding:8px 10px;white-space:nowrap;"></td><td style="background:var(--payments);color:#fff;font-size:13px;font-weight:700;padding:8px 10px;white-space:nowrap;"></td></tr>
+              <tr id="etbl-camp-col-hdrs" style="position:sticky;top:33px;z-index:10;">
+              <th class="sc1" style="background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:11px;padding:8px 10px;border-bottom:1px solid var(--line);cursor:pointer;user-select:none;white-space:nowrap;text-align:left;" data-sortkey="id" onclick="eCampSort('id')">Campaign <span class="sort-arrow" style="font-size:8px;opacity:.5;"> &#8597;</span></th><th class="sc2" style="background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:11px;padding:8px 10px;border-bottom:1px solid var(--line);cursor:pointer;user-select:none;white-space:nowrap;text-align:left;" data-sortkey="name" onclick="eCampSort('name')">Asset <span class="sort-arrow" style="font-size:8px;opacity:.5;"> &#8597;</span></th><th style="background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:11px;padding:8px 10px;border-bottom:1px solid var(--line);cursor:pointer;user-select:none;white-space:nowrap;text-align:left;" data-sortkey="goal" onclick="eCampSort('goal')">Goal <span class="sort-arrow" style="font-size:8px;opacity:.5;"> &#8597;</span></th><th style="background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:11px;padding:8px 10px;border-bottom:1px solid var(--line);cursor:pointer;user-select:none;white-space:nowrap;text-align:left;">Product</th><th style="background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:11px;padding:8px 10px;border-bottom:1px solid var(--line);cursor:pointer;user-select:none;white-space:nowrap;text-align:left;" data-sortkey="subProd" onclick="eCampSort('subProd')">Sub-Product <span class="sort-arrow" style="font-size:8px;opacity:.5;"> &#8597;</span></th><th style="background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:11px;padding:8px 10px;border-bottom:1px solid var(--line);cursor:pointer;user-select:none;white-space:nowrap;text-align:center;">Preview</th><th style="background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:11px;padding:8px 10px;border-bottom:1px solid var(--line);cursor:pointer;user-select:none;white-space:nowrap;text-align:right;" data-sortkey="cs" onclick="eCampSort('cs')">Units <span class="sort-arrow" style="font-size:8px;opacity:.5;"> &#8597;</span></th><th style="background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:11px;padding:8px 10px;border-bottom:1px solid var(--line);cursor:pointer;user-select:none;white-space:nowrap;text-align:right;" data-sortkey="rev" onclick="eCampSort('rev')">Revenue <span class="sort-arrow" style="font-size:8px;opacity:.5;"> &#8597;</span></th><th style="background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:11px;padding:8px 10px;border-bottom:1px solid var(--line);cursor:pointer;user-select:none;white-space:nowrap;text-align:right;color:var(--text-3);" data-sortkey="elig" onclick="eCampSort('elig')">Eligible <span class="sort-arrow" style="font-size:8px;opacity:.5;"> &#8597;</span></th><th style="background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:11px;padding:8px 10px;border-bottom:1px solid var(--line);cursor:pointer;user-select:none;white-space:nowrap;text-align:right;color:var(--text-3);" data-sortkey="nc" onclick="eCampSort('nc')">Contactable <span class="sort-arrow" style="font-size:8px;opacity:.5;"> &#8597;</span></th><th style="background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:11px;padding:8px 10px;border-bottom:1px solid var(--line);cursor:pointer;user-select:none;white-space:nowrap;text-align:right;color:var(--text-3);" data-sortkey="sent" onclick="eCampSort('sent')">Sent <span class="sort-arrow" style="font-size:8px;opacity:.5;"> &#8597;</span></th><th style="background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:11px;padding:8px 10px;border-bottom:1px solid var(--line);cursor:pointer;user-select:none;white-space:nowrap;text-align:right;color:var(--text-3);" data-sortkey="dlvd" onclick="eCampSort('dlvd')">Delivered <span class="sort-arrow" style="font-size:8px;opacity:.5;"> &#8597;</span></th><th style="background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:11px;padding:8px 10px;border-bottom:1px solid var(--line);cursor:pointer;user-select:none;white-space:nowrap;text-align:right;color:var(--text-3);" data-sortkey="dlvdpct" onclick="eCampSort('dlvdpct')">Del % <span class="sort-arrow" style="font-size:8px;opacity:.5;"> &#8597;</span></th><th style="background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:11px;padding:8px 10px;border-bottom:1px solid var(--line);cursor:pointer;user-select:none;white-space:nowrap;text-align:right;color:var(--text-3);" data-sortkey="opnd" onclick="eCampSort('opnd')">Opened <span class="sort-arrow" style="font-size:8px;opacity:.5;"> &#8597;</span></th><th style="background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:11px;padding:8px 10px;border-bottom:1px solid var(--line);cursor:pointer;user-select:none;white-space:nowrap;text-align:right;color:var(--text-3);" data-sortkey="opndpct" onclick="eCampSort('opndpct')">Open % <span class="sort-arrow" style="font-size:8px;opacity:.5;"> &#8597;</span></th><th style="background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:11px;padding:8px 10px;border-bottom:1px solid var(--line);cursor:pointer;user-select:none;white-space:nowrap;text-align:right;color:var(--text-3);" data-sortkey="clkd" onclick="eCampSort('clkd')">Clicked <span class="sort-arrow" style="font-size:8px;opacity:.5;"> &#8597;</span></th><th style="background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:11px;padding:8px 10px;border-bottom:1px solid var(--line);cursor:pointer;user-select:none;white-space:nowrap;text-align:right;color:var(--text-3);" data-sortkey="clkdpct" onclick="eCampSort('clkdpct')">CTR % <span class="sort-arrow" style="font-size:8px;opacity:.5;"> &#8597;</span></th><th style="background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:11px;padding:8px 10px;border-bottom:1px solid var(--line);cursor:pointer;user-select:none;white-space:nowrap;text-align:right;color:var(--text-3);" data-sortkey="ss" onclick="eCampSort('ss')">Started Signup <span class="sort-arrow" style="font-size:8px;opacity:.5;"> &#8597;</span></th><th style="background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:11px;padding:8px 10px;border-bottom:1px solid var(--line);cursor:pointer;user-select:none;white-space:nowrap;text-align:right;color:var(--text-3);" data-sortkey="sspct" onclick="eCampSort('sspct')">SS % <span class="sort-arrow" style="font-size:8px;opacity:.5;"> &#8597;</span></th><th style="background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:11px;padding:8px 10px;border-bottom:1px solid var(--line);cursor:pointer;user-select:none;white-space:nowrap;text-align:right;color:var(--text-3);" data-sortkey="cs2" onclick="eCampSort('cs2')">Converted <span class="sort-arrow" style="font-size:8px;opacity:.5;"> &#8597;</span></th><th style="background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:11px;padding:8px 10px;border-bottom:1px solid var(--line);cursor:pointer;user-select:none;white-space:nowrap;text-align:right;color:var(--text-3);" data-sortkey="cspct" onclick="eCampSort('cspct')">Conv % <span class="sort-arrow" style="font-size:8px;opacity:.5;"> &#8597;</span></th><th style="background:var(--tbl-hdr-bg);color:var(--tbl-hdr-tx);font-size:11px;padding:8px 10px;border-bottom:1px solid var(--line);cursor:pointer;user-select:none;white-space:nowrap;text-align:right;color:var(--text-3);" data-sortkey="unsub" onclick="eCampSort('unsub')">Unsubscribed <span class="sort-arrow" style="font-size:8px;opacity:.5;"> &#8597;</span></th>
             </tr></thead>
             <tbody id="etbl-campaign-assets-body"></tbody>
           </table>
@@ -572,52 +584,13 @@ body{font-family:var(--font);background:#f4f4f0 !important;color:var(--text-1);f
     </div>
     <!-- Details metric charts -->
     <div style="padding:14px 24px 32px;" id="det-metric-charts">
-      <div style="display:flex;gap:14px;margin-bottom:14px;"><div style="flex:1;min-width:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff;"><div class="sec-hdr"><span class="sec-hdr-text" id="ecard-det-hdr-sends">All Email Campaigns · Total Sends · September</span></div><div style="display:flex;"><div style="width:55%;padding:14px;border-right:1px solid var(--line);box-sizing:border-box;"><div style="font-size:10px;font-weight:600;color:var(--navy);margin-bottom:6px;">Email · Total Sends</div><div style="position:relative;height:220px;"><canvas id="echart-sends_det"></canvas></div></div><div style="width:45%;padding:14px;box-sizing:border-box;"><table class="tbl" style="width:100%;font-size:10px;"><thead><tr><th style="text-align:left;font-size:9px;padding:3px 4px;">Period</th><th style="text-align:right;font-size:9px;padding:3px 4px;" id="etbl-det-sends-h1">Sends</th><th style="text-align:right;font-size:9px;padding:3px 4px;color:var(--text-3);">ITPM</th><th style="text-align:right;font-size:9px;padding:3px 4px;color:var(--text-3);">ITB</th><th style="text-align:right;font-size:9px;padding:3px 4px;" id="etbl-det-sends-h2">Delivery Rate %</th><th style="text-align:right;font-size:9px;padding:3px 4px;color:var(--text-3);">ITPM</th><th style="text-align:right;font-size:9px;padding:3px 4px;color:var(--text-3);">ITB</th></tr></thead><tbody id="etbl-det-sends-body"></tbody></table></div></div></div><div style="flex:1;min-width:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff;"><div class="sec-hdr"><span class="sec-hdr-text" id="ecard-det-hdr-opens">All Email Campaigns · Opens · September</span></div><div style="display:flex;"><div style="width:55%;padding:14px;border-right:1px solid var(--line);box-sizing:border-box;"><div style="font-size:10px;font-weight:600;color:var(--navy);margin-bottom:6px;">Email · Opens</div><div style="position:relative;height:220px;"><canvas id="echart-opens_det"></canvas></div></div><div style="width:45%;padding:14px;box-sizing:border-box;"><table class="tbl" style="width:100%;font-size:10px;"><thead><tr><th style="text-align:left;font-size:9px;padding:3px 4px;">Period</th><th style="text-align:right;font-size:9px;padding:3px 4px;" id="etbl-det-opens-h1">Opens</th><th style="text-align:right;font-size:9px;padding:3px 4px;color:var(--text-3);">ITPM</th><th style="text-align:right;font-size:9px;padding:3px 4px;color:var(--text-3);">ITB</th><th style="text-align:right;font-size:9px;padding:3px 4px;" id="etbl-det-opens-h2">Open Rate %</th><th style="text-align:right;font-size:9px;padding:3px 4px;color:var(--text-3);">ITPM</th><th style="text-align:right;font-size:9px;padding:3px 4px;color:var(--text-3);">ITB</th></tr></thead><tbody id="etbl-det-opens-body"></tbody></table></div></div></div></div><div style="display:flex;gap:14px;margin-bottom:14px;"><div style="flex:1;min-width:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff;"><div class="sec-hdr"><span class="sec-hdr-text" id="ecard-det-hdr-clicks">All Email Campaigns · Clicks · September</span></div><div style="display:flex;"><div style="width:55%;padding:14px;border-right:1px solid var(--line);box-sizing:border-box;"><div style="font-size:10px;font-weight:600;color:var(--navy);margin-bottom:6px;">Email · Clicks</div><div style="position:relative;height:220px;"><canvas id="echart-clicks_det"></canvas></div></div><div style="width:45%;padding:14px;box-sizing:border-box;"><table class="tbl" style="width:100%;font-size:10px;"><thead><tr><th style="text-align:left;font-size:9px;padding:3px 4px;">Period</th><th style="text-align:right;font-size:9px;padding:3px 4px;" id="etbl-det-clicks-h1">Clicks</th><th style="text-align:right;font-size:9px;padding:3px 4px;color:var(--text-3);">ITPM</th><th style="text-align:right;font-size:9px;padding:3px 4px;color:var(--text-3);">ITB</th><th style="text-align:right;font-size:9px;padding:3px 4px;" id="etbl-det-clicks-h2">CTR %</th><th style="text-align:right;font-size:9px;padding:3px 4px;color:var(--text-3);">ITPM</th><th style="text-align:right;font-size:9px;padding:3px 4px;color:var(--text-3);">ITB</th></tr></thead><tbody id="etbl-det-clicks-body"></tbody></table></div></div></div><div style="flex:1;min-width:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff;"><div class="sec-hdr"><span class="sec-hdr-text" id="ecard-det-hdr-unsubs">All Email Campaigns · Unsubscribes · September</span></div><div style="display:flex;"><div style="width:55%;padding:14px;border-right:1px solid var(--line);box-sizing:border-box;"><div style="font-size:10px;font-weight:600;color:var(--navy);margin-bottom:6px;">Email · Unsubscribes</div><div style="position:relative;height:220px;"><canvas id="echart-unsubs_det"></canvas></div></div><div style="width:45%;padding:14px;box-sizing:border-box;"><table class="tbl" style="width:100%;font-size:10px;"><thead><tr><th style="text-align:left;font-size:9px;padding:3px 4px;">Period</th><th style="text-align:right;font-size:9px;padding:3px 4px;" id="etbl-det-unsubs-h1">Unsubscribes</th><th style="text-align:right;font-size:9px;padding:3px 4px;color:var(--text-3);">ITPM</th><th style="text-align:right;font-size:9px;padding:3px 4px;color:var(--text-3);">ITB</th><th style="text-align:right;font-size:9px;padding:3px 4px;" id="etbl-det-unsubs-h2">Unsub Rate %</th><th style="text-align:right;font-size:9px;padding:3px 4px;color:var(--text-3);">ITPM</th><th style="text-align:right;font-size:9px;padding:3px 4px;color:var(--text-3);">ITB</th></tr></thead><tbody id="etbl-det-unsubs-body"></tbody></table></div></div></div></div>
-    </div>
-      <!-- ═══ NEW: Signups + Units det charts ═══════════════════════════ -->
-      <div style="display:flex;gap:14px;margin-bottom:14px;padding:0 0 14px;">
-        <div style="flex:1;min-width:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff;">
-          <div class="sec-hdr"><span class="sec-hdr-text" id="ecard-det-hdr-signups">All Email Campaigns · Signups · September</span></div>
-          <div style="display:flex;">
-            <div style="width:55%;padding:14px;border-right:1px solid var(--line);box-sizing:border-box;">
-              <div style="font-size:10px;font-weight:600;color:var(--navy);margin-bottom:6px;">Email · Signups Started</div>
-              <div style="position:relative;height:220px;"><canvas id="echart-signups_det"></canvas></div>
-            </div>
-            <div style="width:45%;padding:14px;box-sizing:border-box;">
-              <table class="tbl" style="width:100%;font-size:10px;"><thead><tr>
-                <th style="text-align:left;font-size:9px;padding:3px 4px;">Period</th>
-                <th style="text-align:right;font-size:9px;padding:3px 4px;" id="etbl-det-signups-h1">Signups Started</th>
-                <th style="text-align:right;font-size:9px;padding:3px 4px;color:var(--text-3);">ITPM</th>
-                <th style="text-align:right;font-size:9px;padding:3px 4px;color:var(--text-3);">ITB</th>
-                <th style="text-align:right;font-size:9px;padding:3px 4px;" id="etbl-det-signups-h2">Click-to-Signup %</th>
-                <th style="text-align:right;font-size:9px;padding:3px 4px;color:var(--text-3);">ITPM</th>
-                <th style="text-align:right;font-size:9px;padding:3px 4px;color:var(--text-3);">ITB</th>
-              </tr></thead><tbody id="etbl-det-signups-body"></tbody></table>
-            </div>
-          </div>
-        </div>
-        <div style="flex:1;min-width:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff;">
-          <div class="sec-hdr"><span class="sec-hdr-text" id="ecard-det-hdr-units_det">All Email Campaigns · Units · September</span></div>
-          <div style="display:flex;">
-            <div style="width:55%;padding:14px;border-right:1px solid var(--line);box-sizing:border-box;">
-              <div style="font-size:10px;font-weight:600;color:var(--navy);margin-bottom:6px;">Email · Units from Email</div>
-              <div style="position:relative;height:220px;"><canvas id="echart-units_det"></canvas></div>
-            </div>
-            <div style="width:45%;padding:14px;box-sizing:border-box;">
-              <table class="tbl" style="width:100%;font-size:10px;"><thead><tr>
-                <th style="text-align:left;font-size:9px;padding:3px 4px;">Period</th>
-                <th style="text-align:right;font-size:9px;padding:3px 4px;" id="etbl-det-units_det-h1">Units</th>
-                <th style="text-align:right;font-size:9px;padding:3px 4px;color:var(--text-3);">ITPM</th>
-                <th style="text-align:right;font-size:9px;padding:3px 4px;color:var(--text-3);">ITB</th>
-                <th style="text-align:right;font-size:9px;padding:3px 4px;" id="etbl-det-units_det-h2">Signup Complete %</th>
-                <th style="text-align:right;font-size:9px;padding:3px 4px;color:var(--text-3);">ITPM</th>
-                <th style="text-align:right;font-size:9px;padding:3px 4px;color:var(--text-3);">ITB</th>
-              </tr></thead><tbody id="etbl-det-units_det-body"></tbody></table>
-            </div>
-          </div>
-        </div>
+
+      <div style="padding:0 24px 20px;">
+        <div style="display:flex;gap:16px;margin-bottom:20px;"><div style="flex:1;min-width:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff;"><div class="sec-hdr"><span class="sec-hdr-text" id="ecard-hdr-units_det_c">All Email Campaigns · Units from Email · September</span></div><div style="display:flex;"><div style="width:50%;padding:18px;border-right:1px solid var(--line);box-sizing:border-box;"><div style="font-size:11px;font-weight:600;color:var(--navy);margin-bottom:8px;" id="echart-title-units_det_c">Email · Units from Email</div><div style="position:relative;height:300px;"><canvas id="echart-units_det_c"></canvas></div></div><div style="width:50%;padding:18px;box-sizing:border-box;"><table class="tbl" style="width:100%;font-size:10px;"><thead><tr><th style="text-align:left;font-size:9px;padding:4px 5px;">Period</th><th style="text-align:right;font-size:9px;padding:4px 5px;" id="etbl-units_det_c-h1">Units</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPM</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITB</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">PY</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPY</th><th style="text-align:right;font-size:9px;padding:4px 5px;" id="etbl-units_det_c-h2">Click-to-Conv Rate %</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPM</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITB</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">PY</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPY</th></tr></thead><tbody id="etbl-units_det_c-body"></tbody></table></div></div></div><div style="flex:1;min-width:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff;"><div class="sec-hdr"><span class="sec-hdr-text" id="ecard-hdr-audience_c">All Email Campaigns · Email-able Audience · September</span></div><div style="display:flex;"><div style="width:50%;padding:18px;border-right:1px solid var(--line);box-sizing:border-box;"><div style="font-size:11px;font-weight:600;color:var(--navy);margin-bottom:8px;" id="echart-title-audience_c">Email · Email-able Audience</div><div style="position:relative;height:300px;"><canvas id="echart-audience_c"></canvas></div></div><div style="width:50%;padding:18px;box-sizing:border-box;"><table class="tbl" style="width:100%;font-size:10px;"><thead><tr><th style="text-align:left;font-size:9px;padding:4px 5px;">Period</th><th style="text-align:right;font-size:9px;padding:4px 5px;" id="etbl-audience_c-h1">Email-able</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPM</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITB</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">PY</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPY</th><th style="text-align:right;font-size:9px;padding:4px 5px;" id="etbl-audience_c-h2">% of Customers</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPM</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITB</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">PY</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPY</th></tr></thead><tbody id="etbl-audience_c-body"></tbody></table></div></div></div></div>
+        <div style="display:flex;gap:16px;margin-bottom:20px;"><div style="flex:1;min-width:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff;"><div class="sec-hdr"><span class="sec-hdr-text" id="ecard-hdr-sends_c">All Email Campaigns · Total Sends · September</span></div><div style="display:flex;"><div style="width:50%;padding:18px;border-right:1px solid var(--line);box-sizing:border-box;"><div style="font-size:11px;font-weight:600;color:var(--navy);margin-bottom:8px;" id="echart-title-sends_c">Email · Total Sends</div><div style="position:relative;height:300px;"><canvas id="echart-sends_c"></canvas></div></div><div style="width:50%;padding:18px;box-sizing:border-box;"><table class="tbl" style="width:100%;font-size:10px;"><thead><tr><th style="text-align:left;font-size:9px;padding:4px 5px;">Period</th><th style="text-align:right;font-size:9px;padding:4px 5px;" id="etbl-sends_c-h1">Sends</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPM</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITB</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">PY</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPY</th><th style="text-align:right;font-size:9px;padding:4px 5px;" id="etbl-sends_c-h2">Delivery Rate %</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPM</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITB</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">PY</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPY</th></tr></thead><tbody id="etbl-sends_c-body"></tbody></table></div></div></div><div style="flex:1;min-width:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff;"><div class="sec-hdr"><span class="sec-hdr-text" id="ecard-hdr-opens_c">All Email Campaigns · Opens · September</span></div><div style="display:flex;"><div style="width:50%;padding:18px;border-right:1px solid var(--line);box-sizing:border-box;"><div style="font-size:11px;font-weight:600;color:var(--navy);margin-bottom:8px;" id="echart-title-opens_c">Email · Opens</div><div style="position:relative;height:300px;"><canvas id="echart-opens_c"></canvas></div></div><div style="width:50%;padding:18px;box-sizing:border-box;"><table class="tbl" style="width:100%;font-size:10px;"><thead><tr><th style="text-align:left;font-size:9px;padding:4px 5px;">Period</th><th style="text-align:right;font-size:9px;padding:4px 5px;" id="etbl-opens_c-h1">Opens</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPM</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITB</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">PY</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPY</th><th style="text-align:right;font-size:9px;padding:4px 5px;" id="etbl-opens_c-h2">Open Rate %</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPM</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITB</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">PY</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPY</th></tr></thead><tbody id="etbl-opens_c-body"></tbody></table></div></div></div></div>
+        <div style="display:flex;gap:16px;"><div style="flex:1;min-width:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff;"><div class="sec-hdr"><span class="sec-hdr-text" id="ecard-hdr-clicks_c">All Email Campaigns · Clicks · September</span></div><div style="display:flex;"><div style="width:50%;padding:18px;border-right:1px solid var(--line);box-sizing:border-box;"><div style="font-size:11px;font-weight:600;color:var(--navy);margin-bottom:8px;" id="echart-title-clicks_c">Email · Clicks</div><div style="position:relative;height:300px;"><canvas id="echart-clicks_c"></canvas></div></div><div style="width:50%;padding:18px;box-sizing:border-box;"><table class="tbl" style="width:100%;font-size:10px;"><thead><tr><th style="text-align:left;font-size:9px;padding:4px 5px;">Period</th><th style="text-align:right;font-size:9px;padding:4px 5px;" id="etbl-clicks_c-h1">Clicks</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPM</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITB</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">PY</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPY</th><th style="text-align:right;font-size:9px;padding:4px 5px;" id="etbl-clicks_c-h2">CTR %</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPM</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITB</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">PY</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPY</th></tr></thead><tbody id="etbl-clicks_c-body"></tbody></table></div></div></div><div style="flex:1;min-width:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fff;"><div class="sec-hdr"><span class="sec-hdr-text" id="ecard-hdr-unsubs_c">All Email Campaigns · Unsubscribes · September</span></div><div style="display:flex;"><div style="width:50%;padding:18px;border-right:1px solid var(--line);box-sizing:border-box;"><div style="font-size:11px;font-weight:600;color:var(--navy);margin-bottom:8px;" id="echart-title-unsubs_c">Email · Unsubscribes</div><div style="position:relative;height:300px;"><canvas id="echart-unsubs_c"></canvas></div></div><div style="width:50%;padding:18px;box-sizing:border-box;"><table class="tbl" style="width:100%;font-size:10px;"><thead><tr><th style="text-align:left;font-size:9px;padding:4px 5px;">Period</th><th style="text-align:right;font-size:9px;padding:4px 5px;" id="etbl-unsubs_c-h1">Unsubscribes</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPM</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITB</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">PY</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPY</th><th style="text-align:right;font-size:9px;padding:4px 5px;" id="etbl-unsubs_c-h2">Unsub Rate %</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPM</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITB</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">PY</th><th style="text-align:right;font-size:9px;padding:4px 5px;color:var(--text-3);">ITPY</th></tr></thead><tbody id="etbl-unsubs_c-body"></tbody></table></div></div></div></div>
       </div>
-  </div>
+
 </main>
 <footer class="dash-footer">
   <span>ELM · Global Business Solutions Group</span>
@@ -678,9 +651,9 @@ try{(function(){var _c=document.getElementById('revChart');if(_c){window._revCha
   data:{
     labels:months,
     datasets:[
-      {label:'Achieved',data:[420,580,680,680,680,680,680,680,680,680,680,680],backgroundColor:'#07c4d9',borderWidth:0,stack:'bars'},
-      {label:'High Confidence Path To',data:highConf,backgroundColor:'rgba(7,196,217,0.5)',borderWidth:0,stack:'bars'},
-      {label:'Low Confidence Path To',data:lowConf,backgroundColor:'rgba(7,196,217,0.12)',borderWidth:0,stack:'bars'},
+      {label:'Achieved',data:[420,580,680,680,680,680,680,680,680,680,680,680],backgroundColor:'#07c4d9',borderWidth:0,stack:'bars',order:10},
+      {label:'High Confidence Path To',data:highConf,backgroundColor:'rgba(7,196,217,0.5)',borderWidth:0,stack:'bars',order:10},
+      {label:'Low Confidence Path To',data:lowConf,backgroundColor:'rgba(7,196,217,0.12)',borderWidth:0,stack:'bars',order:10},
       {label:'Forecast',data:forecastVals,type:'line',borderColor:'#000000',borderWidth:2,pointRadius:3,pointBackgroundColor:'#000000',fill:false,stack:undefined,order:1},
       {label:'Target',data:targetVals,type:'line',borderColor:'#aaaaaa',borderWidth:1.5,borderDash:[5,4],pointRadius:0,fill:false,stack:undefined,order:2}
     ]
@@ -702,9 +675,9 @@ try{(function(){var _c=document.getElementById('revChart2');if(_c){window._revCh
   data:{
     labels:months,
     datasets:[
-      {label:'Achieved',data:[420,580,680,680,680,680,680,680,680,680,680,680],backgroundColor:'#07c4d9',borderWidth:0,stack:'bars'},
-      {label:'High Confidence Path To',data:highConf,backgroundColor:'rgba(7,196,217,0.5)',borderWidth:0,stack:'bars'},
-      {label:'Low Confidence Path To',data:lowConf,backgroundColor:'rgba(7,196,217,0.12)',borderWidth:0,stack:'bars'},
+      {label:'Achieved',data:[420,580,680,680,680,680,680,680,680,680,680,680],backgroundColor:'#07c4d9',borderWidth:0,stack:'bars',order:10},
+      {label:'High Confidence Path To',data:highConf,backgroundColor:'rgba(7,196,217,0.5)',borderWidth:0,stack:'bars',order:10},
+      {label:'Low Confidence Path To',data:lowConf,backgroundColor:'rgba(7,196,217,0.12)',borderWidth:0,stack:'bars',order:10},
       {label:'Forecast',data:forecastVals,type:'line',borderColor:'#000000',borderWidth:2,pointRadius:3,pointBackgroundColor:'#000000',fill:false,stack:undefined,order:1},
       {label:'Target',data:targetVals,type:'line',borderColor:'#aaaaaa',borderWidth:1.5,borderDash:[5,4],pointRadius:0,fill:false,stack:undefined,order:2}
     ]
@@ -734,9 +707,9 @@ try{(function(){var _c=document.getElementById('gnaChart');if(_c){window._gnaCha
   data:{
     labels:months,
     datasets:[
-      {label:'Achieved',data:[310,420,490,490,490,490,490,490,490,490,490,490],backgroundColor:'#07c4d9',borderWidth:0,stack:'bars'},
-      {label:'High Confidence Path To',data:gnaHigh,backgroundColor:'rgba(7,196,217,0.5)',borderWidth:0,stack:'bars'},
-      {label:'Low Confidence Path To',data:gnaLow,backgroundColor:'rgba(7,196,217,0.12)',borderWidth:0,stack:'bars'},
+      {label:'Achieved',data:[310,420,490,490,490,490,490,490,490,490,490,490],backgroundColor:'#07c4d9',borderWidth:0,stack:'bars',order:10},
+      {label:'High Confidence Path To',data:gnaHigh,backgroundColor:'rgba(7,196,217,0.5)',borderWidth:0,stack:'bars',order:10},
+      {label:'Low Confidence Path To',data:gnaLow,backgroundColor:'rgba(7,196,217,0.12)',borderWidth:0,stack:'bars',order:10},
       {label:'Forecast',data:gnaForecast,type:'line',borderColor:'#000000',borderWidth:2,pointRadius:3,pointBackgroundColor:'#000000',fill:false,stack:undefined,order:1},
       {label:'Target',data:gnaTarget,type:'line',borderColor:'#aaaaaa',borderWidth:1.5,borderDash:[5,4],pointRadius:0,fill:false,stack:undefined,order:2}
     ]
@@ -1682,13 +1655,13 @@ var ECO_BENCH = {
   unsubs:    {bar:1050,  line:0.045},
   audience:  {bar:3.65,  line:73.0},
   signups:   {bar:7.2,   line:10.3},
-  units_det: {bar:4.3,   line:60.0}
+  units_det: {bar:4.3,   line:2.2}
 };
 var ECO_BENCH_FUNNEL = [4200000,3800000,2000000,580000,48000,7200,4320]; // 7 funnel stages
 
 var eCharts={};
 var EMAIL_TITLES={audience:'Email · Email-able Audience',sends:'Email · Total Sends',opens:'Email · Opens',clicks:'Email · Clicks',unsubs:'Email · Unsubscribes',frequency:'Email · Frequency',signups:'Email · Signups Started',units_det:'Email · Units from Email'};
-var EMAIL_HDRS={audience:['Email-able','% of Customers'],sends:['Sends','Delivery Rate %'],opens:['Opens','Open Rate %'],clicks:['Clicks','CTR %'],unsubs:['Unsubscribes','Unsub Rate %'],frequency:['Emails / Customer','Journeys'],signups:['Signups Started','Click-to-Signup %'],units_det:['Units','Signup Complete %']};
+var EMAIL_HDRS={audience:['Email-able','% of Customers'],sends:['Sends','Delivery Rate %'],opens:['Opens','Open Rate %'],clicks:['Clicks','CTR %'],unsubs:['Unsubscribes','Unsub Rate %'],frequency:['Emails / Customer','Journeys'],signups:['Signups Started','Click-to-Signup %'],units_det:['Units','Click-to-Conv Rate %']};
 
 function eGetViewKey(){ var v=window._currentViewBy||'month'; return v==='ytd'?'month':v; }
 
@@ -1696,18 +1669,17 @@ function eInitChart(key){
   var canvas=document.getElementById('echart-'+key);
   if(!canvas||typeof Chart==='undefined') return;
   if(eCharts[key]){eCharts[key].destroy();}
-  var pc=getComputedStyle(document.documentElement).getPropertyValue('--payments').trim()||'#07c4d9';
-  var hex=pc.replace('#','');var r=parseInt(hex.substr(0,2),16)||7,g=parseInt(hex.substr(2,2),16)||196,b=parseInt(hex.substr(4,2),16)||217;
-  var vk=eGetViewKey(); var d=EMAIL_DATA[key][vk]||EMAIL_DATA[key].month;
+  var _pc=document.documentElement.style.getPropertyValue('--payments').trim()||getComputedStyle(document.documentElement).getPropertyValue('--payments').trim()||'#07c4d9';var pc=_pc.replace(/^\s+/,'');var hex=pc.replace('#','');var r=parseInt(hex.substr(0,2),16)||7,g=parseInt(hex.substr(2,2),16)||196,b=parseInt(hex.substr(4,2),16)||217;
+  var vk=eGetViewKey(); var eSrc=EMAIL_DATA[key]||(typeof EMAIL_DATA_EXTRA!=='undefined'&&EMAIL_DATA_EXTRA[key])||{}; var d=eSrc[vk]||eSrc.month;
   var bench = ECO_BENCH[key] || {};
   var benchBarData = bench.bar ? Array(d.labels.length).fill(bench.bar) : null;
   var benchLineData = bench.line ? Array(d.labels.length).fill(bench.line) : null;
   var datasets = [
-    {type:'bar',label:'Value',data:d.bar,backgroundColor:'rgba('+r+','+g+','+b+',0.7)',borderColor:pc,borderWidth:1,yAxisID:'y',order:2},
+    {type:'bar',label:'Value',data:d.bar,backgroundColor:'rgba('+r+','+g+','+b+',0.7)',borderColor:'rgb('+r+','+g+','+b+')',borderWidth:1,yAxisID:'y',order:2},
     {type:'line',label:'Rate',data:d.line,borderColor:'#14324F',borderWidth:2,pointRadius:2,pointBackgroundColor:'#14324F',fill:false,yAxisID:'y1',order:1}
   ];
-  if(benchBarData)  datasets.push({type:'line',label:'Eco Benchmark',data:benchBarData,borderColor:'rgba(100,120,140,0.55)',borderDash:[5,4],borderWidth:1.5,pointRadius:0,yAxisID:'y',order:3,fill:false});
-  if(benchLineData) datasets.push({type:'line',label:'Eco Rate Benchmark',data:benchLineData,borderColor:'rgba(100,120,140,0.4)',borderDash:[5,4],borderWidth:1.5,pointRadius:0,yAxisID:'y1',order:3,fill:false});
+  if(benchBarData)  datasets.push({type:'line',label:'Eco Benchmark',data:benchBarData,borderColor:'rgba('+Math.round(r*0.6)+','+Math.round(g*0.6)+','+Math.round(b*0.6)+',0.9)',borderDash:[5,4],borderWidth:1.5,pointRadius:0,yAxisID:'y',order:3,fill:false});
+  if(benchLineData) datasets.push({type:'line',label:'Eco Rate Benchmark',data:benchLineData,borderColor:'rgba('+Math.round(r*0.6)+','+Math.round(g*0.6)+','+Math.round(b*0.6)+',0.9)',borderDash:[5,4],borderWidth:1.5,pointRadius:0,yAxisID:'y1',order:3,fill:false});
   eCharts[key]=new Chart(canvas,{
     data:{labels:d.labels,datasets:datasets},
     options:{responsive:true,maintainAspectRatio:false,
@@ -1723,7 +1695,7 @@ function eInitChart(key){
 
 function eUpdateTable(key){
   var tbody=document.getElementById('etbl-'+key+'-body');if(!tbody)return;
-  var vk=eGetViewKey();var d=EMAIL_DATA[key][vk]||EMAIL_DATA[key].month;
+  var vk=eGetViewKey();var eSrc2=EMAIL_DATA[key]||(typeof EMAIL_DATA_EXTRA!=='undefined'&&EMAIL_DATA_EXTRA[key])||{};var d=eSrc2[vk]||eSrc2.month;
   var rows='';
   var rLabels=d.labels.slice().reverse(),rBar=d.bar.slice().reverse(),rLine=d.line.slice().reverse(),rBi=d.bar_itpm?d.bar_itpm.slice().reverse():null,rLi=d.line_itpm?d.line_itpm.slice().reverse():null;
   rLabels.forEach(function(lbl,i){
@@ -1763,7 +1735,9 @@ function eUpdateTable(key){
 function eRefreshAll(){
   var vk = eGetViewKey();
   // Compute period label from the active selector
-  var periodLabel = vk==='month'
+  var periodLabel = (window._currentViewBy==='ytd')
+    ? 'YTD'
+    : vk==='month'
     ? (function(){ var sel=document.getElementById('current-month-sel'); var mn={Aug:'August',Sep:'September',Oct:'October',Nov:'November',Dec:'December',Jan:'January',Feb:'February',Mar:'March',Apr:'April',May:'May',Jun:'June',Jul:'July'}; return mn[sel?sel.value:'Sep']||'September'; })()
     : vk==='quarter'
     ? (function(){ var btn=document.getElementById('quarter-picker-btn'); return btn?btn.textContent.replace('\u25be','').trim():"Q3 FY'27"; })()
@@ -1773,7 +1747,8 @@ function eRefreshAll(){
 
   // Refresh charts
   if (typeof eInitUnitsChart==='function') eInitUnitsChart();
-  Object.keys(EMAIL_DATA).forEach(function(key){
+  var allChartKeys = Object.keys(EMAIL_DATA).concat(['signups','units_det']);
+  allChartKeys.forEach(function(key){
     eInitChart(key);
     var title = fLabel + ' \u00b7 ' + (EMAIL_TITLES[key]||key) + ' \u00b7 ' + periodLabel;
     // Summary tab headers
@@ -1785,6 +1760,10 @@ function eRefreshAll(){
     var edc=document.getElementById('ecard-det-hdr-'+key); if(edc) edc.textContent=title;
     var ct=document.getElementById('echart-title-'+key); if(ct) ct.textContent=EMAIL_TITLES[key];
   });
+
+  eInitAllCampCharts();
+  eUpdateCampSubtitle();
+  eUpdateDetCallouts();
 
   // Units / Commentary headers
   ['units-hdr','units-commentary-hdr','units-det-hdr'].forEach(function(id){
@@ -1803,7 +1782,7 @@ function eRefreshAll(){
   var eh=document.getElementById('estats-hdr');
   if(eh) eh.textContent=fLabel+' \u00b7 '+periodLabel;
   var efl=document.getElementById('estats-freq-label');
-  if(efl) efl.textContent='Email Frequency \u00b7 '+periodLabel;
+  // frequency label kept static
 }
 
 var _origSetVBM=null;
@@ -1862,7 +1841,9 @@ function eAddBenchmarks(){
     clicks:    {val1:'58K',  lbl1:'Clicks',           val2:'8.5%',  lbl2:'CTR'},
     frequency: {val1:'4.2',  lbl1:'Emails/Customer',  val2:'18',    lbl2:'Journeys'},
     unsubs:    {val1:'12K',  lbl1:'Unsubscribes',     val2:'1.8%',  lbl2:'Unsub Rate'},
-    audience:  {val1:'3.1M', lbl1:'Email-able',       val2:'82%',   lbl2:'of Customers'}
+    audience:  {val1:'3.1M', lbl1:'Email-able',       val2:'82%',   lbl2:'of Customers'},
+    signups:   {val1:'7.2K', lbl1:'Signups Started',  val2:'10.3%', lbl2:'Click-to-Signup'},
+    units_det: {val1:'4.3K', lbl1:'Units',            val2:'2.2%',  lbl2:'Click-to-Conv Rate'}
   };
   Object.keys(benchmarks).forEach(function(key){
     var tbody=document.getElementById('etbl-'+key+'-body');
@@ -1887,7 +1868,7 @@ function eAddDetBenchmarks(){
     clicks:    {val1:'70K',  lbl1:'Clicks',         val2:'3.3%',  lbl2:'CTR'},
     unsubs:    {val1:'1.1K', lbl1:'Unsubscribes',   val2:'0.045%',lbl2:'Unsub Rate'},
     signups:   {val1:'7.2K', lbl1:'Signups Started',val2:'10.3%', lbl2:'Click-to-Signup Rate'},
-    units_det: {val1:'4.3K', lbl1:'Units',          val2:'60.0%', lbl2:'Signup Completion Rate'}
+    units_det: {val1:'4.3K', lbl1:'Units',          val2:'2.2%',  lbl2:'Click-to-Conv Rate'}
   };
   Object.keys(benchmarks).forEach(function(key){
     var tbody=document.getElementById('etbl-det-'+key+'-body');
@@ -1925,16 +1906,16 @@ var EMAIL_DATA_EXTRA = {
     month:{labels:["Oct '24","Nov '24","Dec '24","Jan '25","Feb '25","Mar '25","Apr '25","May '25","Jun '25","Jul '25","Aug '25","Sep '25"],
       bar:[1.9,2.0,2.2,2.1,2.2,2.3,2.4,2.3,2.4,2.4,2.5,2.5],
       bar_itpm:[105,107,110,108,110,111,112,111,112,112,113,112],
-      line:[59.4,58.8,61.1,60.0,61.1,62.2,63.2,62.2,63.2,63.2,64.1,64.1],
-      line_itpm:[103,102,104,103,104,106,107,106,107,107,108,108]},
+      line:[2.4,2.5,2.6,2.6,2.6,2.6,2.7,2.6,2.7,2.6,2.7,2.7],
+      line_itpm:[100,104,104,100,100,100,104,96,104,96,104,100]},
     quarter:{labels:["Q4 FY'25","Q1 FY'26","Q2 FY'26","Q3 FY'26","Q4 FY'26","Q1 FY'27","Q2 FY'27","Q3 FY'27"],
       bar:[1.8,1.9,2.1,2.2,2.3,2.4,2.5,2.6],bar_itpm:[103,105,108,110,111,112,113,114],
-      line:[58.0,59.4,60.6,61.5,62.5,63.0,63.6,64.1],line_itpm:[100,102,104,105,107,108,109,110]},
+      line:[2.3,2.4,2.5,2.6,2.6,2.7,2.7,2.8],line_itpm:[100,104,104,104,100,104,100,104]},
     week:{labels:Array.from({length:13},function(_,i){return'W'+(i+1);}),
       bar:Array.from({length:13},function(_,i){return+(1.7+i*0.06).toFixed(2);}),
       bar_itpm:Array.from({length:13},function(_,i){return Math.round(100+i*0.25);}),
-      line:Array.from({length:13},function(_,i){return+(57.5+i*0.5).toFixed(1);}),
-      line_itpm:Array.from({length:13},function(_,i){return Math.round(99+i*0.18);})}}
+      line:Array.from({length:13},function(_,i){return+(2.3+i*0.03).toFixed(2);}),
+      line_itpm:Array.from({length:13},function(_,i){return Math.round(100+i*0.15);})}}
 };
 var UNITS_DATA={
   month:{labels:["Oct '24","Nov '24","Dec '24","Jan '25","Feb '25","Mar '25","Apr '25","May '25","Jun '25","Jul '25","Aug '25","Sep '25"],actuals:[142,155,168,152,160,172,178,170,175,182,188,195],forecast:[138,150,162,155,165,170,175,172,178,180,185,190],target:[145,158,170,158,165,175,180,175,182,188,192,198]},
@@ -1948,13 +1929,13 @@ function eInitUnitsChart(){
   if(_unitsChart){_unitsChart.destroy();_unitsChart=null;}
   var vk=typeof eGetViewKey==='function'?eGetViewKey():'month';
   var d=UNITS_DATA[vk]||UNITS_DATA.month;
-  var upc=getComputedStyle(document.documentElement).getPropertyValue('--payments').trim()||'#07c4d9';
+  var upc=(document.documentElement.style.getPropertyValue('--payments').trim()||getComputedStyle(document.documentElement).getPropertyValue('--payments').trim()||'#07c4d9').replace(/^\s+/,'');
   var uhex=upc.replace('#','');
   var ur=parseInt(uhex.substr(0,2),16)||7,ug=parseInt(uhex.substr(2,2),16)||196,ub=parseInt(uhex.substr(4,2),16)||217;
   _unitsChart=new Chart(canvas,{
     type:'bar',
     data:{labels:d.labels,datasets:[
-      {label:'Actuals', data:d.actuals, backgroundColor:upc, borderWidth:0},
+      {label:'Actuals', data:d.actuals, backgroundColor:upc, borderWidth:0, order:10},
       {label:'Forecast',data:d.forecast,type:'line',borderColor:'#000000',borderWidth:2,pointRadius:3,pointBackgroundColor:'#000000',fill:false,order:1},
       {label:'Target',  data:d.target,  type:'line',borderColor:'#aaaaaa',borderWidth:1.5,borderDash:[5,4],pointRadius:0,fill:false,order:2}
     ]},
@@ -1972,48 +1953,360 @@ function eUpdateUnitsTable(d){
   if(!d)d=UNITS_DATA[vk]||UNITS_DATA.month;
   var tbody=document.getElementById('etbl-units-body');
   if(!tbody)return;
-  function fmt(v){if(v===null)return'\u2014';return(v>=0?'+':'')+v+'K';}
-  function itpm(a,b){if(!a||!b)return null;return Math.round((a/b)*100);}
-  function itc(v){if(!v)return '';return v>=100?'val-g':v>=80?'val-a':'val-r';}
-  function dc(v){if(v===null)return '';return v>=0?'val-g':'val-r';}
+  function fmtRev(v){ return v===null?'\u2014':'$'+v; }
+  function fmtU(v){   return v===null?'\u2014':v+'K'; }
+  function itc(v){    return !v?'':v>=100?'val-g':v>=80?'val-a':'val-r'; }
+  function itx(a,b){  return (a&&b)?Math.round((a/b)*100):null; }
 
-  // This quarter: Aug, Sep, Oct (Oct is future so dashes for actuals/delta/ITF/ITT)
-  var qtdRows=[
-    {lbl:'Aug', act:420,fc:400,tg:580},
-    {lbl:'Sep', act:580,fc:550,tg:760},
-    {lbl:'Oct', act:null,fc:650,tg:900}
+  var unitRows=[
+    {lbl:'Aug', rev:'$550K', arr:'$6.6M', units:188, pm:182, py:176},
+    {lbl:'Sep', rev:'$580K', arr:'$7.0M', units:195, pm:188, py:182},
+    {lbl:'Oct', rev:null,    arr:null,    units:null, pm:195, py:188}
   ];
-  // QTD (Aug+Sep only — Oct not yet complete)
-  var qtdAct=1000,qtdFc=950,qtdTg=1340;
-  // YTD
-  var ytdAct=3200,ytdFc=3050,ytdTg=4200;
+  var qtd = {lbl:'QTD', rev:'$1.13M', arr:null, units:383, pm:370, py:358, isTotal:true};
+  var ytd = {lbl:'YTD', rev:'$4.82M', arr:null, units:1956, pm:1861, py:1829, isTotal:true};
 
-  function row(lbl,act,fc,tg,isTotal){
-    var dfc=act!==null?act-fc:null;
-    var dtg=act!==null?act-tg:null;
-    var itf=itpm(act,fc),itt=itpm(act,tg);
-    var bold=isTotal?'font-weight:700;':'';
-    var bg=isTotal?'background:var(--tbl-hdr-bg);':'';
-    return '<tr style="'+bg+'">'
-      +'<td style="'+bold+'">'+lbl+'</td>'
-      +'<td style="'+bold+'">'+(act!==null?act+'K':'\u2014')+'</td>'
-      +'<td class="dvl">'+fc+'K</td>'
-      +'<td>'+(dfc!==null?'<span class="val-delta">'+fmt(dfc)+'</span>':'\u2014')+'</td>'
-      +'<td>'+(itf?'<span class="'+itc(itf)+'">'+itf+'</span>':'\u2014')+'</td>'
-      +'<td class="dv">'+tg+'K</td>'
-      +'<td>'+(dtg!==null?'<span class="val-delta">'+fmt(dtg)+'</span>':'\u2014')+'</td>'
-      +'<td>'+(itt?'<span class="'+itc(itt)+'">'+itt+'</span>':'\u2014')+'</td>'
-      +'</tr>';
+  function rowU(r){
+    var ipm = itx(r.units,r.pm), ipy = itx(r.units,r.py);
+    var bold = r.isTotal ? 'font-weight:700;' : '';
+    var bg   = r.isTotal ? 'background:var(--tbl-hdr-bg);' : '';
+    return '<tr style="'+bg+'">'+
+      '<td style="'+bold+'">'+r.lbl+'</td>'+
+      '<td style="text-align:right;'+bold+'">'+fmtRev(r.rev)+'</td>'+
+      '<td style="text-align:right;'+bold+'">'+(r.arr||'\u2014')+'</td>'+
+      '<td style="text-align:right;'+bold+'">'+fmtU(r.units)+'</td>'+
+      '<td style="text-align:right;color:var(--text-3);">'+fmtU(r.pm)+'</td>'+
+      '<td style="text-align:right;">'+(ipm?'<span class="'+itc(ipm)+'">'+ipm+'</span>':'\u2014')+'</td>'+
+      '<td style="text-align:right;color:var(--text-3);">'+fmtU(r.py)+'</td>'+
+      '<td style="text-align:right;">'+(ipy?'<span class="'+itc(ipy)+'">'+ipy+'</span>':'\u2014')+'</td>'+
+      '</tr>';
   }
 
-  var rows=qtdRows.map(function(r){return row(r.lbl,r.act,r.fc,r.tg,false);}).join('');
-  rows+=row('QTD',qtdAct,qtdFc,qtdTg,true);
-  rows+=row('YTD',ytdAct,ytdFc,ytdTg,true);
-  tbody.innerHTML=rows;
+  // This quarter: Aug, Sep, Oct (Oct is future so dashes for actuals/delta/ITF/ITT)
+  tbody.innerHTML = unitRows.map(rowU).join('') + rowU(qtd) + rowU(ytd);
 
   var el=document.getElementById('units-hdr');
   if(el){var pl=vk==='month'?'September':vk==='quarter'?"Q3 FY'27":'W13';el.textContent='Units From Email \u00b7 '+pl;}
 }
+
+function esfToggle(type) {
+  var ids = ['kpi','aud','goal'];
+  ids.forEach(function(t) {
+    var dd = document.getElementById('esf-'+t+'-dd');
+    if (dd) dd.style.display = (t===type && dd.style.display==='none') ? 'block' : 'none';
+  });
+}
+function esfUpdate(type) {
+  var dd  = document.getElementById('esf-'+type+'-dd');
+  var btn = document.getElementById('esf-'+type+'-btn');
+  if (!dd || !btn) return;
+  var checked = Array.from(dd.querySelectorAll('input:checked')).map(function(i){return i.closest('label').textContent.trim();});
+  var total   = dd.querySelectorAll('input').length;
+  var label   = {kpi:'Outcome KPIs', aud:'Audiences', goal:'Goals'}[type] || type;
+  var hasFilter = checked.length < total && checked.length > 0;
+  btn.style.background = hasFilter ? 'var(--payments)' : 'var(--navy)';
+  btn.firstChild.textContent = checked.length===total ? ('All '+label+' ') : (checked.length===1 ? checked[0]+' ' : checked.length+' '+label+' ');
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('#email-inline-filters')) {
+    ['kpi','aud','goal'].forEach(function(t){
+      var dd = document.getElementById('esf-'+t+'-dd');
+      if (dd) dd.style.display = 'none';
+    });
+  }
+});
+
+
+// ── Campaign-tab summary-style charts (canvas suffix _c) ────────────────
+function eInitCampChart(key) {
+  var canvasId = 'echart-'+key+'_c';
+  var canvas = document.getElementById(canvasId);
+  if (!canvas || typeof Chart === 'undefined') return;
+  if (canvas._chartInst) { canvas._chartInst.destroy(); canvas._chartInst = null; }
+
+  var vk   = eGetViewKey();
+  var eSrc = EMAIL_DATA[key] || (typeof EMAIL_DATA_EXTRA!=='undefined' && EMAIL_DATA_EXTRA[key]) || {};
+  var d    = eSrc[vk] || eSrc.month || {};
+  if (!d.labels) return;
+
+  // ── Colors ──────────────────────────────────────────────────────────────
+  var upc = (document.documentElement.style.getPropertyValue('--payments').trim() || getComputedStyle(document.documentElement).getPropertyValue('--payments').trim() || '#07c4d9').replace(/^\s+/,'');
+  var hex = upc.replace('#','');
+  var r=parseInt(hex.substr(0,2),16)||7, g=parseInt(hex.substr(2,2),16)||196, b=parseInt(hex.substr(4,2),16)||217;
+  var prodFill   = 'rgba('+r+','+g+','+b+',0.72)';
+  var prodBorder = 'rgb('+r+','+g+','+b+')';
+  var darkProd   = 'rgba('+Math.round(r*0.55)+','+Math.round(g*0.55)+','+Math.round(b*0.55)+',0.95)';
+  var rateColor  = 'rgba(10,10,10,0.88)';
+  var rateBench  = 'rgba(90,90,90,0.85)';
+
+  var bench     = (typeof ECO_BENCH !== 'undefined') ? (ECO_BENCH[key] || {}) : {};
+  var bFmt      = d.barFmt  || 'K';
+  var lFmt      = d.lineFmt || '%';
+  var hasLine   = !!(d.line  && d.line.length);
+  var hasBBar   = !!bench.bar;
+  var hasBLine  = !!(bench.line && hasLine);
+  var hdrs      = EMAIL_HDRS[key] || [key, 'Rate'];
+
+  // ── Datasets ─────────────────────────────────────────────────────────────
+  var datasets = [];
+
+  // 1. Actuals — bars
+  datasets.push({
+    label: hdrs[0], data: d.bar, type:'bar',
+    backgroundColor: prodFill, borderColor: prodBorder, borderWidth:1,
+    order:10, yAxisID:'y'
+  });
+
+  // 2. Actuals benchmark — darker product color, long dash [8,4]
+  if (hasBBar) {
+    datasets.push({
+      label:'Eco '+hdrs[0]+' Benchmark', type:'line',
+      data: d.labels.map(function(){ return bench.bar; }),
+      borderColor: darkProd, borderWidth:2, borderDash:[8,4],
+      pointRadius:0, fill:false, order:5, yAxisID:'y'
+    });
+  }
+
+  // 3. Rate — solid black line with dots
+  if (hasLine) {
+    datasets.push({
+      label: hdrs[1]||'Rate', type:'line', data: d.line,
+      borderColor: rateColor, borderWidth:2, borderDash:[],
+      pointRadius:4, pointBackgroundColor: rateColor,
+      fill:false, order:2, yAxisID:'y2'
+    });
+  }
+
+  // 4. Rate benchmark — dark gray, short-gap dash [3,5]
+  if (hasBLine) {
+    datasets.push({
+      label:'Eco Rate Benchmark', type:'line',
+      data: d.labels.map(function(){ return bench.line; }),
+      borderColor: rateBench, borderWidth:2, borderDash:[3,5],
+      pointRadius:0, fill:false, order:6, yAxisID:'y2'
+    });
+  }
+
+  var chart = new Chart(canvas, {
+    type:'bar',
+    data:{labels:d.labels, datasets:datasets},
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{display:false}, tooltip:{mode:'index',intersect:false}},
+      scales:{
+        x:{ticks:{font:{size:9},autoSkip:true}, grid:{display:false}},
+        y:{position:'left', ticks:{font:{size:9}, callback:function(v){return v+bFmt;}},
+           grid:{color:'rgba(0,0,0,0.04)'}},
+        y2:{position:'right', display:hasLine,
+            ticks:{font:{size:9}, callback:function(v){return v+lFmt;}},
+            grid:{drawOnChartArea:false}}
+      }
+    }
+  });
+  canvas._chartInst = chart;
+
+  // ── HTML Key / Legend (below canvas) ────────────────────────────────────
+  var canvasBox = canvas.parentElement;
+  if (canvasBox) {
+    var keyEl = document.getElementById(canvasId+'-key');
+    if (!keyEl) {
+      keyEl = document.createElement('div');
+      keyEl.id = canvasId+'-key';
+      keyEl.style.cssText = 'display:flex;flex-wrap:wrap;gap:8px 14px;padding:6px 0 0;font-size:9px;color:var(--text-2);';
+      var titleEl = document.getElementById('echart-title-'+key+'_c');
+      if (titleEl && titleEl.parentNode) {
+        keyEl.style.cssText = 'display:flex;flex-wrap:wrap;gap:6px 12px;padding:4px 0 6px;font-size:9px;color:var(--text-2);';
+        titleEl.parentNode.insertBefore(keyEl, titleEl.nextSibling);
+      }
+    }
+    var keyItems = [
+      '<span style="display:flex;align-items:center;gap:4px;">'
+        +'<span style="display:inline-block;width:12px;height:10px;background:'+prodFill+';border:1px solid '+prodBorder+';border-radius:2px;flex-shrink:0;"></span>'
+        +hdrs[0]+'</span>',
+    ];
+    if (hasBBar) keyItems.push(
+      '<span style="display:flex;align-items:center;gap:4px;">'
+        +'<span style="display:inline-block;width:18px;border-top:2px dashed '+darkProd+';flex-shrink:0;"></span>'
+        +'Eco Benchmark</span>');
+    if (hasLine) keyItems.push(
+      '<span style="display:flex;align-items:center;gap:4px;">'
+        +'<span style="display:inline-flex;align-items:center;gap:1px;flex-shrink:0;">'
+          +'<span style="display:inline-block;width:8px;height:2px;background:'+rateColor+';"></span>'
+          +'<span style="display:inline-block;width:6px;height:6px;background:'+rateColor+';border-radius:50%;"></span>'
+          +'<span style="display:inline-block;width:8px;height:2px;background:'+rateColor+';"></span>'
+        +'</span>'
+        +(hdrs[1]||'Rate')+'</span>');
+    if (hasBLine) keyItems.push(
+      '<span style="display:flex;align-items:center;gap:4px;">'
+        +'<span style="display:inline-block;width:18px;border-top:2px dashed '+rateBench+';flex-shrink:0;"></span>'
+        +'Eco Rate Benchmark</span>');
+    keyEl.innerHTML = keyItems.join('');
+  }
+
+  // ── Benchmark text above table ───────────────────────────────────────────
+  var tbEl = document.getElementById('etbl-'+key+'_c-body');
+  if (tbEl) {
+    var tableEl = tbEl.closest ? tbEl.closest('table') : null;
+    if (tableEl && tableEl.parentNode) {
+      var benchEl = document.getElementById('etbl-'+key+'_c-bench');
+      if (!benchEl) {
+        benchEl = document.createElement('div');
+        benchEl.id = 'etbl-'+key+'_c-bench';
+        benchEl.style.cssText = 'font-size:11px;font-weight:500;color:var(--text-3);padding:0 0 6px;border-bottom:1px solid var(--line);margin-bottom:5px;';
+      }
+      if (hasBBar || hasBLine) {
+        var parts = [];
+        if (hasBBar)  parts.push(hdrs[0]+' eco: '+bench.bar+bFmt);
+        if (hasBLine) parts.push((hdrs[1]||'Rate')+' eco: '+bench.line+lFmt);
+        benchEl.textContent = 'Ecosystem benchmarks \u2014 ' + parts.join(' \u00b7 ');
+        tableEl.parentNode.insertBefore(benchEl, tableEl);
+      }
+    }
+  }
+
+  // ── Update table ─────────────────────────────────────────────────────────
+  var tb = document.getElementById('etbl-'+key+'_c-body');
+  if (tb && typeof eUpdateTable === 'function') {
+    var realId = 'etbl-'+key+'-body';
+    var realEl = document.getElementById(realId);
+    if (realEl) realEl.id = '__tmp_swap';
+    tb.id = realId;
+    eUpdateTable(key);
+    tb.id = 'etbl-'+key+'_c-body';
+    if (realEl) realEl.id = realId;
+  }
+
+  // ── Card header ──────────────────────────────────────────────────────────
+  var fLabel = typeof eGetFilterLabel==='function' ? eGetFilterLabel() : 'All Email Campaigns';
+  var periodLabel = (window._currentViewBy==='ytd') ? 'YTD'
+    : vk==='month'   ? (function(){ var s=document.getElementById('current-month-sel'); var mn={Aug:'August',Sep:'September',Oct:'October',Nov:'November',Dec:'December',Jan:'January',Feb:'February',Mar:'March',Apr:'April',May:'May',Jun:'June',Jul:'July'}; return mn[s?s.value:'Sep']||'September'; })()
+    : vk==='quarter' ? (function(){ var bq=document.getElementById('quarter-picker-btn'); return bq?bq.textContent.replace('\u25be','').trim():"Q3 FY'27"; })()
+    : 'W8';
+  var hdEl = document.getElementById('ecard-hdr-'+key+'_c');
+  var ttEl = document.getElementById('echart-title-'+key+'_c');
+  if (hdEl) hdEl.textContent = fLabel+' \u00b7 '+(EMAIL_TITLES[key]||key)+' \u00b7 '+periodLabel;
+  if (ttEl) ttEl.textContent = EMAIL_TITLES[key]||key;
+}
+
+function eInitAllCampCharts() {
+  var keys = Object.keys(EMAIL_DATA).concat(['units_det']);
+  keys.forEach(function(k){ eInitCampChart(k); });
+}
+
+
+// ── Campaign table column sort ───────────────────────────────────────────
+var _eCampSortKey = null, _eCampSortDir = 1;
+function eCampSort(key) {
+  if (_eCampSortKey === key) { _eCampSortDir *= -1; }
+  else { _eCampSortKey = key; _eCampSortDir = -1; } // default desc
+  // Update arrow indicators
+  document.querySelectorAll('#etbl-campaign-assets thead .sort-arrow').forEach(function(el){
+    el.innerHTML = ' &#8597;';
+    el.style.opacity = '.5';
+  });
+  var active = document.querySelector('#etbl-campaign-assets thead [data-sortkey="'+key+'"] .sort-arrow');
+  if (active) { active.innerHTML = _eCampSortDir === -1 ? ' &#8595;' : ' &#8593;'; active.style.opacity = '1'; }
+  // Re-render
+  var f = typeof eGetActiveFilter==='function' ? eGetActiveFilter() : {campaigns:[],emails:[],goals:[]};
+  if (typeof eBuildCampaignTable==='function') eBuildCampaignTable(f.campaigns, f.emails.map(function(e){return (f.campaigns[0]||'')+'::'+e;}));
+}
+
+
+// ── Campaign Performance dynamic sub-title ───────────────────────────────
+
+// ── Update detail-tab callout numbers when filter changes ────────────────
+function eUpdateDetCallouts() {
+  var f = (typeof eGetActiveFilter === 'function') ? eGetActiveFilter() : {campaigns:[], emails:[]};
+  var camps  = f.campaigns || [];
+  var emails = f.emails    || [];
+
+  // Compute totals from CAMPAIGN_ASSET_DATA
+  var T = {sent:0, dlvd:0, opnd:0, clkd:0, unsub:0};
+  var allCampIds = (typeof CAMPAIGN_ASSET_DATA !== 'undefined') ? Object.keys(CAMPAIGN_ASSET_DATA) : [];
+  var activeCamps = camps.length ? camps : allCampIds;
+
+  activeCamps.forEach(function(id) {
+    var cdat = CAMPAIGN_ASSET_DATA && CAMPAIGN_ASSET_DATA[id];
+    if (!cdat) return;
+    var eKeys = Object.keys(cdat.emails || {});
+    eKeys.forEach(function(ek) {
+      // email filter: check if this email is selected (or no email filter)
+      if (emails.length) {
+        var match = emails.some(function(ef){
+          return ef === ek || ef === id+'::'+ek || ef.indexOf(ek) !== -1;
+        });
+        if (!match) return;
+      }
+      var e = cdat.emails[ek];
+      T.sent  += (e.sent  || 0);
+      T.dlvd  += (e.dlvd  || 0);
+      T.opnd  += (e.opnd  || 0);
+      T.clkd  += (e.clkd  || 0);
+      T.unsub += (e.unsub || 0);
+    });
+  });
+
+  function fmtNum(n) {
+    if (n >= 1e6)  return (n/1e6).toFixed(n>=10e6?1:2).replace(/\.?0+$/,'')+'M';
+    if (n >= 1e3)  return (n/1e3).toFixed(n>=100e3?0:1).replace(/\.?0+$/,'')+'K';
+    return String(n);
+  }
+  function fmtPct(a, b) {
+    return b ? (a/b*100).toFixed(a/b>0.1?1:3)+'%' : '—';
+  }
+
+  function set(id, val) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = val;
+  }
+
+  set('det-big-sends',    fmtNum(T.sent));
+  set('det-big-dlvd',     fmtPct(T.dlvd, T.sent));
+  set('det-big-opens',    fmtNum(T.opnd));
+  set('det-big-open-pct', fmtPct(T.opnd, T.sent));
+  set('det-big-clicks',   fmtNum(T.clkd));
+  set('det-big-ctr',      fmtPct(T.clkd, T.sent));
+  set('det-big-unsubs',   fmtNum(T.unsub));
+  set('det-big-unsub-pct',fmtPct(T.unsub, T.sent));
+}
+
+function eUpdateCampSubtitle() {
+  var el = document.getElementById('det-subtitle');
+  if (!el) return;
+  var vk = typeof eGetViewKey === 'function' ? eGetViewKey() : 'month';
+  var period = (window._currentViewBy === 'ytd') ? 'YTD'
+    : vk === 'month'   ? (function(){ var s=document.getElementById('current-month-sel'); var mn={Aug:'August',Sep:'September',Oct:'October',Nov:'November',Dec:'December',Jan:'January',Feb:'February',Mar:'March',Apr:'April',May:'May',Jun:'June',Jul:'July'}; return mn[s?s.value:'Sep']||'September'; })()
+    : vk === 'quarter' ? (function(){ var b=document.getElementById('quarter-picker-btn'); return b?b.textContent.replace('\u25be','').trim():"Q3 FY'27"; })()
+    : (function(){ var b=document.getElementById('week-picker-btn'); return b?b.textContent.replace('\u25be','').trim():'W8'; })();
+
+  var f = (typeof eGetActiveFilter === 'function') ? eGetActiveFilter() : {campaigns:[], emails:[]};
+  var camps = f.campaigns || [], emails = f.emails || [];
+  var text;
+
+  if (camps.length === 1) {
+    var id   = camps[0];
+    var cdat = (typeof CAMPAIGN_ASSET_DATA !== 'undefined') ? (CAMPAIGN_ASSET_DATA[id] || {}) : {};
+    var cname = cdat.name || id;
+    if (emails.length === 1) {
+      // Single email: show email name from campaign data
+      var ename = emails[0];
+      if (cdat.emails) {
+        var eobj = cdat.emails[ename] || cdat.emails[Object.keys(cdat.emails)[0]];
+        if (eobj && eobj.name) ename = eobj.name;
+      }
+      text = 'Campaign ' + id + ' \u00b7 ' + ename + ' \u00b7 ' + period;
+    } else {
+      text = 'Campaign ' + id + ' \u00b7 ' + cname + ' \u00b7 ' + period;
+    }
+  } else if (camps.length > 1) {
+    text = camps.length + ' Campaigns \u00b7 ' + period;
+  } else {
+    text = 'All Email Campaigns \u00b7 ' + period;
+  }
+
+  el.textContent = text;
+}
+
 function eCampToggle(){
   var dd  = document.getElementById('edd-camp');
   var btn = document.getElementById('ei-camp-btn') || document.getElementById('eflt-camp-btn');
@@ -2182,7 +2475,7 @@ function eEmailToggle() {
 // ── Funnel chart ────────────────────────────────────────────────────────
 var FUNNEL_DATA = {
   default: {
-    stages: ['QBO Subscribers','Eligible Audience','Contactable','Sent','Delivered','Opened','Clicked','Started Signup','Completed Signup'],
+    stages: ['QBO Subscribers','Eligible Audience','Contactable','Sent','Delivered','Opened','Clicked','Started Signup','Converted'],
     counts: [5200000, 4200000, 380000, 2400000, 2357000, 668000, 26000, 3900, 2340],
     py:     [4900000, 3950000, 362000, 2180000, 2138600, 598000, 22000, 3200, 1856]
   }
@@ -2199,7 +2492,7 @@ function eInitFunnelChart(filter) {
   var f = eGetActiveFilter();
   var vk = typeof eGetViewKey==='function' ? eGetViewKey() : 'month';
   var pl = vk==='month' ? 'September' : vk==='quarter' ? "Q3 FY'27" : 'W13';
-  var stages = ['Eligible Audience','Contactable','Sent','Opened','Clicked','Started Signup','Completed Signup'];
+  var stages = ['Eligible Audience','Contactable','Sent','Opened','Clicked','Started Signup','Converted'];
 
   // STACKED mode: single campaign selected, no specific email
   var singleCamp = f.campaigns.length === 1 && f.emails.length === 0;
@@ -2317,7 +2610,6 @@ function eUpdateFunnelTable(d) {
       + '<td style="text-align:right;padding:6px 8px;font-size:14px;font-weight:600;">'+fmt(cnt)+'</td>'
       + '<td style="text-align:right;padding:6px 8px;font-size:13px;color:var(--text-3);">'+conv+'</td>'
       + '<td style="text-align:right;padding:6px 8px;font-size:13px;'+ic(itpm)+'">'+itpm+'</td>'
-      + '<td style="text-align:right;padding:6px 8px;font-size:13px;'+ic(itb)+'">'+itb+'</td>'
       + '<td style="text-align:right;padding:6px 8px;font-size:13px;'+ic(vspy)+'">'+vspy+'</td>'
       + '</tr>';
   }).join('');
@@ -2419,6 +2711,41 @@ function eBuildCampaignTable(campaigns, emails) {
 
   var seen={}; var ids=[];
   campIds.forEach(function(id){ if(!seen[id]){seen[id]=true;ids.push(id);} });
+
+  // Apply column sort
+  if (_eCampSortKey) {
+    ids.sort(function(a,b){
+      var ca=CAMPAIGN_ASSET_DATA[a], cb=CAMPAIGN_ASSET_DATA[b];
+      if(!ca||!cb) return 0;
+      function tot(c){ return c.emails.reduce(function(acc,e){return{elig:acc.elig+e.elig,nc:acc.nc+e.nc,sent:acc.sent+e.sent,dlvd:acc.dlvd+e.dlvd,opnd:acc.opnd+e.opnd,clkd:acc.clkd+e.clkd,ss:acc.ss+(e.ss||0),cs:acc.cs+(e.cs||0),unsub:acc.unsub+(e.unsub||0)};},{elig:0,nc:0,sent:0,dlvd:0,opnd:0,clkd:0,ss:0,cs:0,unsub:0}); }
+      var ta=tot(ca), tb2=tot(cb);
+      var pct=function(x,y){return y?x/y:0;};
+      var va,vb;
+      var k=_eCampSortKey;
+      if(k==='id')      {va=a;vb=b;}
+      else if(k==='name')   {va=ca.name;vb=cb.name;}
+      else if(k==='goal')   {va=(CAMPAIGN_GOALS[a]||{}).goal||'';vb=(CAMPAIGN_GOALS[b]||{}).goal||'';}
+      else if(k==='subProd'){va=(CAMPAIGN_GOALS[a]||{}).subProd||'';vb=(CAMPAIGN_GOALS[b]||{}).subProd||'';}
+      else if(k==='elig')   {va=ta.elig;vb=tb2.elig;}
+      else if(k==='nc')     {va=ta.elig-ta.nc;vb=tb2.elig-tb2.nc;}
+      else if(k==='sent')   {va=ta.sent;vb=tb2.sent;}
+      else if(k==='dlvd')   {va=ta.dlvd;vb=tb2.dlvd;}
+      else if(k==='dlvdpct'){va=pct(ta.dlvd,ta.sent);vb=pct(tb2.dlvd,tb2.sent);}
+      else if(k==='opnd')   {va=ta.opnd;vb=tb2.opnd;}
+      else if(k==='opndpct'){va=pct(ta.opnd,ta.sent);vb=pct(tb2.opnd,tb2.sent);}
+      else if(k==='clkd')   {va=ta.clkd;vb=tb2.clkd;}
+      else if(k==='clkdpct'){va=pct(ta.clkd,ta.sent);vb=pct(tb2.clkd,tb2.sent);}
+      else if(k==='ss')     {va=ta.ss;vb=tb2.ss;}
+      else if(k==='sspct')  {va=pct(ta.ss,ta.clkd);vb=pct(tb2.ss,tb2.clkd);}
+      else if(k==='cs'||k==='cs2'){va=ta.cs;vb=tb2.cs;}
+      else if(k==='rev')    {va=ta.cs*2.97;vb=tb2.cs*2.97;}
+      else if(k==='cspct')  {va=pct(ta.cs,ta.ss);vb=pct(tb2.cs,tb2.ss);}
+      else if(k==='unsub')  {va=ta.unsub;vb=tb2.unsub;}
+      else {va=0;vb=0;}
+      if(typeof va==='string') return _eCampSortDir*(va<vb?-1:va>vb?1:0);
+      return _eCampSortDir*(va-vb);
+    });
+  }
   var selectedEmails = emails.map(function(e){ return e.split('::')[1]||e; });
 
   var mid   = getComputedStyle(document.documentElement).getPropertyValue('--payments-mid').trim()||'rgba(7,196,217,0.4)';
@@ -2438,29 +2765,38 @@ function eBuildCampaignTable(campaigns, emails) {
     rows.forEach(function(e){grand.elig+=e.elig;grand.nc+=e.nc;grand.sent+=e.sent;grand.dlvd+=e.dlvd;grand.opnd+=e.opnd;grand.clkd+=e.clkd;grand.ss+=(e.ss||0);grand.cs+=(e.cs||0);grand.unsub+=(e.unsub||0);});
   });
   var ts='background:var(--payments);color:#fff;font-size:13px;font-weight:700;padding:8px 10px;white-space:nowrap;';
-  var html = ids.length>0 ?
-    '<tr style="background:var(--payments);">' +
-    '<td class="sc1" style="'+ts+'">ALL</td>' +
-    '<td class="sc2" style="'+ts+'">All Campaigns \u2013 '+ids.length+' campaign'+(ids.length!==1?'s':'')+' shown</td>' +
-    '<td style="'+ts+'"></td>' +
-    '<td style="'+ts+'"><span style="background:rgba(255,255,255,0.25);color:#fff;border-radius:4px;padding:2px 7px;font-size:11px;">'+productName+'</span></td>' +
-    '<td style="'+ts+'"></td>' +
-    '<td style="'+ts+'text-align:center;">\u2014</td>' +
-    '<td style="'+ts+'text-align:right;">'+fmt(grand.elig)+'</td>' +
-    '<td style="'+ts+'text-align:right;">'+fmt(grand.elig-grand.nc)+'</td>' +
-    '<td style="'+ts+'text-align:right;">'+fmt(grand.sent)+'</td>' +
-    '<td style="'+ts+'text-align:right;">'+fmt(grand.dlvd)+'</td>' +
-    '<td style="'+ts+'text-align:right;opacity:.8;">'+pct(grand.dlvd,grand.sent)+'</td>' +
-    '<td style="'+ts+'text-align:right;">'+fmt(grand.opnd)+'</td>' +
-    '<td style="'+ts+'text-align:right;opacity:.8;">'+pct(grand.opnd,grand.sent)+'</td>' +
-    '<td style="'+ts+'text-align:right;">'+fmt(grand.clkd)+'</td>' +
-    '<td style="'+ts+'text-align:right;opacity:.8;">'+pct(grand.clkd,grand.sent)+'</td>' +
-    '<td style="'+ts+'text-align:right;">'+fmt(grand.ss)+'</td>' +
-    '<td style="'+ts+'text-align:right;opacity:.8;">'+pct(grand.ss,grand.clkd)+'</td>' +
-    '<td style="'+ts+'text-align:right;">'+fmt(grand.cs)+'</td>' +
-    '<td style="'+ts+'text-align:right;opacity:.8;">'+pct(grand.cs,grand.ss)+'</td>' +
-    '<td style="'+ts+'text-align:right;">'+fmt(grand.unsub)+'</td>' +
-    '</tr>' : '';
+  // Populate the sticky totals header row
+  var totRow = document.getElementById('etbl-camp-totals-row');
+  if (totRow) {
+    if (ids.length > 0) {
+      totRow.innerHTML =
+        '<td class="sc1" style="'+ts+'">ALL</td>' +
+        '<td class="sc2" style="'+ts+'">All Campaigns – '+ids.length+' campaign'+(ids.length!==1?'s':'')+' shown</td>' +
+        '<td style="'+ts+'"></td>' +
+        '<td style="'+ts+'"><span style="background:rgba(255,255,255,0.25);color:#fff;border-radius:4px;padding:2px 7px;font-size:11px;">'+productName+'</span></td>' +
+        '<td style="'+ts+'"></td>' +
+        '<td style="'+ts+'text-align:center;">—</td>' +
+        '<td style="'+ts+'text-align:right;">'+fmt(grand.cs)+'</td>' +
+        '<td style="'+ts+'text-align:right;">$'+Math.round(grand.cs*2.97).toLocaleString()+'</td>' +
+        '<td style="'+ts+'text-align:right;">'+fmt(grand.elig)+'</td>' +
+        '<td style="'+ts+'text-align:right;">'+fmt(grand.elig-grand.nc)+'</td>' +
+        '<td style="'+ts+'text-align:right;">'+fmt(grand.sent)+'</td>' +
+        '<td style="'+ts+'text-align:right;">'+fmt(grand.dlvd)+'</td>' +
+        '<td style="'+ts+'text-align:right;opacity:.8;">'+pct(grand.dlvd,grand.sent)+'</td>' +
+        '<td style="'+ts+'text-align:right;">'+fmt(grand.opnd)+'</td>' +
+        '<td style="'+ts+'text-align:right;opacity:.8;">'+pct(grand.opnd,grand.sent)+'</td>' +
+        '<td style="'+ts+'text-align:right;">'+fmt(grand.clkd)+'</td>' +
+        '<td style="'+ts+'text-align:right;opacity:.8;">'+pct(grand.clkd,grand.sent)+'</td>' +
+        '<td style="'+ts+'text-align:right;">'+fmt(grand.ss)+'</td>' +
+        '<td style="'+ts+'text-align:right;opacity:.8;">'+pct(grand.ss,grand.clkd)+'</td>' +
+        '<td style="'+ts+'text-align:right;">'+fmt(grand.cs)+'</td>' +
+        '<td style="'+ts+'text-align:right;opacity:.8;">'+pct(grand.cs,grand.ss)+'</td>' +
+        '<td style="'+ts+'text-align:right;">'+fmt(grand.unsub)+'</td>';
+    } else {
+      totRow.innerHTML = '<td class="sc1" style="'+ts+'">ALL</td><td class="sc2" style="'+ts+'">No campaigns shown</td>'+(Array(20).fill('<td style="'+ts+'"></td>').join(''));
+    }
+  }
+  var html = '';
 
   ids.forEach(function(campId, gi) {
     var rowIdx = 0;
@@ -2502,6 +2838,8 @@ function eBuildCampaignTable(campaigns, emails) {
       '<td style="'+gc+'font-size:12px;font-weight:700;text-align:left;"><span style="background:var(--payments);color:#fff;border-radius:4px;padding:2px 7px;font-size:11px;">'+productName+'</span></td>' +
       '<td style="'+gc+'font-size:12px;font-weight:500;text-align:left;color:var(--text-2);">'+cGoal.subProd+'</td>' +
       '<td style="'+gn+'text-align:center;">\u2014</td>' +
+      '<td style="'+gn+'">'+fmt(tot.cs)+'</td>' +
+      '<td style="'+gn+'">'+'$'+Math.round(tot.cs*2.97).toLocaleString()+'</td>' +
       '<td style="'+gn+'">'+fmt(tot.elig)+'</td>' +
       '<td style="'+gn+'">'+fmt(tot.elig-tot.nc)+'</td>' +
       '<td style="'+gn+'">'+fmt(tot.sent)+'</td>' +
@@ -2531,6 +2869,8 @@ function eBuildCampaignTable(campaigns, emails) {
         '<td style="'+ec+'text-align:left;"><span style="background:var(--payments);color:#fff;border-radius:4px;padding:2px 7px;font-size:10px;">'+productName+'</span></td>' +
         '<td style="'+ec+'text-align:left;color:var(--text-3);font-size:12px;">'+cGoal.subProd+'</td>' +
         '<td style="'+ec+'text-align:center;"><span style="font-size:11px;color:var(--payments);cursor:pointer;border:1px solid var(--payments);border-radius:3px;padding:2px 7px;">View</span></td>' +
+        '<td style="'+ec+'text-align:right;">'+fmt(e.cs)+'</td>' +
+        '<td style="'+ec+'text-align:right;">'+'$'+Math.round((e.cs||0)*2.97).toLocaleString()+'</td>' +
         '<td style="'+ec+'text-align:right;">'+fmt(e.elig)+'</td>' +
         '<td style="'+ec+'text-align:right;color:var(--text-3);">'+fmt(e.elig-e.nc)+'</td>' +
         '<td style="'+ec+'text-align:right;">'+fmt(e.sent)+'</td>' +
@@ -2549,7 +2889,9 @@ function eBuildCampaignTable(campaigns, emails) {
     });
   });
 
-  tbody.innerHTML = html || '<tr><td colspan="20" style="padding:20px;text-align:center;color:var(--text-3);">No data.</td></tr>';
+  tbody.innerHTML = html || '<tr><td colspan="22" style="padding:20px;text-align:center;color:var(--text-3);">No data.</td></tr>';
+  if (typeof eUpdateCampSubtitle === 'function') eUpdateCampSubtitle();
+  if (typeof eUpdateDetCallouts === 'function') eUpdateDetCallouts();
 
   // Wire up click handlers
   document.querySelectorAll('.camp-grp-hdr').forEach(function(row) {
@@ -2639,7 +2981,7 @@ function eOnFilterChange() {
   var ehdr = document.getElementById('estats-hdr');
   if (ehdr) ehdr.textContent = fLabel + ' · ' + pl;
   var efl = document.getElementById('estats-freq-label');
-  if (efl) efl.textContent = 'Email Frequency · ' + pl;
+  if (efl) efl.textContent = 'Email Frequency';
 
   // 2. Toggle forecast cols (Summary only)
   document.querySelectorAll('.units-forecast-col').forEach(function(el) {
@@ -2655,6 +2997,7 @@ function eOnFilterChange() {
     if (typeof eInitUnitsChart==='function')     eInitUnitsChart();
     // Also refresh summary tab charts so they update if Summary is visible
     Object.keys(EMAIL_DATA).forEach(function(key){ if(typeof eInitChart==='function') eInitChart(key); });
+    ['signups','units_det'].forEach(function(key){ if(typeof eInitChart==='function') eInitChart(key); });
     var ctw = document.getElementById('campaign-asset-table-wrap');
     if (ctw) ctw.style.display = 'block';
   }, 50);
@@ -2672,14 +3015,17 @@ function switchEmailTab(tab) {
       btn.style.color         = on ? '#fff' : 'var(--navy)';
       btn.style.fontWeight    = on ? '700' : '600';
       btn.style.border        = on ? 'none' : '1px solid var(--payments-mid)';
-      btn.style.borderBottom  = 'none';
+      btn.style.borderBottom  = on ? '3px solid rgba(255,255,255,0.45)' : 'none';
       btn.style.borderRadius  = '6px 6px 0 0';
-      btn.style.padding       = '8px 20px 10px';
+      btn.style.padding       = on ? '8px 20px 7px' : '8px 20px 10px';
       btn.style.marginBottom  = '-4px';
       btn.style.position      = 'relative';
       btn.style.zIndex        = on ? '10' : '5';
     }
-    var ifl = document.getElementById('email-inline-filters'); if (ifl && t==='details') ifl.style.display = on ? 'flex' : 'none';
+    var summGrp = document.getElementById('esf-summ-group');
+    var campGrp = document.getElementById('esf-camp-group');
+    if (summGrp) summGrp.style.display = (t==='summary' && on) ? 'flex' : 'none';
+    if (campGrp) campGrp.style.display = (t==='details' && on) ? 'flex' : 'none';
   });
   if (tab==='summary') setTimeout(function(){ eRefreshAll(); eInitUnitsChart(); }, 100);
   if (tab==='details') setTimeout(function(){
@@ -2687,6 +3033,7 @@ function switchEmailTab(tab) {
     if(typeof eInitFunnelChart==='function') eInitFunnelChart('all');
     if(typeof eInitAllDetCharts==='function') eInitAllDetCharts();
     if(typeof eUpdateStatsBox==='function') eUpdateStatsBox();
+    if(typeof eInitAllCampCharts==='function') eInitAllCampCharts();
   }, 150);
 }
 
@@ -2713,9 +3060,8 @@ function eInitDetChart(key) {
   var singleCamp = f.campaigns.length === 1 && f.emails.length === 0
                    && CAMPAIGN_ASSET_DATA[f.campaigns[0]] && field;
 
-  var pc  = getComputedStyle(document.documentElement).getPropertyValue('--payments').trim() || '#07c4d9';
-  var hex = pc.replace('#','');
-  var rv=parseInt(hex.substr(0,2),16)||7, gv=parseInt(hex.substr(2,2),16)||196, bv=parseInt(hex.substr(4,2),16)||217;
+  var _pc2=document.documentElement.style.getPropertyValue('--payments').trim()||getComputedStyle(document.documentElement).getPropertyValue('--payments').trim()||'#07c4d9';var pc=_pc2.replace(/^\s+/,'');var hex=pc.replace('#','');var rv=parseInt(hex.substr(0,2),16)||7, gv=parseInt(hex.substr(2,2),16)||196, bv=parseInt(hex.substr(4,2),16)||217;
+  var _rgb = 'rgb('+rv+','+gv+','+bv+')';
   var emailColors = [
     'rgba('+rv+','+gv+','+bv+',0.9)','rgba('+rv+','+gv+','+bv+',0.72)',
     'rgba('+rv+','+gv+','+bv+',0.55)','rgba('+rv+','+gv+','+bv+',0.38)',
@@ -2736,7 +3082,7 @@ function eInitDetChart(key) {
         label: e.name.length>30 ? e.name.substring(0,28)+'\u2026' : e.name,
         data: d.bar.map(function(v){ return Math.round(v*props[i]); }),
         backgroundColor: emailColors[i % emailColors.length],
-        borderColor:     emailColors[i % emailColors.length].replace(/[\d.]+\)$/, '1)'),
+        borderColor:     _rgb,
         borderWidth: 1,
         yAxisID: 'y',
         stack: 'emails',
@@ -2786,11 +3132,11 @@ function eInitDetChart(key) {
     var benchDetBar  = benchDet.bar  ? Array(d.labels.length).fill(benchDet.bar)  : null;
     var benchDetLine = benchDet.line ? Array(d.labels.length).fill(benchDet.line) : null;
     var detDatasets = [
-      { type:'bar',  label:'Value', data:d.bar,  backgroundColor:'rgba('+rv+','+gv+','+bv+',0.7)', borderColor:pc, borderWidth:1, yAxisID:'y',  order:2 },
+      { type:'bar',  label:'Value', data:d.bar,  backgroundColor:'rgba('+rv+','+gv+','+bv+',0.7)', borderColor:'rgb('+rv+','+gv+','+bv+')', borderWidth:1, yAxisID:'y',  order:2 },
       { type:'line', label:'Rate',  data:d.line, borderColor:'#14324F', borderWidth:2, pointRadius:2, pointBackgroundColor:'#14324F', fill:false, yAxisID:'y1', order:1 }
     ];
-    if(benchDetBar)  detDatasets.push({type:'line',label:'Eco Benchmark',data:benchDetBar, borderColor:'rgba(100,120,140,0.55)',borderDash:[5,4],borderWidth:1.5,pointRadius:0,yAxisID:'y', order:3,fill:false});
-    if(benchDetLine) detDatasets.push({type:'line',label:'Eco Rate Benchmark',data:benchDetLine,borderColor:'rgba(100,120,140,0.4)',borderDash:[5,4],borderWidth:1.5,pointRadius:0,yAxisID:'y1',order:3,fill:false});
+    if(benchDetBar)  detDatasets.push({type:'line',label:'Eco Benchmark',data:benchDetBar, borderColor:'rgba('+Math.round(rv*0.6)+','+Math.round(gv*0.6)+','+Math.round(bv*0.6)+',0.9)',borderDash:[5,4],borderWidth:1.5,pointRadius:0,yAxisID:'y', order:3,fill:false});
+    if(benchDetLine) detDatasets.push({type:'line',label:'Eco Rate Benchmark',data:benchDetLine,borderColor:'rgba('+Math.round(rv*0.6)+','+Math.round(gv*0.6)+','+Math.round(bv*0.6)+',0.9)',borderDash:[5,4],borderWidth:1.5,pointRadius:0,yAxisID:'y1',order:3,fill:false});
     eDetCharts[key] = new Chart(canvas, {
       data: { labels: d.labels, datasets: detDatasets },
       options: { responsive:true, maintainAspectRatio:false,
@@ -2930,7 +3276,9 @@ function eUpdateStatsBox() {
   if (ee) ee.textContent = totalEmails;
   if (ef) ef.textContent = freq;
   if (eh) eh.textContent = fLabel + ' \u00b7 ' + pl;
-  if (efl) efl.textContent = 'Email Frequency \u00b7 ' + pl;
+  var eoh = document.getElementById('estats-outcomes-hdr');
+  if (eoh) eoh.textContent = 'All Email Outcomes \u00b7 ' + pl;
+  if (efl) efl.textContent = 'Email Frequency';
 }
 
 
